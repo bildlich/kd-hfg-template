@@ -47,8 +47,7 @@ Do not develop on the remote server. Modifying a live website is bad practice, p
 
 8. Next we need Typo3 how to connect to the local database. Do this by editing the file `/typo3conf/LocalConfiguration.php`. *Make sure not to upload this file back to server or the website will break for obvious reasons.*
 9. Configure Typo3 so it knows where it's located. Login to the backend. In the middle column, select the page "Home" (the one with the little earth icon). In the left column, select "Template". In the right column, click the pen next to "Vollständigen Template-Datensatz bearbeiten." Under "setup", change the value of `config.baseURL` to something like `http://localhost:8888/kd20/` (depending on how your local server is configured and where you have placed the working copy).
-10. The main `.htaccess` file needs a change, too: Comment out the line `RewriteBase /`. It should read `#RewriteBase /`.
-11. Open the website in the browser to see if everything is working.
+10. Open the website in the browser to see if everything is working.
 
 ## Download the MySQL database
 
