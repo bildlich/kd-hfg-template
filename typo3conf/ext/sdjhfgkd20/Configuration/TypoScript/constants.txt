@@ -1,0 +1,14 @@
+plugin.tx_sdjhfgkd20 {
+	view {
+		# cat=plugin.tx_sdjhfgkd20/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:sdjhfgkd20/Resources/Private/Templates/
+		# cat=plugin.tx_sdjhfgkd20/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:sdjhfgkd20/Resources/Private/Partials/
+		# cat=plugin.tx_sdjhfgkd20/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:sdjhfgkd20/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_sdjhfgkd20//a; type=string; label=Default storage PID
+		storagePid =
+	}
+}

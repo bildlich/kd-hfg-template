@@ -1,0 +1,24 @@
+<label for="date">
+	<f:translate key="tx_sdjnews_domain_model_news.date" /> <span class="required">(required)</span>
+</label><br />
+	<f:form.textfield property="date"  value="{news.date->f:format.date()}" /><br />
+<label for="header">
+	<f:translate key="tx_sdjnews_domain_model_news.header" />
+</label><br />
+	<f:form.textfield property="header" /><br />
+<label for="metatitle">
+	<f:translate key="tx_sdjnews_domain_model_news.metatitle" />
+</label><br />
+	<f:form.textfield property="metatitle" /><br />
+<label for="metaabstract">
+	<f:translate key="tx_sdjnews_domain_model_news.metaabstract" />
+</label><br />
+	<f:form.textarea property="metaabstract" cols="40" rows="15" /><br />
+<label for="metadescription">
+	<f:translate key="tx_sdjnews_domain_model_news.metadescription" />
+</label><br />
+	<f:form.textarea property="metadescription" cols="40" rows="15" /><br />
+<label for="metakeywords">
+	<f:translate key="tx_sdjnews_domain_model_news.metakeywords" />
+</label><br />
+	<f:form.textarea property="metakeywords" cols="40" rows="15" /><br />

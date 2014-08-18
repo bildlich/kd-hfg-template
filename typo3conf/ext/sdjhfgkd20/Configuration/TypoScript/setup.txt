@@ -1,0 +1,39 @@
+plugin.tx_sdjhfgkd20 {
+	view {
+		templateRootPath = {$plugin.tx_sdjhfgkd20.view.templateRootPath}
+		partialRootPath = {$plugin.tx_sdjhfgkd20.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_sdjhfgkd20.view.layoutRootPath}
+	}
+	persistence {
+		storagePid = {$plugin.tx_sdjhfgkd20.persistence.storagePid}
+	}
+	features {
+		# uncomment the following line to enable the new Property Mapper.
+		# rewrittenPropertyMapper = 1
+	}
+}
+
+plugin.tx_sdjhfgkd20._CSS_DEFAULT_STYLE (
+	textarea.f3-form-error {
+		background-color:#FF9F9F;
+		border: 1px #FF0000 solid;
+	}
+
+	input.f3-form-error {
+		background-color:#FF9F9F;
+		border: 1px #FF0000 solid;
+	}
+
+	.tx-sdjhfgkd20 table {
+		border-collapse:separate;
+		border-spacing:10px;
+	}
+
+	.tx-sdjhfgkd20 table th {
+		font-weight:bold;
+	}
+
+	.tx-sdjhfgkd20 table td {
+		vertical-align:top;
+	}
+)

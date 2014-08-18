@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-01-09T13:02:16Z" product-name="sdjnews">
+		<header/>
+		<body>
+
+			<trans-unit id="date.description">
+				<source>date</source>
+			</trans-unit>
+			<trans-unit id="header.description">
+				<source>header</source>
+			</trans-unit>
+			<trans-unit id="metatitle.description">
+				<source>metatitle</source>
+			</trans-unit>
+			<trans-unit id="metaabstract.description">
+				<source>metaabstract</source>
+			</trans-unit>
+			<trans-unit id="metadescription.description">
+				<source>metadescription</source>
+			</trans-unit>
+			<trans-unit id="metakeywords.description">
+				<source>metakeywords</source>
+			</trans-unit>
+			<trans-unit id="media.description">
+				<source>media</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

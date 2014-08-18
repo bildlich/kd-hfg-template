@@ -1,0 +1,7 @@
+<f:for each="{vh:media(mdata:news.media)}" as="media" iteration="j">
+			<f:for each="{media.image}" as="pic" iteration="i">
+		    	<aside>{pic.caption}</aside>
+		    	<p><img src="{vh:imgResource(image:pic.pic, path:'uploads/tx_sdjnews/')}" class="big-image"/ ></p>
+		    </f:for>
+		    <f:format.html>{media.text}</f:format.html>		
+		</f:for>

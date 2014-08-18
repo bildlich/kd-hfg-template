@@ -1,0 +1,11 @@
+{namespace vh=Tx_sdjimagegroups_ViewHelpers} 
+<f:layout name="Default" />
+<f:section name="main">
+<f:flashMessages />
+<div class="image-group" style="{vh:containerHeight(images:images)}">
+<f:for each="{images}" as="pic">
+	<vh:Img image="{pic.image}" w="{pic.imgwidth}" h="{pic.imgheight}" t="{pic.imgtop}" r="{pic.imgright}" b="{pic.imgbottom}" l="{pic.imgleft}" />
+</f:for>
+</div>
+
+</f:section>

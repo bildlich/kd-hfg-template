@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-01-09T13:02:16Z" product-name="sdjnews">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_sdjnews_domain_model_news">
+				<source>News</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_news.date">
+				<source>date</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_news.header">
+				<source>header</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_news.metatitle">
+				<source>metatitle</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_news.metaabstract">
+				<source>metaabstract</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_news.metadescription">
+				<source>metadescription</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_news.metakeywords">
+				<source>metakeywords</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_news.media">
+				<source>media</source>
+			</trans-unit>
+			
+			<trans-unit id="tx_sdjnews_domain_model_newsmedia">
+				<source>NewsMedia</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_newsmedia.text">
+				<source>text</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_newsmedia.images">
+				<source>images</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_newsmedia.imagecaption">
+				<source>imagecaption</source>
+			</trans-unit>
+			
+		</body>
+	</file>
+</xliff>

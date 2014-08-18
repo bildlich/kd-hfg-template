@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-12-17T22:22:16Z" product-name="sdjhfgkd20">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_sdjhfgkd20_domain_model_lehrende">
+				<source>Lehrende</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_lehrende.anrede">
+				<source>Anrede</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_lehrende.titel">
+				<source>Titel</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_lehrende.vorname">
+				<source>Vorname</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_lehrende.nachname">
+				<source>Nachname</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_lehrende.bild">
+				<source>Bild</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_lehrende.description">
+				<source>Beschreibung</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_lehrende.info">
+				<source>Auf Infoseite anzeigen?</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_lehrende.website">
+				<source>Website</source>
+			</trans-unit>
+			
+			<trans-unit id="tx_sdjhfgkd20_domain_model_studierende">
+				<source>Studierende</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_studierende.vorname">
+				<source>Vorname</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_studierende.nachname">
+				<source>Nachname</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_studierende.info">
+				<source>Auf Infoseite anzeigen?</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_studierende.website">
+				<source>Website</source>
+			</trans-unit>
+			
+			
+
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte">
+				<source>Projekte</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.title">
+				<source>Titel</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.year">
+				<source>Jahr</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.mainimage">
+				<source>Hauptbild</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.techniques">
+				<source>Techniken</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.students">
+				<source>Studenten</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.seminar">
+				<source>Seminare</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.semester">
+				<source>Semester</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.description">
+				<source>Beschreibung</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.metatitle">
+				<source>Title-Tag</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.metaabstract">
+				<source>Abstract</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.metadescription">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.metakeywords">
+				<source>Keywords</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.teacher">
+				<source>Lehrende</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_projekte.media">
+				<source>Medien</source>
+			</trans-unit>
+
+			<trans-unit id="tx_sdjhfgkd20_domain_model_media">
+				<source>Medien</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_media.title">
+				<source>Titel (intern für Sortierung)</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_media.image">
+				<source>Bild</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_media.mp4">
+				<source>Mp4</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_media.ogg">
+				<source>Ogg</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20_domain_model_media.embed">
+				<source>Embed (http://vimeo.com/82090537, http://www.youtube.com/watch?v=vqRWMDv0r78, http://youtu.be/vqRWMDv0r78)</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

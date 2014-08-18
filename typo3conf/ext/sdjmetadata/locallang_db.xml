@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'sdjmetadata'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="pages.tx_sdjmetadata_title">Title-Tag</label>
+			<label index="pages.tx_sdjmetadata_abstract">Abstract</label>
+			<label index="pages.tx_sdjmetadata_description">Description</label>
+			<label index="pages.tx_sdjmetadata_keywords">Keywords</label>
+			<label index="pages.tx_sdjmetadata_xmlprio">Priorität (0.0 - 1.0)</label>
+			<label index="pages.tx_sdjmetadata_xmlinterval">Intervall (always, hourly, daily, weekly, monthly, yearly, never)</label>
+		</languageKey>
+	</data>
+</T3locallang>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-12-17T22:22:16Z" product-name="sdjhfgkd20">
+		<header/>
+		<body>
+
+			<trans-unit id="title.description">
+				<source>Titel (intern für Sortierung)</source>
+			</trans-unit>
+			<trans-unit id="image.description">
+				<source>Bild</source>
+			</trans-unit>
+			<trans-unit id="mp4.description">
+				<source>Mp4</source>
+			</trans-unit>
+			<trans-unit id="ogg.description">
+				<source>Ogg</source>
+			</trans-unit>
+			<trans-unit id="embed.description">
+				<source>Embed (http://vimeo.com/82090537, http://www.youtube.com/watch?v=vqRWMDv0r78, http://youtu.be/vqRWMDv0r78)</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

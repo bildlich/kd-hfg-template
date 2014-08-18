@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-12-17T22:22:16Z" product-name="sdjhfgkd20">
+		<header/>
+		<body>
+			<trans-unit id="anrede.description">
+				<source>Anrede</source>
+			</trans-unit>
+			<trans-unit id="titel.description">
+				<source>Titel</source>
+			</trans-unit>
+			<trans-unit id="vorname.description">
+				<source>Vorname</source>
+			</trans-unit>
+			<trans-unit id="nachname.description">
+				<source>Nachname</source>
+			</trans-unit>
+			<trans-unit id="bild.description">
+				<source>Bild</source>
+			</trans-unit>
+			<trans-unit id="description.description">
+				<source>Beschreibung</source>
+			</trans-unit>
+			<trans-unit id="info.description">
+				<source>Auf Infoseite anzeigen?</source>
+			</trans-unit>
+			<trans-unit id="website.description">
+				<source>Website</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

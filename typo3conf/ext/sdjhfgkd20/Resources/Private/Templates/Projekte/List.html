@@ -1,0 +1,19 @@
+{namespace vh=Tx_sdjhfgkd20_ViewHelpers} 
+
+<f:layout name="Default" />
+<f:section name="main">
+<f:flashMessages />
+	<div class="scroll ajax-load-me">
+	    <div id="stack-area" class="mode-stack">
+	    	<ul id="hidden-stack">
+	    		<f:for each="{projektes}" as="projekte" iteration="i">
+	    			<li class='card' data-pid="{i.cycle}" data-sort-data='{vh:json(teacher:projekte.teacher, year:projekte.year)}' style="height: 210px; width:{vh:imgWidth(image:projekte.mainimage)}px;">
+	    				<f:link.page pageUid="{vh:getData(index:'pid')}" additionalParams="{tx_sdjhfgkd20_detail:projekte.uid}">
+	    					<f:image src="{projekte.mainimage}" width="" height="{settings.projects_maxH}" alt="{projekte.title}" />
+	    				</f:link.page>
+	    			</li>
+				</f:for>
+	    	</ul>
+	    </div>
+	</div>
+</f:section>

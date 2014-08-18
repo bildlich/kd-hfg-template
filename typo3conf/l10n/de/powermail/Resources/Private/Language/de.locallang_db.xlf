@@ -1,0 +1,500 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-11-18T08:22:11Z" product-name="powermail" target-language="de">
+    <header/>
+    <body>
+      <trans-unit id="tx_powermail_domain_model_mails" xml:space="preserve" approved="yes">
+        <source>Mails</source>
+      <target state="translated">Mails</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.sender_mail" xml:space="preserve" approved="yes">
+        <source>Senders Email</source>
+      <target state="translated">Absender E-Mail</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.sender_name" xml:space="preserve" approved="yes">
+        <source>Senders Name</source>
+      <target state="translated">Absender Name</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.subject" xml:space="preserve" approved="yes">
+        <source>Mail Subject</source>
+      <target state="translated">E-Mail Betreffzeile</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.body" xml:space="preserve" approved="yes">
+        <source>Parameter</source>
+      <target state="translated">Parameter</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.receiver_mail" xml:space="preserve" approved="yes">
+        <source>Receivers Mail</source>
+      <target state="translated">Empfänger E-Mail</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.form" xml:space="preserve" approved="yes">
+        <source>Related Form</source>
+      <target state="translated">Formular</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.answers" xml:space="preserve" approved="yes">
+        <source>Answers</source>
+      <target state="translated">Antworten</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.feuser" xml:space="preserve" approved="yes">
+        <source>FE_User</source>
+      <target state="translated">Frontent-Benutzer</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.spam_factor" xml:space="preserve" approved="yes">
+        <source>Spam Factor</source>
+      <target state="translated">Spam Faktor</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.time" xml:space="preserve" approved="yes">
+        <source>Time for submitting form (in seconds)</source>
+      <target state="translated">Zeit zum Ausfüllen des Formulares (in Sekunden)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.sender_ip" xml:space="preserve" approved="yes">
+        <source>Senders IP address</source>
+      <target state="translated">IP-Adresse des Absenders</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.user_agent" xml:space="preserve" approved="yes">
+        <source>Senders User Agent</source>
+      <target state="translated">User Agent des Absenders</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.crdate" xml:space="preserve" approved="yes">
+        <source>Creation Date</source>
+      <target state="translated">Erstellungsdatum</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.marketing_searchterm" xml:space="preserve" approved="yes">
+        <source>Searchengine Searchterm leads to this mail (e.g. Google)</source>
+      <target state="translated">Suchbegriff in Suchmaschine führte zu dieser Mail (z.B. Google)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.marketing_referer" xml:space="preserve" approved="yes">
+        <source>Last external page</source>
+      <target state="translated">Letzte aufgerufene externe Seite</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.marketing_payed_search_result" xml:space="preserve" approved="yes">
+        <source>Payed Searchresults leads to this mail (e.g. Adwords)</source>
+      <target state="translated">Gekauftes Suchergebnis führte zu dieser Mail (z.B. Adwords)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.marketing_language" xml:space="preserve" approved="yes">
+        <source>Website Language</source>
+      <target state="translated">Website Sprache</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.marketing_browser_language" xml:space="preserve" approved="yes">
+        <source>Browser Language</source>
+      <target state="translated">Browser Sprache</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_mails.marketing_funnel" xml:space="preserve" approved="yes">
+        <source>Page Funnel which leads to this mail</source>
+      <target state="translated">Seitenfüller, der zu dieser Mail führt</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_forms" xml:space="preserve" approved="yes">
+        <source>Forms</source>
+      <target state="translated">Formulare</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_forms.title" xml:space="preserve" approved="yes">
+        <source>Title</source>
+      <target state="translated">Bezeichnung</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_forms.css" xml:space="preserve" approved="yes">
+        <source>Layout</source>
+      <target state="translated">Layout</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_forms.css.1" xml:space="preserve" approved="yes">
+        <source>Layout1</source>
+      <target state="translated">Layout1</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_forms.css.2" xml:space="preserve" approved="yes">
+        <source>Layout2</source>
+      <target state="translated">Layout2</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_forms.css.3" xml:space="preserve" approved="yes">
+        <source>Layout3</source>
+      <target state="translated">Layout3</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_forms.pages" xml:space="preserve" approved="yes">
+        <source>Pages</source>
+      <target state="translated">Seiten</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_pages" xml:space="preserve" approved="yes">
+        <source>Pages</source>
+      <target state="translated">Seiten</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_pages.title" xml:space="preserve" approved="yes">
+        <source>Title</source>
+      <target state="translated">Bezeichnung</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_pages.css" xml:space="preserve" approved="yes">
+        <source>Layout</source>
+      <target state="translated">Layout</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_pages.css.1" xml:space="preserve" approved="yes">
+        <source>Layout1</source>
+      <target state="translated">Layout1</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_pages.css.2" xml:space="preserve" approved="yes">
+        <source>Layout2</source>
+      <target state="translated">Layout2</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_pages.css.3" xml:space="preserve" approved="yes">
+        <source>Layout3</source>
+      <target state="translated">Layout3</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_pages.fields" xml:space="preserve" approved="yes">
+        <source>Fields</source>
+      <target state="translated">Felder</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields" xml:space="preserve" approved="yes">
+        <source>Fields</source>
+      <target state="translated">Felder</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.title" xml:space="preserve" approved="yes">
+        <source>Title</source>
+      <target state="translated">Bezeichnung</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type" xml:space="preserve" approved="yes">
+        <source>Type</source>
+      <target state="translated">Typ</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.spacer1" xml:space="preserve" approved="yes">
+        <source>Standard</source>
+      <target state="translated">Standard</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.spacer2" xml:space="preserve" approved="yes">
+        <source>Extra</source>
+      <target state="translated">Erweitert</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.spacer3" xml:space="preserve" approved="yes">
+        <source>Extensions</source>
+      <target state="translated">Extensions</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.0" xml:space="preserve" approved="yes">
+        <source>Textfield (Input)</source>
+      <target state="translated">Textfeld (Input)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.1" xml:space="preserve" approved="yes">
+        <source>Textfield with more Rows (Textarea)</source>
+      <target state="translated">Textfeld Mehrzeilig (Textarea)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.2" xml:space="preserve" approved="yes">
+        <source>Selecfield</source>
+      <target state="translated">Auswahlfeld (Select)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.3" xml:space="preserve" approved="yes">
+        <source>Checkboxes</source>
+      <target state="translated">Mehrfachauswahl (Check)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.4" xml:space="preserve" approved="yes">
+        <source>Radiobuttons</source>
+      <target state="translated">Einfachauswahl (Radio)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.5" xml:space="preserve" approved="yes">
+        <source>Submit</source>
+      <target state="translated">Abschicken Feld (Submit)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.6" xml:space="preserve" approved="yes">
+        <source>Captcha Field</source>
+      <target state="translated">Captcha</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.7" xml:space="preserve" approved="yes">
+        <source>Reset</source>
+      <target state="translated">Zurücksetzen</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.8" xml:space="preserve" approved="yes">
+        <source>Show some Text</source>
+      <target state="translated">Zeige Text</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.9" xml:space="preserve" approved="yes">
+        <source>Content Element</source>
+      <target state="translated">Seiteninhalt</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.10" xml:space="preserve" approved="yes">
+        <source>Show HTML</source>
+      <target state="translated">HTML</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.11" xml:space="preserve" approved="yes">
+        <source>Password Field</source>
+      <target state="translated">Passwort Feld</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.12" xml:space="preserve" approved="yes">
+        <source>File Upload</source>
+      <target state="translated">Datei Upload</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.13" xml:space="preserve" approved="yes">
+        <source>Hidden Field</source>
+      <target state="translated">Verstecktes Feld</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.14" xml:space="preserve" approved="yes">
+        <source>Date</source>
+      <target state="translated">Datum</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.15" xml:space="preserve" approved="yes">
+        <source>Location</source>
+      <target state="translated">Location</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.type.16" xml:space="preserve" approved="yes">
+        <source>TypoScript</source>
+      <target state="translated">TypoScript</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.settings" xml:space="preserve" approved="yes">
+        <source>Options</source>
+      <target state="translated">Optionen</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.path" xml:space="preserve" approved="yes">
+        <source>TypoScript Path (e.g. lib.test)</source>
+      <target state="translated">TypoScript Pfad (z.B. lib.test)</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.content_element" xml:space="preserve" approved="yes">
+        <source>Select Content Element</source>
+      <target state="translated">Inhalt auswählen</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.text" xml:space="preserve" approved="yes">
+        <source>Add some text</source>
+      <target state="translated">Text für Ausgabe im Formular</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.validation_title" xml:space="preserve" approved="yes">
+        <source>Validation</source>
+      <target state="translated">Feldüberprüfung</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.mandatory" xml:space="preserve" approved="yes">
+        <source>Mandatory Field</source>
+      <target state="translated">Pflichtfeld</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.validation" xml:space="preserve" approved="yes">
+        <source>Validation</source>
+      <target state="translated">Überprüfung</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.validation.1" xml:space="preserve" approved="yes">
+        <source>Email</source>
+      <target state="translated">E-Mail</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.validation.2" xml:space="preserve" approved="yes">
+        <source>URL</source>
+      <target state="translated">URL</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.validation.3" xml:space="preserve" approved="yes">
+        <source>Phone</source>
+      <target state="translated">Telefon</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.validation.4" xml:space="preserve" approved="yes">
+        <source>Numbers Only</source>
+      <target state="translated">Zahlen</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.validation.5" xml:space="preserve" approved="yes">
+        <source>Letters Only</source>
+      <target state="translated">Zeichen</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.css" xml:space="preserve" approved="yes">
+        <source>Layout</source>
+      <target state="translated">Layout</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.css.1" xml:space="preserve" approved="yes">
+        <source>Layout 1</source>
+      <target state="translated">Layout 1</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.css.2" xml:space="preserve" approved="yes">
+        <source>Layout 2</source>
+      <target state="translated">Layout 2</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.css.3" xml:space="preserve" approved="yes">
+        <source>Layout 3</source>
+      <target state="translated">Layout 3</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.prefill_title" xml:space="preserve" approved="yes">
+        <source>Prefill Field</source>
+      <target state="translated">Feld vorbefüllen</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.prefill_value" xml:space="preserve" approved="yes">
+        <source>With Value</source>
+      <target state="translated">Mit Wert</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value" xml:space="preserve" approved="yes">
+        <source>Value from logged in Frontent User</source>
+      <target state="translated">Aus Frontend-Benutzer-Datenbank</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.name" xml:space="preserve" approved="yes">
+        <source>Name</source>
+      <target state="translated">Name</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.address" xml:space="preserve" approved="yes">
+        <source>Address</source>
+      <target state="translated">Adresse</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.phone" xml:space="preserve" approved="yes">
+        <source>Phone</source>
+      <target state="translated">Telefon</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.fax" xml:space="preserve" approved="yes">
+        <source>Fax</source>
+      <target state="translated">Fax</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.email" xml:space="preserve" approved="yes">
+        <source>Email</source>
+      <target state="translated">E-Mail</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.zip" xml:space="preserve" approved="yes">
+        <source>ZIP</source>
+      <target state="translated">PLZ</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.city" xml:space="preserve" approved="yes">
+        <source>City</source>
+      <target state="translated">Stadt</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.country" xml:space="preserve" approved="yes">
+        <source>Country</source>
+      <target state="translated">Land</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.www" xml:space="preserve" approved="yes">
+        <source>Website</source>
+      <target state="translated">Webseite</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.feuser_value.company" xml:space="preserve" approved="yes">
+        <source>Company</source>
+      <target state="translated">Firma</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.sender_email" xml:space="preserve" approved="yes">
+        <source>This field contains the Email of the sender</source>
+      <target state="translated">Dieses Feld beinhaltet die E-Mail des Absenders</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.sender_name" xml:space="preserve" approved="yes">
+        <source>This field contains the Name of the sender</source>
+      <target state="translated">Dieses Feld beinhaltet den Namen des Absenders</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.marker_title" xml:space="preserve" approved="yes">
+        <source>Variables</source>
+      <target state="translated">Variablen</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.own_marker" xml:space="preserve" approved="yes">
+        <source>Enter your own Variable Name</source>
+      <target state="translated">Variablenname (ohne umschließende {})</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.auto_marker" xml:space="preserve" approved="yes">
+        <source>Individual Fieldname to use as Variable (automaticly wrapped with {})</source>
+      <target state="translated">Variablenname für dieses Feld</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.own_marker_select" xml:space="preserve" approved="yes">
+        <source>Add my own Variable Name</source>
+      <target state="translated">Eigenen Variablennamen vergeben</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.sheet1" xml:space="preserve" approved="yes">
+        <source>Extended</source>
+      <target state="translated">Erweitert</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.sheet2" xml:space="preserve" approved="yes">
+        <source>Marketing</source>
+      <target state="translated">Marketing</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_fields.palette1" xml:space="preserve" approved="yes">
+        <source>Email or Name</source>
+      <target state="translated">E-Mail oder Name</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_answers" xml:space="preserve" approved="yes">
+        <source>Answers</source>
+      <target state="translated">Antworten</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_answers.value" xml:space="preserve" approved="yes">
+        <source>The transferred value</source>
+      <target state="translated">Der übermittelte Text</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_answers.mail" xml:space="preserve" approved="yes">
+        <source>Mail</source>
+      <target state="translated">Mail</target></trans-unit>
+      <trans-unit id="tx_powermail_domain_model_answers.field" xml:space="preserve" approved="yes">
+        <source>Field</source>
+      <target state="translated">Feld</target></trans-unit>
+      <trans-unit id="pleaseChoose" xml:space="preserve" approved="yes">
+        <source>Please choose...</source>
+      <target state="translated">Bitte wählen...</target></trans-unit>
+      <trans-unit id="flexform.main" xml:space="preserve" approved="yes">
+        <source>Main Settings</source>
+      <target state="translated">Einstellungen</target></trans-unit>
+      <trans-unit id="flexform.main.form" xml:space="preserve" approved="yes">
+        <source>Choose a Powermail Form</source>
+      <target state="translated">Powermail Formular wählen</target></trans-unit>
+      <trans-unit id="flexform.main.pid" xml:space="preserve" approved="yes">
+        <source>Where to save Mails (empty = same page)</source>
+      <target state="translated">Wo sollen die Mails gespeichert werden? (leer = gleiche Seite)</target></trans-unit>
+      <trans-unit id="flexform.main.optin" xml:space="preserve" approved="yes">
+        <source>Mail must be confirmed (Double Opt-In)</source>
+      <target state="translated">E-Mail muss bestätigt werden (Double Opt-In)</target></trans-unit>
+      <trans-unit id="flexform.main.confirmation" xml:space="preserve" approved="yes">
+        <source>Do you want a confirmation page?</source>
+      <target state="translated">Bestätigungsseite aktivieren</target></trans-unit>
+      <trans-unit id="flexform.main.moresteps" xml:space="preserve" approved="yes">
+        <source>Do you want to split each page (step by step)?</source>
+      <target state="translated">Mehrschrittformular aktivieren (Schritt für Schritt)</target></trans-unit>
+      <trans-unit id="flexform.receiver" xml:space="preserve" approved="yes">
+        <source>Mail to Receiver</source>
+      <target state="translated">Empfänger</target></trans-unit>
+      <trans-unit id="flexform.receiver.name" xml:space="preserve" approved="yes">
+        <source>Receivers Name</source>
+      <target state="translated">Name des Empfängers</target></trans-unit>
+      <trans-unit id="flexform.receiver.email" xml:space="preserve" approved="yes">
+        <source>Receivers Email</source>
+      <target state="translated">E-Mail Adresse des Empfängers</target></trans-unit>
+      <trans-unit id="flexform.receiver.fe_group" xml:space="preserve" approved="yes">
+        <source>Send Email to Frontend User Group</source>
+      <target state="translated">E-Mail an Empfänger einer Frontend-Benutzer-Gruppe versenden</target></trans-unit>
+      <trans-unit id="flexform.receiver.subject" xml:space="preserve" approved="yes">
+        <source>Subject for Email to Receiver (Empty subject disables mail)</source>
+      <target state="translated">Betreff der Mail an Empfänger (Leerer Betreff deaktiviert den Mailversand)</target></trans-unit>
+      <trans-unit id="flexform.receiver.body" xml:space="preserve" approved="yes">
+        <source>Bodytext for Email to Receiver</source>
+      <target state="translated">Inhalt der Mail an Empfänger</target></trans-unit>
+      <trans-unit id="flexform.sender" xml:space="preserve" approved="yes">
+        <source>Mail to User</source>
+      <target state="translated">Absender</target></trans-unit>
+      <trans-unit id="flexform.sender.email" xml:space="preserve" approved="yes">
+        <source>Sender Email (For Confirmation Mail to User)</source>
+      <target state="translated">E-Mail Adresse des Absenders (Mail an Sender)</target></trans-unit>
+      <trans-unit id="flexform.sender.name" xml:space="preserve" approved="yes">
+        <source>Sender Name (For Confirmation Mail to User)</source>
+      <target state="translated">Name des Absender (Mail an Sender)</target></trans-unit>
+      <trans-unit id="flexform.sender.subject" xml:space="preserve" approved="yes">
+        <source>Subject for Email to Sender (Empty subject disables mail)</source>
+      <target state="translated">Betreff der Mail an Absender (Leerer Betreff deaktiviert den Mailversand)</target></trans-unit>
+      <trans-unit id="flexform.sender.body" xml:space="preserve" approved="yes">
+        <source>Bodytext for Email to Sender</source>
+      <target state="translated">Inhalt der Mail an Absender</target></trans-unit>
+      <trans-unit id="flexform.thx" xml:space="preserve" approved="yes">
+        <source>Submit Page</source>
+      <target state="translated">Antwortseite</target></trans-unit>
+      <trans-unit id="flexform.thx.body" xml:space="preserve" approved="yes">
+        <source>Text on submit page</source>
+      <target state="translated">Text auf Antwortseite</target></trans-unit>
+      <trans-unit id="flexform.thx.redirect" xml:space="preserve" approved="yes">
+        <source>Redirect to any other Page after submit</source>
+      <target state="translated">Weiterleitung nach Ausfüllen auf beliebige Seite</target></trans-unit>
+      <trans-unit id="flexform_pi2.updateNote" xml:space="preserve" approved="yes">
+        <source>ATTENTION: Please select a form in Settings before!</source>
+      <target state="translated">ACHTUNG: Bitte zuvor Formular in Einstellungen auswählen!</target></trans-unit>
+      <trans-unit id="flexform_pi2.main" xml:space="preserve" approved="yes">
+        <source>Main Settings</source>
+      <target state="translated">Einstellungen</target></trans-unit>
+      <trans-unit id="flexform_pi2.main.switchableControllerActions" xml:space="preserve" approved="yes">
+        <source>Choose your view</source>
+      <target state="translated">Wählen Sie Ihre Ansicht</target></trans-unit>
+      <trans-unit id="flexform_pi2.main.switchableControllerActions.0" xml:space="preserve" approved="yes">
+        <source>List View</source>
+      <target state="translated">Listenansicht</target></trans-unit>
+      <trans-unit id="flexform_pi2.main.switchableControllerActions.1" xml:space="preserve" approved="yes">
+        <source>Detail View</source>
+      <target state="translated">Detailansicht</target></trans-unit>
+      <trans-unit id="flexform_pi2.main.switchableControllerActions.2" xml:space="preserve" approved="yes">
+        <source>Edit View</source>
+      <target state="translated">Änderungsansicht</target></trans-unit>
+      <trans-unit id="flexform_pi2.main.form" xml:space="preserve" approved="yes">
+        <source>Choose a form</source>
+      <target state="translated">Wählen Sie ein Formular</target></trans-unit>
+      <trans-unit id="flexform_pi2.main.pid" xml:space="preserve" approved="yes">
+        <source>Select a page with mails (optional)</source>
+      <target state="translated">Seite mit Mails auswählen (optional)</target></trans-unit>
+      <trans-unit id="flexform_pi2.list" xml:space="preserve" approved="yes">
+        <source>Listview</source>
+      <target state="translated">Listenansicht</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.fields" xml:space="preserve" approved="yes">
+        <source>Choose Fields to show (Empty: All Fields)</source>
+      <target state="translated">Felder für Ansicht wählen (Leer: Alle Felder)</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.delta" xml:space="preserve" approved="yes">
+        <source>Show entries of the last X Seconds (Empty: Function disabled)</source>
+      <target state="translated">Zeige nur Mails der letzten X Sekunden (Leer: Funktion deaktiviert)</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.limit" xml:space="preserve" approved="yes">
+        <source>Show max. X entries (Empty: No Limit)</source>
+      <target state="translated">Zeige max X Mails (Leer: Zeige Alle)</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.pid" xml:space="preserve" approved="yes">
+        <source>Page with Plugin for list view (Empty: Same page)</source>
+      <target state="translated">Seite mit Listenansicht (Leer: Gleiche Seite)</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.showownonly" xml:space="preserve" approved="yes">
+        <source>Own entries</source>
+      <target state="translated">Eigene Mails</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.showownonly.0" xml:space="preserve" approved="yes">
+        <source>Show only entries from logged in Frontend-User</source>
+      <target state="translated">Zeige nur eigene Mails des eingeloggten Frontend-Benutzers</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.export" xml:space="preserve" approved="yes">
+        <source>Export Formats</source>
+      <target state="translated">Export Formate</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.export.0" xml:space="preserve" approved="yes">
+        <source>XLS Export</source>
+      <target state="translated">XLS Export</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.export.1" xml:space="preserve" approved="yes">
+        <source>CSV Export</source>
+      <target state="translated">CSV Export</target></trans-unit>
+      <trans-unit id="flexform_pi2.list.export.2" xml:space="preserve" approved="yes">
+        <source>RSS Feed</source>
+      <target state="translated">RSS Feed</target></trans-unit>
+      <trans-unit id="flexform_pi2.single" xml:space="preserve" approved="yes">
+        <source>Detailview</source>
+      <target state="translated">Detailansicht</target></trans-unit>
+      <trans-unit id="flexform_pi2.single.fields" xml:space="preserve" approved="yes">
+        <source>Choose Fields to show (Empty: All Fields)</source>
+      <target state="translated">Felder für Ansicht wählen (Leer: Alle Felder)</target></trans-unit>
+      <trans-unit id="flexform_pi2.single.pid" xml:space="preserve" approved="yes">
+        <source>Page with Plugin for detail view (Empty: Same page)</source>
+      <target state="translated">Seite mit Detailansicht (Leer: Gleiche Seite)</target></trans-unit>
+      <trans-unit id="flexform_pi2.search" xml:space="preserve" approved="yes">
+        <source>Searchsettings</source>
+      <target state="translated">Sucheinstellungen</target></trans-unit>
+      <trans-unit id="flexform_pi2.search.fields" xml:space="preserve" approved="yes">
+        <source>Add searchfield</source>
+      <target state="translated">Suchfelder hinzufügen</target></trans-unit>
+      <trans-unit id="flexform_pi2.search.fields.all" xml:space="preserve" approved="yes">
+        <source>[Fulltext Search]</source>
+      <target state="translated">[Volltextsuche]</target></trans-unit>
+      <trans-unit id="flexform_pi2.search.operator" xml:space="preserve" approved="yes">
+        <source>search fields operator (AND / OR)</source>
+      <target state="translated">Suchfelder Operator (ODER / UND)</target></trans-unit>
+      <trans-unit id="flexform_pi2.search.operator.0" xml:space="preserve" approved="yes">
+        <source>OR (Find keyword in Field1 OR Field2)</source>
+      <target state="translated">ODER (Finde Suchwort in Feld1 ODER Feld2)</target></trans-unit>
+      <trans-unit id="flexform_pi2.search.operator.1" xml:space="preserve" approved="yes">
+        <source>AND (Find keyword in Field1 AND Field2)</source>
+      <target state="translated">UND (Finde Suchwort in Feld1 UND Feld2)</target></trans-unit>
+      <trans-unit id="flexform_pi2.search.abc" xml:space="preserve" approved="yes">
+        <source>Add ABC filter</source>
+      <target state="translated">ABC Filter hinzufügen</target></trans-unit>
+      <trans-unit id="flexform_pi2.search.abc.off" xml:space="preserve" approved="yes">
+        <source>[Deactivated]</source>
+      <target state="translated">[Ausgeschaltet]</target></trans-unit>
+      <trans-unit id="flexform_pi2.edit" xml:space="preserve" approved="yes">
+        <source>Editview</source>
+      <target state="translated">Änderungsansicht</target></trans-unit>
+      <trans-unit id="flexform_pi2.edit.fields" xml:space="preserve" approved="yes">
+        <source>Choose Fields to edit (Empty: All fields)</source>
+      <target state="translated">Felder für Änderung wählen (Leer: Alle Felder)</target></trans-unit>
+      <trans-unit id="flexform_pi2.edit.feuser" xml:space="preserve" approved="yes">
+        <source>Choose one or more Frontend-Users with permission to change</source>
+      <target state="translated">Wählen Sie einen oder mehrere FE-User aus, die Datensätze ändern dürfen</target></trans-unit>
+      <trans-unit id="flexform_pi2.edit.feuser.owner" xml:space="preserve" approved="yes">
+        <source>[Owner]</source>
+      <target state="translated">[Ersteller]</target></trans-unit>
+      <trans-unit id="flexform_pi2.edit.fegroup" xml:space="preserve" approved="yes">
+        <source>Choose one or more Frontend-Groups with permission to change</source>
+      <target state="translated">Wählen Sie einen oder mehrere FE-Gruppen aus, deren User Datensätze ändern dürfen</target></trans-unit>
+      <trans-unit id="flexform_pi2.edit.pid" xml:space="preserve" approved="yes">
+        <source>Page with Plugin for edit view (Empty: Same page)</source>
+      <target state="translated">Seite mit Änderungsansicht (Leer: Gleiche Seite)</target></trans-unit>
+      <trans-unit id="pluginInfo.receiverEmail" xml:space="preserve" approved="yes">
+        <source>Receivers Email Address</source>
+      <target state="translated">Empfänger E-Mail</target></trans-unit>
+      <trans-unit id="pluginInfo.receiverName" xml:space="preserve" approved="yes">
+        <source>Receivers Name</source>
+      <target state="translated">Empfänger Name</target></trans-unit>
+      <trans-unit id="pluginInfo.subject" xml:space="preserve" approved="yes">
+        <source>Mail Subject</source>
+      <target state="translated">Betreff</target></trans-unit>
+      <trans-unit id="pluginInfo.subject" xml:space="preserve" approved="yes">
+        <source>Mail Subject</source>
+      <target state="translated">Betreff</target></trans-unit>
+      <trans-unit id="pluginInfo.form" xml:space="preserve" approved="yes">
+        <source>Form Title</source>
+      <target state="translated">Formular Bezeichnung</target></trans-unit>
+      <trans-unit id="pluginInfo.savePid" xml:space="preserve" approved="yes">
+        <source>Storage Location for Mails</source>
+      <target state="translated">Speicherort der E-Mails</target></trans-unit>
+      <trans-unit id="pluginInfo.confirmationPage" xml:space="preserve" approved="yes">
+        <source>Confirmation Page activated?</source>
+      <target state="translated">Bestätigungsseite aktiv?</target></trans-unit>
+      <trans-unit id="pluginInfo.optin" xml:space="preserve" approved="yes">
+        <source>Double Opt-In active?</source>
+      <target state="translated">Double Opt-In aktiv?</target></trans-unit>
+    </body>
+  </file>
+</xliff>

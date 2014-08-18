@@ -1,0 +1,21 @@
+{namespace vh=Tx_sdjhfgkd20_ViewHelpers} 
+<f:layout name="Default" />
+<f:section name="main">
+<f:flashMessages />
+	<ul class="teachers-list-small">
+		<f:for each="{lehrendes}" as="lehrende">
+			<f:if condition="{lehrende.info}==2">
+				<li>
+					<f:if condition="{vh:urlCheck(url:lehrende.website)}==''">
+						<f:then>
+							<f:if condition="{lehrende.vorname}">{lehrende.vorname} </f:if>{lehrende.nachname}</f:then>
+						<f:else>
+							<a href="{vh:urlCheck(url:lehrende.website)}" target="_blank"><f:if condition="{lehrende.vorname}">{lehrende.vorname} </f:if>{lehrende.nachname}</a>
+						</f:else>
+					</f:if>
+				</li>
+			</f:if>
+		</f:for>
+	</ul>
+	<a id="show-all-teachers" data-switch-word="–weniger" href="#">+mehr</a>
+</f:section>

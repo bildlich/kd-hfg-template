@@ -1,0 +1,28 @@
+aside{
+	margin:0;
+    float:left;
+	width:250px;
+	margin-left:20px;
+	margin-top:10px;
+}
+
+p{
+ 	width:650px;
+ 	float:left;
+}
+
+aside p{
+	margin:0;
+	width:100%;
+	margin-bottom:20px;
+}
+
+span.aside{
+	 float:left;
+	 display:block;
+}
+
+h1,h2,h3,h4,h5,h6{
+	clear:both;
+	width:100%;
+}

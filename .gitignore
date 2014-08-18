@@ -1,0 +1,28 @@
+### SublimeText ###
+*.sublime-workspace
+
+### Sass ###
+.sass-cache
+
+### CodeKit ###
+*/codekit-config.json
+
+# Ignore .htaccess for security reasons
+.htaccess
+
+# Ignore serveral upload and file directories
+/fileadmin/user_upload/
+/fileadmin/_temp_/
+/fileadmin/_processed_/
+/fileadmin/*.t3d
+/uploads/
+
+# Ignore cache
+/typo3conf/temp_CACHED*
+/typo3conf/temp_fieldInfo.php
+
+# Ignore files with database credentials
+/typo3conf/LocalConfiguration.php
+
+# Ignore temp directory.
+/typo3temp/

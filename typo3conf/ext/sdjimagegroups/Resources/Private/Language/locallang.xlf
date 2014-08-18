@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-01-23T20:03:55Z" product-name="sdjimagegroups">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_sdjimagegroups_domain_model_imagegroup">
+				<source>Bildergruppe</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjimagegroups_domain_model_imagegroup.images">
+				<source>Bilder</source>
+			</trans-unit>
+			
+			<trans-unit id="tx_sdjimagegroups_domain_model_images">
+				<source>Bilder</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjimagegroups_domain_model_images.image">
+				<source>Bild</source>
+			</trans-unit>			
+			<trans-unit id="tx_sdjimagegroups_domain_model_images.imgwidth">
+				<source>Breite (650, wenn nicht angegeben)</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjimagegroups_domain_model_images.imgheight">
+				<source>Höhe (wird berechnet, wenn nicht angegeben)</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjimagegroups_domain_model_images.imgtop">
+				<source>Abstand: Oben (z.B. 10px, -20px, 10%, -10%)</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjimagegroups_domain_model_images.imgright">
+				<source>Abstand: Rechts (z.B. 10px, -20px, 10%, -10%)</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjimagegroups_domain_model_images.imgbottom">
+				<source>Abstand: Unten (z.B. 10px, -20px, 10%, -10%)</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjimagegroups_domain_model_images.imgleft">
+				<source>Abstand: Links (z.B. 10px, -20px, 10%, -10%)</source>
+			</trans-unit>			
+		</body>
+	</file>
+</xliff>

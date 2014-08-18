@@ -1,0 +1,1082 @@
+@import "compass/reset";
+@import "compass/css3";
+@import "compass/typography/links";
+@import "compass/utilities/general/clearfix";
+$experimental-support-for-opera: true; 
+
+/* Page dimensions and ratios */
+$page-collapsed-width: 40px;
+$page-tease-width: 6%;
+$number-of-pages: 3;
+$page-padding-left: 10px;
+$content-beginning-left: 14rem;
+$content-offset-top: 127px;
+$page-padding-right: $page-padding-left;
+/* Typography */
+$root-font-size: 16px;
+@mixin font-s {
+	font-size: 0.9rem;
+	line-height: 1.3;
+	font-family: Karla, sans-serif;
+}
+@mixin font-m {
+	font-size: 1.5rem;
+	line-height: 1.2;
+	font-family: Karla, sans-serif;
+}
+@mixin font-l {
+	font-size: 2rem;
+	line-height: 1.2;
+	font-family: Karla, sans-serif;
+}
+@mixin custom-underline {
+	position: relative;
+	&:after {
+		content: '';
+		width: 100%;
+		position: absolute;
+		left: 0;
+		bottom: 1px;
+		border-width: 0 0 1px;
+		border-style: solid;
+	}
+}
+
+/* Colors and element styling */
+$accent-color-1: #1821fa;
+/* Settings for medium-sized screens */
+$mediumscreen-root-font-size : 11px;
+/* Settings for small screens */
+$smallscreen-root-font-size : 9px;
+$smallscreen-page-padding-left: 1.2rem;
+$smallscreen-content-offset-top: 6rem;
+
+
+.test {
+	width: auto;
+	height: 40px;
+	background: blue;
+	position: fixed;
+	bottom:0; right: 0;
+	z-index: 10000;
+	color: white;
+}
+
+
+* {
+	@include box-sizing(border-box);
+}
+
+html {
+	font-size: $root-font-size;
+}
+body {
+	@include font-m;
+	width: 100%;
+	max-width: 1700px; // even if the browser window is wider than this, the main content area is limited to this
+	height: 100%;
+	-webkit-font-smoothing: antialiased; // Webkit renders Karla typeface too bold by default, especially when white on dark background
+	position: fixed; // prevents arrow keys in firefox from accidentally scrolling content horizontally
+}
+
+
+/* Begin Overall page display and navigation styles */
+.page {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	position: absolute;
+	background: #fff;
+	border-left: 1px solid #aaa;
+	@include box-shadow(rgba(140, 140, 140, 1) 0 0 10px);
+	@include transition(left 0.7s cubic-bezier(0.770, 0.000, 0.175, 1.000));
+	.logo {
+		position: absolute;
+		margin-top: 0.625rem;
+		display: block;
+		@include font-s;
+		color: black;
+		margin-left: $page-padding-left;
+		overflow: hidden;
+	}
+	.main-nav {
+		position: absolute;
+		left: $page-padding-left;
+		top: 73px; // needed for browser which do not support rem
+		top: 4.6rem;
+		color: $accent-color-1;
+	}
+
+	.scroll {
+		width: 100%; // Safari 5, Opera 12
+		height: 100%;
+		position: absolute;
+		top: 0; left: 0;
+		overflow-y: auto;
+		overflow-x: hidden;
+		-webkit-overflow-scrolling: touch;
+		padding-right: $page-padding-right + 3*$page-collapsed-width;
+		padding-left: 224px; // IE 8
+		padding-left: $content-beginning-left;
+	}
+	.sub-nav {
+		position: absolute;
+		z-index: 1; // make sure it is above .scroll, otherwise links are not clickable
+		left: $page-padding-left;
+		top: $content-offset-top;
+
+		a.active {
+			@include custom-underline;
+		}
+	}
+	&:not(.open) {
+		cursor: pointer;
+	}
+}
+.ajax-load-me {
+	opacity: 1;
+	@include transition(opacity 0.3s linear 0.3s); // delay makes content appear only when sliding effect is finished
+}
+.page:not(.open) .ajax-load-me {
+	transition-delay: 0s;
+	opacity: 0;
+}
+#loading-indicator {
+	opacity: 0;
+	@include transition(opacity 0.3s 0.7s); // 0.5s delay so that the sliding transition is completed before the loading indicator appears
+	width: 100px; height: 100px;
+	position: fixed;
+	z-index: 98;
+	left: 50%; top: 3000px; // indicator is off screen when not needed
+	margin-left: -50px;
+	background: transparent url(../img-ui/hfg-spinner.gif) no-repeat center center;
+}
+body.loading {
+	.ajax-load-me {
+		opacity: 0; // fade in ajax-loaded content only after loading is finished
+	}
+	#loading-indicator {
+		opacity: 1;
+		top: 30%;
+	}
+}
+body.loading .project-details.open, #detail-slideshow.loading {
+		background: black url(../img-ui/hfg-spinner-black.gif) no-repeat center 30%;
+}
+.loading .page {
+	transition-delay: 0.3s;
+}
+/* End overall page display and navigation styles */
+
+/* Begin page specific navigation styles */
+.page#info {
+	.logo {
+		margin-left: $page-padding-left;
+	}
+}
+.page#news {
+	$margin-left: -3*$page-collapsed-width;
+	margin-left: $margin-left;
+	left: 4*$page-collapsed-width;
+	&.translate-more {
+		left: $page-collapsed-width*5;
+		transition-delay: 0.05s;
+	}
+	&.right {
+		left: 100%;
+		&.translate-less {
+			left: 100% - 2%*3; // for browsers which don't support calc(), e.g. safari 5
+			@include experimental-value(left, calc(100% - 40px));
+			transition-delay: 0s;
+		}
+	}
+	.logo {
+		margin-left: -$page-collapsed-width+$page-padding-left;
+	}
+}
+.page#projects {
+	$margin-left: -2*$page-collapsed-width;
+	margin-left: $margin-left;
+	left: 4*$page-collapsed-width;
+	&.translate-more {
+		left: $page-collapsed-width*5;
+		transition-delay: 0.05s;
+	}
+	&.right {
+		left: 100%;
+		&.translate-less {
+			left: 100% - 2%*2; // for browsers which don't support calc(), e.g. safari 5
+			@include experimental-value(left, calc(100% - 40px));
+			transition-delay: 0s;
+		}
+	}
+	.logo {
+		margin-left: -2*$page-collapsed-width+$page-padding-left;
+	}
+}
+.page#index {
+	$margin-left: -$page-collapsed-width;
+	margin-left: $margin-left;
+	left: 4*$page-collapsed-width;
+	&.translate-more {
+		left: $page-collapsed-width*5;
+		transition-delay: 0.05s;
+	}
+	&.right {
+		left: 100%;
+		&.translate-less {
+			left: 100% - 2%; // for browsers which don't support calc(), e.g. safari 5
+			@include experimental-value(left, calc(100% - 40px));
+			transition-delay: 0s;
+		}
+	}
+	.logo {
+		margin-left: -3*$page-collapsed-width+$page-padding-left;
+	}
+}
+/* End page specific navigation styles */
+
+/* Begin page specific LAYOUT styles */
+.page#info {
+	.sub-nav {
+		a.ajax {
+			@include font-s;
+			color: $accent-color-1;
+			display: block;
+			margin-top: 1rem;
+		}
+	}
+}
+.news-meta {		// only used on news page
+	@include font-s;
+}
+#top {
+	width: 0; height: 0;
+}
+a.btn-top {
+	position: fixed;
+	display: block;
+	right: -20rem;
+	bottom: $smallscreen-page-padding-left;
+	width: 4rem; height: 4rem;
+	background: #fff url(../img-ui/arrup-1.png) no-repeat center center;
+	@include transition(right 0.5s ease-in-out);
+	@include box-shadow(rgba(0,0,0,0.5) 0 0 10px);
+	&.show {
+		right: $smallscreen-page-padding-left;
+	}
+}
+
+.page#projects {
+	.scroll{
+		padding-left: 0;
+	}
+	.scroll.ajax-error {
+		padding-top: 0;
+		padding-left: 285px;
+	}
+	.sub-nav {
+		ul {
+			margin-bottom: 1.8rem;
+		}
+	}
+}
+.page#index {
+	background: black;
+	#intro-slider {
+		cursor: pointer;
+		position: absolute;
+		z-index: 100;
+		width: 100%;
+		height: 100%;
+		li {
+			width: 100%;
+			height: 100%;
+			@include background-size(cover);
+		}
+	}
+	.logo {
+		position: absolute;
+		z-index: 1000;
+	}
+	.main-nav {
+		display: none;
+	}
+}
+.page#error-404 {
+	.logo {
+		z-index: 100; // make sure the logo is clickable and not hidden behind .scroll
+	}
+	.scroll {
+		width: 100%;
+		img {
+			@include box-shadow(none);
+		}
+	}
+}
+/* End page specific LAYOUT styles */
+
+/* Begin overall content styles */
+// Hyphenation (if browser does not support hyphenation, Hyphenator.js takes care of it)
+// once browser support them we should make use of hyphenate-limit-lines et al. to avoid letter effect
+/*p {
+	@include hyphens(auto);
+}
+.donthyphenate, .donthyphenate * {
+	@include hyphens(none);
+}*/
+
+section, article {
+	@include legacy-pie-clearfix;
+	&:first-of-type {
+		padding-top: $content-offset-top;
+	}
+	padding-bottom: 7rem;
+	clear: both;
+	h2,h3 {
+		margin-bottom: 25px;
+		margin-bottom: 1.53rem;
+		clear: both;
+		-webkit-transform: translate3d(0,0,0); // This hack is needed b/c of weird positioning bug in Safari when a Youtube video is on the same page
+		&>span {
+			@include custom-underline();
+		}
+	}
+	&>p {
+		width: 67%;
+		margin-bottom: 25px;
+		float: left;
+		&>img {
+			width: 100%; // Images in paragraphs are automatically resized to width of main column
+		}
+		&>iframe {
+			max-width: 100%; // Embedded videos are not supposed to be wider than the main column
+		}
+	}
+	img {
+		@include box-shadow(rgba(0,0,0,0.5) 0 0 10px);
+	}
+	&>.image-group {
+		position: relative;
+		width: 100%;
+		clear: both;
+		img {
+			position: absolute;
+		}
+	}
+	ul.teachers-list-big {
+		@include font-s;
+		width: 67%;
+		li {
+			display: inline-block;
+			width: 30%;
+			margin: 0 3% 2rem 0;
+			vertical-align: top;
+			&:nth-child(3n) {
+				margin-right: 0;
+			}
+		}
+		img {
+			width: 80%;
+			margin-bottom: 1rem;
+		}
+	}
+	.teachers-list-small, .students-list-small, .alumni-list {
+		overflow: hidden;
+		width: 67%;
+		max-width: 60rem;
+		margin-bottom:0.4rem;
+		@include font-s;
+		&.open {
+			height: auto;
+		}
+		li {
+			display: inline-block;
+			width: 160px;
+			margin-right: 10px;
+			white-space: nowrap;
+		}
+	}
+	.teachers-list-small {
+		height: 4.5rem;
+	}
+	.alumni-list {
+		height: 0;
+	}
+	a#show-all-teachers, a#show-alumni {
+		@include font-s;
+	}
+	.address {
+		width: 70%;
+		@include columns(2);
+		@include column-gap(0);
+		overflow: visible;
+		margin-bottom: 1.6rem;
+	}
+	.small-left, .small-right {
+		width: 35%;
+		@include font-s;
+		float: left;
+		padding-right: 1rem;
+		h3 {
+			text-decoration: underline;
+			margin-bottom: 1.2rem;
+		}
+		p {
+			margin-bottom: 1.2rem;
+		}
+	}
+
+	.small-print {
+		@include font-s;
+		width:67%;
+		h3 {
+			margin-bottom: 0;
+			text-decoration: underline;
+		}
+		p {
+			margin-bottom: 1.53rem;
+		}
+		a {
+				color:#777;
+		}
+	}
+	aside {
+		width: 23%;
+		@include font-s;
+		margin: 0 6% 0 4%;
+		float: right;
+		h2, p {
+			clear: both;
+			&:first-child {
+				margin-top: 0.55rem;  // push the baseline of the first line of the aside on the same level as the baseline of the first line of the main column
+			}
+		}
+		h2 {
+			margin-bottom: 0;
+			text-decoration: underline;
+		}
+		p {
+			margin-bottom: 12px;
+		}
+		img {
+			position: relative;
+		}
+	}
+	strong {
+		display: inline-block;
+		border-bottom: 1px solid black;
+	}
+	ol {
+		counter-reset:li;
+		&>li {
+			list-style-type: none;
+			position: relative;
+			margin-left: 16px;
+		}
+		&>li:before {	// style the number
+			content:counter(li) ".";
+			counter-increment:li;
+			position:absolute;
+			left: -16px;
+		}
+	}
+}
+
+a, a:visited, a:hover {
+	color: $accent-color-1;
+	text-decoration: none;
+}
+/* End overall content styles */
+
+/* Begin project preview styles */
+#stack-area {
+	min-height: 500px;
+	text-align: center;
+	margin: $content-offset-top 0 0 $content-beginning-left;
+	&.mode-stack {
+		margin-left: $content-beginning-left*0.7;
+		margin-right: $content-beginning-left*0.5;
+	}
+
+	.stack.key-all h2 {
+		display: none; // Do not display "all" title when no filter is selected
+	}
+	li {
+		width: auto; // To do: provide the dimensions inline for the real image dimensions by the backend
+		@include box-shadow(rgba(10, 10, 10, 0.5) 0 0 10px);
+
+		img {
+			display: block;
+			width: 100%;
+		}
+	}
+}
+
+#stack-area.mode-stack .stack {
+	position: relative;
+	width: 350px;
+	height: 300px;
+	margin: 0 20px 50px 20px;
+	display: inline-block;
+	&.key-all {
+		top: -2.5rem;
+		width: 650px;
+		height: 650px;
+	}
+	li {
+		&.ui-draggable-dragging a {
+			cursor: -moz-grabbing;
+			cursor: -webkit-grabbing;
+			cursor: grabbing;
+		}
+		position: absolute !important;
+		left: 0; top: 0;
+		z-index: 101;
+	}
+	h2 {
+		text-align: center;
+	}
+}
+body.touch-device .stack, #stack-area.mode-list .stack {
+	margin: 0 0 10px 0;
+	text-align: left;
+	li {
+		text-align: center;
+		display: inline-block;
+		margin: 0 50px 50px 0;
+		position: relative !important;
+		top: 0 !important;
+		left: 0 !important;
+		.back a.move-to-back {
+			display: none;
+		}
+	}
+	h2 {
+		text-align: left;
+		margin: 0 0 25px 0;
+	}
+}
+/* End project preview styles */
+
+
+.project-details {
+	position: absolute;
+	z-index: 1000;
+	background: black;
+	color: white;
+	visibility: hidden;
+	opacity: 0;
+	@include transition(visibility 0s linear 0.1s, opacity 0.1s linear);
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	&.open {
+		visibility: visible;
+		opacity: 1;
+		transition-delay:0s;
+	}
+	.project-title {
+		text-align: center;
+		width: 80%;
+		width: calc(100% - 22rem);
+		margin: 0 auto;
+		padding-top: 3px;
+		min-height: 2.5rem;
+	}
+	.project-title,
+	#btn-close,
+	#btn-info,
+	#btn-words-close {
+		color: white;
+		img {
+			vertical-align: baseline;
+		}
+	}
+	#btn-close, 
+	#btn-info,
+	#btn-next-img,
+	#btn-previous-img {
+		cursor: pointer;
+		white-space: nowrap;
+		position: absolute;
+		z-index: 1001;
+		-webkit-tap-highlight-color: rgba(0,0,0,0); // prevent green flashing when tapping on mobile
+	}
+	#btn-close {
+		top: 3px;
+		right: 10px;
+		right: 0.625rem;
+		width: 50px; height: 50px;
+		width: 3.125rem; height: 3.125rem;
+		text-align: right;
+		img {
+			width: 1.125rem; height: 1.125rem;
+		}
+	}
+	#btn-info,
+	#btn-words-close {
+		position: absolute;
+		top: 3px;
+		left: 10px;
+		img {
+			width: 1.125rem; height: 1.125rem;
+		}
+	}
+	#btn-previous-img {
+		top: 50%;
+		padding: 1px 1px 1px 10px;
+		left: 0;
+		margin-top: -28 - 14px;
+		background: black;
+	}
+	#btn-next-img {
+		top: 50%;
+		padding: 1px 10px 1px 1px;
+		right: 0;
+		margin-top: -28 - 14px;
+		background: black;
+	}
+	#detail-slideshow {
+		height: 100%;
+		@include experimental-value(height, calc(100% - 40px));
+		width: 100%;
+		li {
+			height: 100%;width: 100%;
+			text-align: center;
+			img, video, object, iframe {
+				position: relative;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			&.embed {
+				position: relative;
+				z-index: auto !important; // we do not want a new stacking context
+				object, iframe {
+					background: black;
+					height: 480px;
+					z-index: 102; // above the next/pre image buttons
+				}
+			}
+		}
+		.cycle-prev, .cycle-next {
+			position: absolute;
+			width: 50%;
+			height: 100%;
+			z-index: 101;
+			top:0;
+			background: transparent no-repeat;
+			opacity: 0;
+			&:hover {
+				opacity: 1;
+			}
+		}
+		.cycle-prev {
+			left: 0;
+			cursor: url(../img-ui/arrleft-3.png), pointer;
+			background-position: left center;
+		}
+		.cycle-next {
+			display: block;
+			right: 0;
+			cursor: url(../img-ui/arrright-3.png), pointer;
+			background-position: right center;
+		}
+	}
+	#project-words {
+		padding: 0 $page-padding-left 0 $page-padding-left;
+		margin: 0 auto;
+		cursor: url(../img-ui/x-1.png), pointer;
+		background: $accent-color-1;
+		opacity: 1;
+		visibility: hidden;
+		@include transition(visibility 0s linear 0.1s, opacity 0.1s linear);
+		position: absolute;
+		top: 0; left: 0;
+		z-index: 1002;
+		height: 100%; width: 100%;
+		overflow-y: auto;
+		&.open {
+			opacity: 1;
+			visibility: visible;
+			transition-delay:0s;
+		}
+		#project-description {
+			float: right;
+			margin: $content-offset-top 18% 20px 0;
+			text-align: left;
+			width: 64%;
+			p {
+				margin-bottom: 16px;
+				margin-bottom: 1rem;
+			}
+		}
+		#project-meta {
+			width: 15%;
+			@include font-s;
+			margin-top: $content-offset-top; // IE 8
+			margin: $content-offset-top 1rem 1rem 1.5rem;
+			dt {
+				font-weight: bold;
+			}
+			dd {
+				margin-bottom: 16px;
+				margin-bottom: 1rem;
+				word-wrap: break-word;
+			}
+		}
+		#project-description a, #project-meta a {
+			color: white;
+			@include custom-underline;
+		}
+	}
+	.ajax-error {
+		width: 50%;
+		margin: $content-offset-top auto 0 auto;
+	}
+}
+#smallscreen-menu {
+	display: none;
+}
+/* 
+Begin specific style for Tablets and smaller PCs
+*/
+@media only screen and (max-width: 1024px) {
+	html {
+		font-size: $mediumscreen-root-font-size;
+	}
+	#stack-area {
+		.stack {
+			width: 100%;
+			height: auto !important;
+			li {
+				display: inline !important;
+				z-index: 0;
+				margin: 0 3rem 0 0 !important;
+				line-height: 6rem;
+				@include box-shadow(none);
+				img {
+					height: 11rem !important;
+					width: auto;
+					display: inline;
+				}
+			}
+		}
+	}
+	section, article {
+		&>p, aside, ul.teachers-list-big, ul.teachers-list-small, ul.students-list-small, ul.alumni-list {
+			width: 95%;
+			max-width: auto;
+			float: none;
+		}
+		aside {
+			background: #eee;
+			padding: $smallscreen-page-padding-left;
+			margin-left: 0; margin-right: 0;
+			margin-bottom: 1.53rem;
+			& * {
+				font-size: inherit;
+			}
+			img {
+				width: auto !important;
+				max-width: 100%;
+			}
+			*:first-child {
+				margin-top: 0 !important;
+			}
+			*:last-child {
+				margin-bottom: 0;
+			}
+		}
+		.image-group {
+			margin-top: 2rem;
+			height: auto !important;
+			width: 67%;
+			img {
+				display: block;
+				position: static;
+				width: auto !important;
+				max-width: 100% !important;
+				margin-bottom: 1.53rem;
+			}
+		}
+		.address {
+			width: 95%;
+			@include columns(1);
+		}
+		.small-left, .small-right {
+			width: 47%;
+		}
+		.small-print {
+			width: 95%;
+		}
+	}
+}
+/* End specific stlye for smaller PCs */
+
+
+/* 
+Begin specific stlye for small screens. 
+This targets smartphones and small tablets in portrait mode
+*/
+@media only screen and (max-width: 799px) {
+	.test {
+		background: red;
+	}
+	html {
+		height: auto;
+		overflow: auto;
+		font-size: $smallscreen-root-font-size;
+	}
+	body {
+		height: auto;
+		position: static;
+		overflow: auto;
+	}
+	#index h1 {
+		@include font-m;
+	}
+	.page {
+		position: static !important;
+		@include box-shadow(none);
+		width: 100%;
+		height: auto;
+		overflow: auto;
+		padding: 0 $smallscreen-page-padding-left;
+		margin-left: 0 !important;
+		border-left: 0;
+		&:not(.open) {
+			display: none;
+		}
+		.logo, .main-nav {
+			display: none;
+		}
+		.sub-nav {
+			position: static !important;
+			padding-top: $smallscreen-content-offset-top !important;
+			@include font-l;
+			&>a {
+				font-size: inherit !important;
+			}
+		}
+		.scroll {
+			padding: 0;
+			position: static;
+			height: auto;
+			overflow: auto;
+			width: 100% !important;
+			#stack-area {
+				width: 100% !important;
+				padding: 0;
+				margin: 0 !important;
+				img {
+					height: 15rem !important;
+				}
+			}
+			section, article {
+				&:first-of-type {
+					padding-top: $smallscreen-content-offset-top;
+				}
+				p {
+					margin-left: 0; margin-right: 0;
+					width: 100%;
+					float: none;
+					margin-bottom: 1.53rem;
+					img {
+						width: auto;
+						max-width: 100%;
+					}
+				}
+				aside {
+					@include font-m;
+					width: 100%;
+					&>*:last-child {
+						margin-bottom: 0;
+					}
+				}
+				.teachers-list-big, .teachers-list-small, .students-list-small, .alumni-list {
+					margin-left: 0; margin-right: 0;
+					width: 100%;
+					float: none;
+					margin-bottom: 1.53rem;
+					@include font-m;
+					li {
+						width: 100%;
+						margin: 0;
+						img {
+							width: 50%;
+						}
+					}
+				}
+				.teachers-list-small {
+					height: 12.5rem;
+					&.open {
+						height: auto;
+					}
+				}
+
+				a#show-all-teachers, a#show-alumni {
+					@include font-m;
+					display: block;
+					margin-bottom: 1.53rem;
+				}
+				.image-group {
+					height: auto !important;
+					img {
+						display: block;
+						position: static;
+						width: auto !important;
+						max-width: 100%;
+						margin-bottom: 1.53rem;
+					}
+				}
+				.small-left, .small-right {
+					width: 95%;
+					@include font-m;
+					float: none;
+					padding-right: 0;
+					p {
+						margin-bottom: 1.53rem;
+					}
+				}
+				.news-meta {
+					@include font-m;
+				}
+			}
+
+			#stack-nav {
+				display: none;
+			}
+		}
+	}
+
+	.project-details {
+		&.open {
+			position: fixed;
+			left: 0;
+			top: $smallscreen-content-offset-top - 1rem;
+			width: 100%;
+			height: calc(100% - 4rem);
+		}
+		&:not(.open) {
+			display: none;
+		}
+		#detail-slideshow li {
+			&.html5 {
+				padding: 0 30px; // make sure next/prev links are clickable
+			}
+		}
+		#project-words {
+			#project-description {
+				margin: 3rem 0 0 0 !important;
+				width: 100% !important;
+				max-width: 100% !important;
+				float: none;
+			}
+			#project-meta {
+				@include font-m;
+				margin: 3rem 0 1rem 0 !important;
+				float: none;
+				width: 100%;
+			}
+		}
+	}
+	#smallscreen-menu {
+		background: white;
+		display: block;
+		position: fixed;
+		z-index: 2000;
+		top:0;left:0;
+		width: 100%;
+		@include font-m;
+		.bar {
+			position: relative;
+			padding: $smallscreen-page-padding-left;
+			min-height: 5rem;
+			@include box-shadow(rgba(0,0,0,0.4) 0 0 8px);
+			h1 {
+				position: absolute;
+				right: $smallscreen-page-padding-left;
+				top: 50%;
+				height: 3.6rem;
+				margin-top: -1.8rem;
+				@include font-m;
+				white-space: nowrap;
+			}
+			#btn-smallscreen-menu {
+				text-align: left;
+				display: block;
+				height: 3rem;
+				position: absolute;
+				left: $smallscreen-page-padding-left;
+				top: 50%;
+				margin-top: -1.5rem;
+				padding-left: 2rem;
+				background: transparent url(../img-ui/hamburger-3.png) no-repeat left center;
+				@include font-l;
+				line-height: 3rem;
+			}
+		}
+		nav {
+			height: 0;
+			overflow: hidden;
+			@include transition(height 0.3s ease-in-out);
+			li {
+				min-height: 5rem;
+				border-bottom: 1px solid $accent-color-1;
+				color: $accent-color-1; 
+				@include font-l;
+				line-height: 4.9rem;
+				overflow: hidden;
+				a {
+					padding-left: $smallscreen-page-padding-left+2rem;
+					display: block;
+					width: 100%; height: 100%;
+					&:active {
+						background: $accent-color-1;
+						color: white;
+					}
+				}
+			}
+			&.active {
+				height: 5rem*3;
+			}
+		}
+	}
+}
+/* End specific styles for small screens */
+
+/* Begin specific styles for touch screens */
+body.touch-device {
+	// Next/prev image links always visible on touch devices b/c there is no real :hover state
+	#detail-slideshow {
+			.cycle-next, .cycle-prev {
+				opacity: 1;
+			}
+	}
+	// On Touch devices, we completely disable the stack view. Hence, no controls
+	#stack-nav .show-as {
+		display: none;
+	}
+}
+/* End specific styles for touch screens */
+
+/* Start specific styles for Internet Explorer */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+	.page#news.translate-less.right {
+		left: 100% - 2%*3;
+	}
+	.page#projects.translate-less.right {
+		left: 100% - 2%*2;
+	}
+	.page#index.translate-less.right {
+		left: 100% - 2%;
+	}
+}
+
+
+/* Begin helpers */
+.display-none {
+	display: none;
+}
+/* End helpers */

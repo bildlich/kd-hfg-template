@@ -1,0 +1,81 @@
+{namespace vh=Tx_sdjhfgkd20_ViewHelpers} 
+
+<f:layout name="Default" />
+<f:section name="main">
+<f:flashMessages />
+	<f:link.page pageUid="4" id="btn-close" additionalAttributes="{data-pageslug: 'projects'}"><img src="fileadmin/templates/img-ui/x-1.png"></f:link.page>
+	<h1 class="project-title">{projekte.title}</h1>
+	<a id="btn-info"><img src="fileadmin/templates/img-ui/plus-1.png">&nbsp;Projektinfo</a>	
+
+	<ul id="detail-slideshow">
+	    <div class="cycle-prev">
+	    	<span id="btn-previous-img"><img src="fileadmin/templates/img-ui/arrleft-3.png"></span>
+	    </div>
+	    <div class="cycle-next">
+	    	<span id="btn-next-img"><img src="fileadmin/templates/img-ui/arrright-3.png"></span>
+	    </div>
+
+	    <f:for each="{vh:media(mdata:projekte.media)}" as="media" iteration="j">
+	    	<f:if condition="{media.type}=='image'">
+	    		<li data-width="{media.w}" data-height="{media.h}">
+		    		<img src="{vh:imgResource(image:media.media)}" alt="{media.alt}"/>
+	    		</li>
+	    	</f:if>
+	    	<f:if condition="{media.type}=='video'">
+	    		<li class="video html5" data-width="{media.w}" data-height="{media.h}">
+	        		<video preload="auto" loop="true" autoplay>
+	    				<source src="{media.media}" type="video/mp4">
+	    				<source src="{media.media2}" type="video/ogg">
+	    				Tut uns leid, aber Ihr Browser kann dieses Video nicht abspielen.
+	    			</video>
+	    		</li>
+	    	</f:if>
+	    	<f:if condition="{media.type}=='embed'">
+	    		<li class="video embed youtube" data-width="{media.w}" data-height="{media.h}">
+	    			<iframe src="http://www.youtube.com/embed/{media.media}" width="{media.w}" height="{media.h}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	    		</li>
+	    	</f:if>
+	    	<f:if condition="{media.type}=='embed2'">
+	    		<li class="video embed vimeo" data-width="{media.w}" data-height="{media.h}">
+	    			<!--<iframe src="//player.vimeo.com/video/{media.media}?portrait=0&color=0000ff" width="{media.w}" height="{media.h}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>-->
+	    			<object width="{media.w}" height="{media.h}">
+						<param value="true" name="allowfullscreen">
+						<param value="always" name="allowscriptaccess">
+						<param value="http://vimeo.com/moogaloop.swf?clip_id={media.media}&force_embed=1&server=vimeo.com&show_title=0&show_byline=0&show_portrait=0&color=#0000ff&fullscreen=1&autoplay=0&loop=0" name="movie">
+						<embed width="{media.w}" height="{media.h}" allowscriptaccess="always" allowfullscreen="true" type="application/x-shockwave-flash" src="http://vimeo.com/moogaloop.swf?clip_id={media.media}&force_embed=1&server=vimeo.com&show_title=0&show_byline=0&show_portrait=0&color=0000ff&fullscreen=1&autoplay=0&loop=0">
+					</object>
+				</li>
+	    	</f:if>
+	    </f:for>
+	</ul>
+
+	<div id="project-words">
+	    <a id="btn-words-close"><img src="fileadmin/templates/img-ui/minus-1.png">&nbsp;Projektinfo</a>
+	    <h1 class="project-title">{projekte.title}</h1>
+	    <div id="project-description">
+	    	<f:format.html>{projekte.description}</f:format.html>
+	    </div>
+	    <dl id="project-meta">
+	    	<dt>Studierende/r</dt>
+	    	<dd>	
+	    		<f:for each="{projekte.students}" as="student" iteration="j"><f:if condition="{j.index}>0">,
+	    				<br />
+	    			</f:if>
+	    			{student.vorname} {student.nachname}</f:for>
+	    	</dd>
+	    	<dt>Seminar</dt>
+	    	<dd>{projekte.seminar}</dd>
+	    	<dt>Lehrende/r</dt>
+	    	<dd>
+	    		<f:for each="{projekte.teacher}" as="teacher" iteration="j"><f:if condition="{j.index}>0">,
+	    				<br />
+	    			</f:if>
+	    			{teacher.titel} {teacher.vorname} {teacher.nachname}</f:for>
+	    	</dd>
+	    	<dt>Technische Details</dt>
+	    	<dd>{projekte.techniques}</dd>
+	    	<dt>Semester</dt>
+	    	<dd>{projekte.semester}</dd>
+	    </dl>
+	</div>
+</f:section>

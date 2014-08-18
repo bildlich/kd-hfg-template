@@ -1,0 +1,28 @@
+{namespace vh=Tx_sdjhfgkd20_ViewHelpers} 
+<f:layout name="Default" />
+<f:section name="main">
+<f:flashMessages />
+	<ul class="students-list-small">
+		<f:for each="{studierendes}" as="studierende">
+			<f:if condition="{studierende.info}==1">
+				<f:if condition="{vh:urlCheck(url:studierende.website)}">
+					<li>
+						<a href="{vh:urlCheck(url:studierende.website)}" target="_blank">{studierende.vorname} {studierende.nachname}</a>
+						</li>
+				</f:if>
+			</f:if>
+		</f:for>
+	</ul>
+	<f:if condition="{alumnis -> f:count()} > 10">
+		<a href="#" id="show-alumni" data-switch-word="–Alumni">+Alumni</a>
+		<ul class="alumni-list">
+			<f:for each="{alumnis}" as="alumni">
+					<f:if condition="{vh:urlCheck(url:alumni.website)}">
+						<li>
+							<a href="{vh:urlCheck(url:alumni.website)}" target="_blank">{alumni.vorname} {alumni.nachname}</a>
+						</li>
+					</f:if>
+			</f:for>
+		</ul>
+	</f:if>
+</f:section>

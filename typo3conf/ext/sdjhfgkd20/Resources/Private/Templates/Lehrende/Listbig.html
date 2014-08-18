@@ -1,0 +1,15 @@
+{namespace vh=Tx_sdjhfgkd20_ViewHelpers} 
+<f:layout name="Default" />
+<f:section name="main">
+<f:flashMessages />
+	<ul class="teachers-list-big">
+		<f:for each="{lehrendes}" as="lehrende">
+			<f:if condition="{lehrende.info}==1">
+				<li class="col">
+					<img src="{vh:imgResource(image:lehrende.bild)}" class="teacher-portrait">
+					<f:format.html>{lehrende.description}</f:format.html>
+				</li>
+			</f:if>
+		</f:for>
+	</ul>
+</f:section>

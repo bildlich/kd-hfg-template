@@ -1,0 +1,380 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2012-02-29T20:52:35Z" product-name="extension_builder" target-language="de">
+		<header/>
+		<body>
+			<trans-unit id="error.extension.0" approved="yes">
+				<source>An extension key must have minimum 3, maximum 30 characters (not counting underscores)</source>
+			<target state="translated">Ein Erweiterungsschlüssel muss mindestens 3 und höchstens 30 Zeichen besitzen (Unterstriche nicht eingeschlossen)</target><alt-trans xml:space="preserve" origin="mnitsch"><target>Ein Extension Schlüssel muss minimal 3 und maximal 30 Zeichen besitzen (Unterstriche nicht eingeschlossen)</target></alt-trans><alt-trans xml:space="preserve" origin="bego68"><target>Ein extension key muss minimal 3 und maximal 30 Zeichen enthalten (Unterstriche nicht eingeschlossen)</target></alt-trans></trans-unit>
+			<trans-unit id="error.extension.1" approved="yes">
+				<source>Illegal character(s) in extension key. Allowed characters are: a-z (lowercase), 0-9 and '_' (underscore)</source>
+			<target state="translated">Unzulässige(s) Zeichen im Erweiterungsschlüssel. Erlaubte Zeichen sind a-z (kleingeschrieben), 0-9 und '_' (Unterstrich)</target><alt-trans xml:space="preserve" origin="mnitsch"><target>Unzulässige(s) Zeichen im Extension Schlüssel. Erlaubte Zeichen sind a-z (klein), 0-9 und '_' (Unterstrich)</target></alt-trans><alt-trans xml:space="preserve" origin="bego68"><target>Unzulässige(s) Zeichen im extension key. Erlaubte Zeichen sind a-z (klein), 0-9 und '_' (Unterstrich)</target></alt-trans></trans-unit>
+			<trans-unit id="error.extension.2" approved="yes">
+				<source>The key may not begin with one of the following prefixes: tx,u,user_,pages,tt_,sys_,ts_language_,csh_</source>
+			<target state="translated">Der Schlüssel darf nicht mit einer der folgenden Zeichenketten beginnen: tx,u,user_,pages,tt_,sys_,ts_language_,csh_</target><alt-trans xml:space="preserve" origin="bego68"><target>Der Schlüssel darf nicht mit einem der folgenden Zeichenketten (Präfixen) beginnen: tx,u,user_,pages,tt_,sys_,ts_language_,csh_</target></alt-trans><alt-trans xml:space="preserve" origin="piphi"><target>Der Schlüssel darf nicht mit einer der folgenden Zeichenketten beginnen: Der Schlüssel darf nicht mit einem der folgenden Präfixe beginnen: tx,u,user_,pages,tt_,sys_,ts_language_,csh_</target></alt-trans><alt-trans xml:space="preserve" origin="mnitsch"><target>Der Schlüssel darf nicht mit einem der folgenden Zeichenketten beginnen: tx,u,user_,pages,tt_,sys_,ts_language_,csh_</target></alt-trans></trans-unit>
+			<trans-unit id="error.extension.3" approved="yes">
+				<source>Extension keys cannot start or end with 0-9 and '_' (underscore)</source>
+			<target state="translated">Erweiterungsschlüssel dürfen nicht mit mit 0-9 oder '_' (Unterstrich) beginnen oder enden</target><alt-trans xml:space="preserve" origin="andrehajo"><target>Ein Erweiterungsschlüssel darf nicht mit mit 0-9 oder '_' (Unterstrich) beginnen oder enden</target></alt-trans><alt-trans xml:space="preserve" origin="piphi"><target>Ein Erweiterungsschlüssel darf nicht mit mit 0-9 oder '_' (Unterstrich) anfangen oder enden</target></alt-trans></trans-unit>
+			<trans-unit id="error.extension.500" approved="yes">
+				<source>There is an existing piBased extension with this extension key. Please choose another extension key or rename the existing extension directory</source>
+			<target state="translated">Es gibt eine von piBase abgeleitete Erweiterung mit diesem Erweiterungsschlüssel. Bitte wählen Sie einen anderen Erweiterungsschlüssel oder benennen Sie das existierende Erweiterungsverzeichnis um</target><alt-trans xml:space="preserve" origin="piphi"><target>Es gibt eine von piBase abgeleitete Erweiterung mit diesem Erweiterungsschlüssel. Bitte einen anderen Erweiterungsschlüssel wählen oder das existierende Dateiverzeichnis umbenennen</target></alt-trans></trans-unit>
+			<trans-unit id="name" approved="yes">
+				<source>Name</source>
+			<target state="translated">Name</target><alt-trans xml:space="preserve" origin="littlegee"><target>Name</target></alt-trans></trans-unit>
+			<trans-unit id="key" approved="yes">
+				<source>Key</source>
+			<target state="translated">Schlüssel</target><alt-trans xml:space="preserve" origin="littlegee"><target>Schlüssel</target></alt-trans></trans-unit>
+			<trans-unit id="extensionTitle" approved="yes">
+				<source>Extension title</source>
+			<target state="translated">Erweiterungstitel</target><alt-trans xml:space="preserve" origin="littlegee"><target>Extension Titel</target></alt-trans></trans-unit>
+			<trans-unit id="extensionKey" approved="yes">
+				<source>Extension Key</source>
+			<target state="translated">Erweiterungsschlüssel</target><alt-trans xml:space="preserve" origin="littlegee"><target>Extension Schlüssel</target></alt-trans><alt-trans xml:space="preserve" origin="andrehajo"><target>Erweiterungsschlüssel</target></alt-trans><alt-trans xml:space="preserve" origin="bego68"><target>Extension key</target></alt-trans></trans-unit>
+			<trans-unit id="descr_extensionKey" approved="yes">
+				<source>The extensionkey should be lowercase and without spaces. It will be the unique identifier for this extension.</source>
+			<target state="translated">Der Erweiterungsschlüssel sollte kleingeschrieben und ohne Leerzeichen sein. Er wird der eindeutige Bezeichner für diese Erweiterung sein.</target><alt-trans xml:space="preserve" origin="piphi"><target>Der Erweiterungsschlüssel sollte kleingeschrieben und ohne Leerzeichen sein. Er wird der eindeutige Bezeichner für diese Erweiterung sein.</target></alt-trans></trans-unit>
+			<trans-unit id="vendorName">
+				<source>Vendor name</source>
+			<target/></trans-unit>
+			<trans-unit id="descr_vendorName">
+				<source>The vendor name is the first part of the new package identifier</source>
+			<target/></trans-unit>
+			<trans-unit id="short_description" approved="yes">
+				<source>Descr.</source>
+			<target state="translated">Beschr.</target><alt-trans xml:space="preserve" origin="littlegee"><target>Beschr.</target></alt-trans></trans-unit>
+			<trans-unit id="description" approved="yes">
+				<source>Description</source>
+			<target state="translated">Beschreibung</target><alt-trans xml:space="preserve" origin="littlegee"><target>Beschreibung</target></alt-trans></trans-unit>
+			<trans-unit id="version" approved="yes">
+				<source>Version</source>
+			<target state="translated">Version</target><alt-trans xml:space="preserve" origin="littlegee"><target>Version</target></alt-trans></trans-unit>
+			<trans-unit id="target_version" approved="yes">
+				<source>Target version</source>
+			<target state="translated">Zielversion</target></trans-unit>
+			<trans-unit id="descr_target_version">
+				<source>If your extension uses features of Extbase/Fluid versions higher than 1.3 you can select your target version here. You have to add the dependency manually in the "Depends on" field.</source>
+			<target/></trans-unit>
+			<trans-unit id="state" approved="yes">
+				<source>State</source>
+			<target state="translated">Status</target><alt-trans xml:space="preserve" origin="littlegee"><target>Status</target></alt-trans></trans-unit>
+			<trans-unit id="alpha" approved="yes">
+				<source>Alpha</source>
+			<target state="translated">Alpha</target><alt-trans xml:space="preserve" origin="littlegee"><target>Alpha</target></alt-trans></trans-unit>
+			<trans-unit id="beta" approved="yes">
+				<source>Beta</source>
+			<target state="translated">Beta</target><alt-trans xml:space="preserve" origin="littlegee"><target>Beta</target></alt-trans></trans-unit>
+			<trans-unit id="stable" approved="yes">
+				<source>Stable</source>
+			<target state="translated">Stabil</target><alt-trans xml:space="preserve" origin="littlegee"><target>Stabil</target></alt-trans></trans-unit>
+			<trans-unit id="experimental" approved="yes">
+				<source>Experimental</source>
+			<target state="translated">Experimentell</target><alt-trans xml:space="preserve" origin="littlegee"><target>Experimentell</target></alt-trans></trans-unit>
+			<trans-unit id="test" approved="yes">
+				<source>Test</source>
+			<target state="translated">Test</target><alt-trans xml:space="preserve" origin="littlegee"><target>Test</target></alt-trans></trans-unit>
+			<trans-unit id="category" approved="yes">
+				<source>Category</source>
+			<target state="translated">Kategorie</target><alt-trans xml:space="preserve" origin="littlegee"><target>Kategorie</target></alt-trans></trans-unit>
+			<trans-unit id="custom_category" approved="yes">
+				<source>OR custom</source>
+			<target state="translated">ODER benutzerdefiniert</target><alt-trans xml:space="preserve" origin="andrehajo"><target>OR benutzerdefiniert</target></alt-trans></trans-unit>
+			<trans-unit id="descr_custom_category" approved="yes">
+				<source>You can define an own category here</source>
+			<target state="translated">Hier kann eine eigene Kategorie definiert werden</target><alt-trans xml:space="preserve" origin="piphi"><target>Hier kann eine eigene Kategorie definiert werden</target></alt-trans></trans-unit>
+			<trans-unit id="descr_category" approved="yes">
+				<source>The category this extension belongs to in the extension manager.</source>
+			<target state="translated">Die Kategorie, zu der diese Erweiterung im Erweiterungsmanager gehört.</target><alt-trans xml:space="preserve" origin="piphi"><target>Die Kategorie, zu der diese Erweiterung im Erweiterungs-Manger gehört.</target></alt-trans></trans-unit>
+			<trans-unit id="misc" approved="yes">
+				<source>Miscellaneous</source>
+			<target state="translated">Verschiedenes</target><alt-trans xml:space="preserve" origin="littlegee"><target>Weiteres</target></alt-trans><alt-trans xml:space="preserve" origin="andrehajo"><target>Verschiedenes</target></alt-trans></trans-unit>
+			<trans-unit id="services" approved="yes">
+				<source>Services</source>
+			<target state="translated">Dienste</target><alt-trans xml:space="preserve" origin="littlegee"><target>Dienste</target></alt-trans></trans-unit>
+			<trans-unit id="backend" approved="yes">
+				<source>Backend</source>
+			<target state="translated">Backend</target><alt-trans xml:space="preserve" origin="littlegee"><target>Backend</target></alt-trans></trans-unit>
+			<trans-unit id="frontend" approved="yes">
+				<source>Frontend</source>
+			<target state="translated">Frontend</target><alt-trans xml:space="preserve" origin="littlegee"><target>Frontend</target></alt-trans></trans-unit>
+			<trans-unit id="templates" approved="yes">
+				<source>Templates</source>
+			<target state="translated">Vorlagen</target><alt-trans xml:space="preserve" origin="andrehajo"><target>Vorlagen</target></alt-trans><alt-trans xml:space="preserve" origin="littlegee"><target>Templates</target></alt-trans></trans-unit>
+			<trans-unit id="examples" approved="yes">
+				<source>Examples</source>
+			<target state="translated">Beispiele</target><alt-trans xml:space="preserve" origin="littlegee"><target>Beispiele</target></alt-trans></trans-unit>
+			<trans-unit id="documentation" approved="yes">
+				<source>Documentation</source>
+			<target state="translated">Dokumentation</target><alt-trans xml:space="preserve" origin="littlegee"><target>Dokumentation</target></alt-trans></trans-unit>
+			<trans-unit id="priority" approved="yes">
+				<source>Priority</source>
+			<target state="translated">Priorität</target><alt-trans xml:space="preserve" origin="littlegee"><target>Priorität</target></alt-trans></trans-unit>
+			<trans-unit id="descr_priority" approved="yes">
+				<source>This tells the EM to try to load the extension as the very first or last of all extensions. Possible values: top or bottom</source>
+			<target state="translated">Dies weist den Erweiterungsmanager an, zu versuchen diese Erweiterung als allererste oder letzte aller Erweiterungen zu laden. Mögliche Werte: top oder bottom</target><alt-trans xml:space="preserve" origin="piphi"><target>Dies weist den ErweiterungsManager an zu versuchen diese Erweiterung als allererste oder letzte aller Erweiterungen zu laden. Mögliche Werte: Anfang oder Ende</target></alt-trans></trans-unit>
+			<trans-unit id="shy" approved="yes">
+				<source>Shy</source>
+			<target state="translated">Schüchtern</target><alt-trans xml:space="preserve" origin="littlegee"><target>Schüchtern</target></alt-trans></trans-unit>
+			<trans-unit id="descr_shy" approved="yes">
+				<source>If the extension is marked as shy, it won't be displayed in the extension manager by default</source>
+			<target state="translated">Wenn eine Erweiterung als 'schüchtern' deklariert ist, wird sie im Erweiterungsmanager standardmäßig nicht angezeigt</target><alt-trans xml:space="preserve" origin="piphi"><target>Wenn eine Erweiterung als 'schüchtern' deklariert ist wird sie im ErweiterungsManager standard-mäßig nicht angezeigt</target></alt-trans></trans-unit>
+			<trans-unit id="disableVersioning" approved="yes">
+				<source>Disable versioning</source>
+			<target state="translated">Versionierung deaktivieren</target></trans-unit>
+			<trans-unit id="descr_disableVersioning">
+				<source>Check this if your extension needs no support for versioning. This will skip the creation of versioning related columns in the database</source>
+			<target/></trans-unit>
+			<trans-unit id="dependsOn" approved="yes">
+				<source>Depends on</source>
+			<target state="translated">Abhängig von</target></trans-unit>
+			<trans-unit id="descr_dependsOn">
+				<source>If the extension is depending on other extensions, enter the extension keys here (one per line followed by a double arrow and the lowest version number). Please leave extbase and fluid since they are required always</source>
+			<target/></trans-unit>
+			<trans-unit id="persons" approved="yes">
+				<source>Persons</source>
+			<target state="translated">Personen</target><alt-trans xml:space="preserve" origin="littlegee"><target>Personen</target></alt-trans></trans-unit>
+			<trans-unit id="role" approved="yes">
+				<source>Role</source>
+			<target state="translated">Rolle</target><alt-trans xml:space="preserve" origin="littlegee"><target>Rolle</target></alt-trans></trans-unit>
+			<trans-unit id="developer" approved="yes">
+				<source>Developer</source>
+			<target state="translated">Entwickler</target><alt-trans xml:space="preserve" origin="littlegee"><target>Entwickler</target></alt-trans></trans-unit>
+			<trans-unit id="product_manager" approved="yes">
+				<source>Product Manager</source>
+			<target state="translated">Produkt-Manager</target><alt-trans xml:space="preserve" origin="littlegee"><target>Produkt Manager</target></alt-trans></trans-unit>
+			<trans-unit id="email" approved="yes">
+				<source>Email</source>
+			<target state="translated">E-Mail</target><alt-trans xml:space="preserve" origin="littlegee"><target>Email</target></alt-trans></trans-unit>
+			<trans-unit id="company" approved="yes">
+				<source>Company</source>
+			<target state="translated">Firma</target><alt-trans xml:space="preserve" origin="littlegee"><target>Firma</target></alt-trans></trans-unit>
+			<trans-unit id="plugins" approved="yes">
+				<source>Frontend plugins</source>
+			<target state="translated">Frontend Plug-Ins</target><alt-trans xml:space="preserve" origin="andrehajo"><target>Frontend Plug-Ins</target></alt-trans><alt-trans xml:space="preserve" origin="littlegee"><target>Frontend plugins</target></alt-trans></trans-unit>
+			<trans-unit id="descr_plugins" approved="yes">
+				<source>The frontend plugins which have to be registered in the extension</source>
+			<target state="translated">Die Frontend-Plug-Ins, welche von der Erweiterung registriert werden müssen</target><alt-trans xml:space="preserve" origin="piphi"><target>Die Frontend Plug-Ins, welche von der Erweiterung registriert werden</target></alt-trans></trans-unit>
+			<trans-unit id="controller_action_combinations">
+				<source>Controller action combinations</source>
+			<target/></trans-unit>
+			<trans-unit id="descr_controller_action_combinations">
+				<source>Here you can configure, which controller action combinations this plugin/module should have. Example: &lt;br /&gt;Blog =&gt; list,show &lt;br /&gt;(one controller per line, actions comma separated) &lt;br /&gt;If you leave this empty, all available actions are configured for this plugin.</source>
+			<target/></trans-unit>
+			<trans-unit id="noncacheable_actions">
+				<source>Non cacheable actions</source>
+			<target/></trans-unit>
+			<trans-unit id="descr_noncacheable_actions">
+				<source>Typically create, delete and update actions should not be cached. (Same format as above)</source>
+			<target/></trans-unit>
+			<trans-unit id="switchableActions">
+				<source>Switchable actions</source>
+			<target/></trans-unit>
+			<trans-unit id="descr_switchableActions">
+				<source>Make actions switchable in the plugin's form. One line for the label, one for the list of allowed Controller-&gt;action pairs (semicolon separated). Example: &lt;br /&gt;Display items&lt;br /&gt;Model-&gt;list; Model-&gt;show;&lt;br /&gt;Admin&lt;br /&gt;Model-&gt;new; Model-&gt;create; Model-&gt;edit; Model-&gt;update;</source>
+			<target/></trans-unit>
+			<trans-unit id="backendModules" approved="yes">
+				<source>Backend modules</source>
+			<target state="translated">Backend-Module</target><alt-trans xml:space="preserve" origin="littlegee"><target>Backend Module</target></alt-trans></trans-unit>
+			<trans-unit id="mainModule" approved="yes">
+				<source>Main module</source>
+			<target state="translated">Hauptmodul</target><alt-trans xml:space="preserve" origin="littlegee"><target>Haupt Modul</target></alt-trans></trans-unit>
+			<trans-unit id="uniqueInThisModel" approved="yes">
+				<source>Should be unique for this model</source>
+			<target state="translated">Soll für dieses Modell eindeutig sein</target><alt-trans xml:space="preserve" origin="piphi"><target>Sollte für dieses Modell eindeutig sein</target></alt-trans></trans-unit>
+			<trans-unit id="type" approved="yes">
+				<source>Type</source>
+			<target state="translated">Typ</target><alt-trans xml:space="preserve" origin="littlegee"><target>Typ</target></alt-trans></trans-unit>
+			<trans-unit id="more" approved="yes">
+				<source>More</source>
+			<target state="translated">Mehr</target><alt-trans xml:space="preserve" origin="littlegee"><target>Mehr</target></alt-trans></trans-unit>
+			<trans-unit id="moreOptions" approved="yes">
+				<source>More options</source>
+			<target state="translated">Mehr Optionen</target></trans-unit>
+			<trans-unit id="advancedOptions" approved="yes">
+				<source>Advanced options</source>
+			<target state="translated">Fortgeschrittene Optionen</target></trans-unit>
+			<trans-unit id="remove" approved="yes">
+				<source>Remove</source>
+			<target state="translated">Entfernen</target><alt-trans xml:space="preserve" origin="littlegee"><target>Entfernen</target></alt-trans></trans-unit>
+			<trans-unit id="add" approved="yes">
+				<source>Add</source>
+			<target state="translated">Hinzufügen</target><alt-trans xml:space="preserve" origin="littlegee"><target>Hinzufügen</target></alt-trans></trans-unit>
+			<trans-unit id="zeroToOne" approved="yes">
+				<source>1:1</source>
+			<target state="translated">1:1</target><alt-trans xml:space="preserve" origin="littlegee"><target>1:1</target></alt-trans></trans-unit>
+			<trans-unit id="manyToOne" approved="yes">
+				<source>n:1</source>
+			<target state="translated">n:1</target><alt-trans xml:space="preserve" origin="littlegee"><target>n:1</target></alt-trans></trans-unit>
+			<trans-unit id="zeroToMany" approved="yes">
+				<source>1:n</source>
+			<target state="translated">1:n</target><alt-trans xml:space="preserve" origin="littlegee"><target>1:n</target></alt-trans></trans-unit>
+			<trans-unit id="manyToMany" approved="yes">
+				<source>m:n</source>
+			<target state="translated">m:n</target><alt-trans xml:space="preserve" origin="littlegee"><target>m:n</target></alt-trans></trans-unit>
+			<trans-unit id="isExcludeField" approved="yes">
+				<source>Is exclude field?</source>
+			<target state="translated">ist Ausschlußfeld?</target><alt-trans xml:space="preserve" origin="piphi"><target>ist Ausschlußfeld?</target></alt-trans></trans-unit>
+			<trans-unit id="descr_isExcludeField" approved="yes">
+				<source>If set to true, this field will only be visible for admin users per default</source>
+			<target state="translated">Wenn auf true gesetzt, wird dieses Feld standardmäßig nur für Administratoren sichtbar sein</target><alt-trans xml:space="preserve" origin="andrehajo"><target>Wenn auf true gesetzt, wird dieses Feld standard mäßig nur für Administratoren sichtbar sein</target></alt-trans><alt-trans xml:space="preserve" origin="piphi"><target>Wenn auf 'wahr' gesetzt, wird dieses Feld standard mäßig nur für Administratoren sichtbar sein</target></alt-trans></trans-unit>
+			<trans-unit id="newModelObject" approved="yes">
+				<source>New model object</source>
+			<target state="translated">Neues Modell-Objekt</target><alt-trans xml:space="preserve" origin="piphi"><target>Neues Modell Objekt</target></alt-trans></trans-unit>
+			<trans-unit id="domainObjectSettings" approved="yes">
+				<source>Domain object settings</source>
+			<target state="translated">Einstellungen des Domainobjekts</target><alt-trans xml:space="preserve" origin="piphi"><target>Einstellungen des Domain Objektes</target></alt-trans></trans-unit>
+			<trans-unit id="objectType" approved="yes">
+				<source>Object type</source>
+			<target state="translated">Objekttyp</target><alt-trans xml:space="preserve" origin="piphi"><target>Objekt Typ</target></alt-trans></trans-unit>
+			<trans-unit id="descr_objectType" approved="yes">
+				<source>Value objects are simple objects that are defined by their value and have no 'identity'</source>
+			<target state="translated">Wertobjekte sind einfache Objekte, die durch ihren Wert definiert sind und keine 'Identität' besitzen</target><alt-trans xml:space="preserve" origin="andrehajo"><target>Wert Objekte sind einfache Objekte, die durch ihren Wert definiert sind und keine 'Identität' besitzen</target></alt-trans><alt-trans xml:space="preserve" origin="piphi"><target>Wert Objekte sind einfaceh Objekte, die durch ihren Wert definiert sind und keine 'Identität' haben</target></alt-trans></trans-unit>
+			<trans-unit id="entity" approved="yes">
+				<source>Entity</source>
+			<target state="translated">Entität</target><alt-trans xml:space="preserve" origin="piphi"><target>Entität</target></alt-trans></trans-unit>
+			<trans-unit id="valueObject" approved="yes">
+				<source>Value object</source>
+			<target state="translated">Wertobjekt</target><alt-trans xml:space="preserve" origin="piphi"><target>Wert Objekt</target></alt-trans></trans-unit>
+			<trans-unit id="isAggregateRoot">
+				<source>Is aggregate root?</source>
+			<target/><alt-trans xml:space="preserve" origin="bego68"><target>Ist aggregate root?</target></alt-trans></trans-unit>
+			<trans-unit id="descr_isAggregateRoot" approved="yes">
+				<source>If true, the extension builder will generate a repository and default controller actions for this model</source>
+			<target state="translated">Wenn ausgewählt wird der Extension-Builder ein Repository und Standard-Kontroller-Aktionen für dieses Modell erzeugen</target><alt-trans xml:space="preserve" origin="piphi"><target>Wenn ausgewählt wird der Extension-Builder ein Repository und standard Kontroller-Aktionen für dieses Modell erzeugen</target></alt-trans></trans-unit>
+			<trans-unit id="enableSorting">
+				<source>Enable sorting?</source>
+			<target/></trans-unit>
+			<trans-unit id="descr_enableSorting">
+				<source>If true, sorting in the backend is enabled</source>
+			<target/></trans-unit>
+			<trans-unit id="mapToTable">
+				<source>Map to existing table</source>
+			<target/></trans-unit>
+			<trans-unit id="descr_mapToTable">
+				<source>If the model should extend an existing table, you can configure this here</source>
+			<target/></trans-unit>
+			<trans-unit id="parentClass">
+				<source>Extend existing model class</source>
+			<target/></trans-unit>
+			<trans-unit id="descr_parentClass">
+				<source>If this model should extend an existing other model, name it here</source>
+			<target/></trans-unit>
+			<trans-unit id="defaultActions" approved="yes">
+				<source>Default actions</source>
+			<target state="translated">Standardaktionen</target><alt-trans xml:space="preserve" origin="littlegee"><target>Standard Aktionen</target></alt-trans></trans-unit>
+			<trans-unit id="actionType" approved="yes">
+				<source>Action type</source>
+			<target state="translated">Aktionstyp</target><alt-trans xml:space="preserve" origin="piphi"><target>Aktions Typ</target></alt-trans></trans-unit>
+			<trans-unit id="descr_actionType" approved="yes">
+				<source>For each selected action, the extension builder will generate a template and a action method in the controller of this model. If the model is an aggregate root the default CRUD actions will be generated per default.</source>
+			<target state="translated">Für jede gewählte Aktion wird der Extension-Builder eine Vorlage und eine Aktions-Methode im Kontroller dieses Modells erzeugen. Wenn das Modell eine aggregate root (gemeinsame Wurzel) ist werden die standard CRUD (Create=Anlegen,Read=Lesen,Update=Aktualisieren,Delete=Löschen)-Aktionen automatisch erzeugt.</target><alt-trans xml:space="preserve" origin="piphi"><target>für jede gewählte Aktion wird der Extension-Builder ein Template und eine Aktions-Methode im Kontroller dieses Modells erzeugen. Wenn das Modell ein (aggregate root?) ist werden die standard CRUD (Create=Anlegen,Read=Lesen,Update=Aktualisieren,Delete=Löschen) Aktionen automatisch erzeugt.</target></alt-trans><alt-trans xml:space="preserve" origin="bego68"><target>Für jede gewählte Aktion wird der Extension-Builder ein Template und eine Aktions-Methode im Kontroller dieses Modells erzeugen. Wenn das Modell eine aggregate root (gemeinsame Wurzel) ist werden die standard CRUD (Create=Anlegen,Read=Lesen,Update=Aktualisieren,Delete=Löschen) Aktionen automatish erzeugt.</target></alt-trans></trans-unit>
+			<trans-unit id="show" approved="yes">
+				<source>show</source>
+			<target state="translated">Anzeige</target><alt-trans xml:space="preserve" origin="bego68"><target>Anzeigen</target></alt-trans><alt-trans xml:space="preserve" origin="littlegee"><target>Anzeige</target></alt-trans></trans-unit>
+			<trans-unit id="list" approved="yes">
+				<source>list</source>
+			<target state="translated">Liste</target><alt-trans xml:space="preserve" origin="littlegee"><target>Liste</target></alt-trans><alt-trans xml:space="preserve" origin="bego68"><target>Auflisten</target></alt-trans></trans-unit>
+			<trans-unit id="create_new" approved="yes">
+				<source>new/create</source>
+			<target state="translated">Neu/Erstellen</target><alt-trans xml:space="preserve" origin="littlegee"><target>Erstellen/Neu</target></alt-trans><alt-trans xml:space="preserve" origin="bego68"><target>Erstellen/Neu Anlegen</target></alt-trans></trans-unit>
+			<trans-unit id="edit_update" approved="yes">
+				<source>edit/update</source>
+			<target state="translated">Bearbeiten/Aktualisieren</target><alt-trans xml:space="preserve" origin="littlegee"><target>Bearbeiten/Aktualisieren</target></alt-trans></trans-unit>
+			<trans-unit id="delete" approved="yes">
+				<source>delete</source>
+			<target state="translated">Löschen</target><alt-trans xml:space="preserve" origin="littlegee"><target>Löschen</target></alt-trans></trans-unit>
+			<trans-unit id="properties" approved="yes">
+				<source>Properties</source>
+			<target state="translated">Eigenschaften</target><alt-trans xml:space="preserve" origin="littlegee"><target>Eigenschaften</target></alt-trans></trans-unit>
+			<trans-unit id="propertyName" approved="yes">
+				<source>Property name</source>
+			<target state="translated">Eigenschaftenname</target><alt-trans xml:space="preserve" origin="littlegee"><target>Eigenschaften Name</target></alt-trans></trans-unit>
+			<trans-unit id="descr_propertyName" approved="yes">
+				<source>The name should be lowerCamelCase and unique in this model</source>
+			<target state="translated">Der Name sollte lowerCamelCase und im Modell eindeutig sein</target><alt-trans xml:space="preserve" origin="piphi"><target>Der Name sollte lowerCamelCase und im Modell eindeutig sein</target></alt-trans></trans-unit>
+			<trans-unit id="propertyType" approved="yes">
+				<source>Property type</source>
+			<target state="translated">Typ der Eigenschaft</target><alt-trans xml:space="preserve" origin="littlegee"><target>Typ der Eigenschaft</target></alt-trans></trans-unit>
+			<trans-unit id="descr_propertyType">
+				<source>All types with * are not yet supported by the frontend form generation/validation</source>
+			<target/></trans-unit>
+			<trans-unit id="string" approved="yes">
+				<source>String</source>
+			<target state="translated">String</target><alt-trans xml:space="preserve" origin="littlegee"><target>String</target></alt-trans></trans-unit>
+			<trans-unit id="text" approved="yes">
+				<source>Text</source>
+			<target state="translated">Text</target><alt-trans xml:space="preserve" origin="littlegee"><target>Text</target></alt-trans></trans-unit>
+			<trans-unit id="richText">
+				<source>Rich text*</source>
+			<target/></trans-unit>
+			<trans-unit id="integer" approved="yes">
+				<source>Integer</source>
+			<target state="translated">Integer</target><alt-trans xml:space="preserve" origin="littlegee"><target>Integer</target></alt-trans></trans-unit>
+			<trans-unit id="floatingPoint" approved="yes">
+				<source>Floating point</source>
+			<target state="translated">Gleitkommazahl</target><alt-trans xml:space="preserve" origin="andrehajo"><target>Gleitkommazahl</target></alt-trans><alt-trans xml:space="preserve" origin="littlegee"><target>Fließkomma</target></alt-trans></trans-unit>
+			<trans-unit id="boolean" approved="yes">
+				<source>Boolean</source>
+			<target state="translated">Boolesch</target><alt-trans xml:space="preserve" origin="littlegee"><target>Boolean</target></alt-trans></trans-unit>
+			<trans-unit id="dateTime" approved="yes">
+				<source>Date time</source>
+			<target state="translated">Datum und Zeit</target><alt-trans xml:space="preserve" origin="bego68"><target>Date time</target></alt-trans><alt-trans xml:space="preserve" origin="littlegee"><target>Datum und Zeit</target></alt-trans></trans-unit>
+			<trans-unit id="date" approved="yes">
+				<source>Date*</source>
+			<target state="translated">Datum*</target></trans-unit>
+			<trans-unit id="time" approved="yes">
+				<source>Time*</source>
+			<target state="translated">Zeit*</target></trans-unit>
+			<trans-unit id="timeSec" approved="yes">
+				<source>Time/Sec*</source>
+			<target state="translated">Zeit/Sekunden*</target></trans-unit>
+			<trans-unit id="selectList" approved="yes">
+				<source>Select list</source>
+			<target state="translated">Auswahlliste</target><alt-trans xml:space="preserve" origin="littlegee"><target>Auswahlliste</target></alt-trans></trans-unit>
+			<trans-unit id="file" approved="yes">
+				<source>File*</source>
+			<target state="translated">Datei*</target><alt-trans xml:space="preserve" origin="littlegee"><target>Datei</target></alt-trans></trans-unit>
+			<trans-unit id="image" approved="yes">
+				<source>Image*</source>
+			<target state="translated">Bild*</target><alt-trans xml:space="preserve" origin="littlegee"><target>Bild</target></alt-trans></trans-unit>
+			<trans-unit id="fileReference" approved="yes">
+				<source>File reference*</source>
+			<target state="translated">Dateireferenz*</target></trans-unit>
+			<trans-unit id="folder" approved="yes">
+				<source>Folder*</source>
+			<target state="translated">Ordner*</target></trans-unit>
+			<trans-unit id="password" approved="yes">
+				<source>Password</source>
+			<target state="translated">Passwort</target></trans-unit>
+			<trans-unit id="isRequired" approved="yes">
+				<source>Is required?</source>
+			<target state="translated">Ist Pflichtfeld?</target><alt-trans xml:space="preserve" origin="bego68"><target>Ist Pflichtfeld?</target></alt-trans><alt-trans xml:space="preserve" origin="littlegee"><target>Wird benötigt?</target></alt-trans></trans-unit>
+			<trans-unit id="relations" approved="yes">
+				<source>Relations</source>
+			<target state="translated">Beziehungen</target><alt-trans xml:space="preserve" origin="littlegee"><target>Beziehungen</target></alt-trans></trans-unit>
+			<trans-unit id="relationName" approved="yes">
+				<source>Name</source>
+			<target state="translated">Name</target><alt-trans xml:space="preserve" origin="littlegee"><target>Name</target></alt-trans></trans-unit>
+			<trans-unit id="descr_relationName" approved="yes">
+				<source>The name should be lowerCamelCase and unique in this model</source>
+			<target state="translated">Der Name sollte lowerCamelCase und im Modell eindeutig sein</target><alt-trans xml:space="preserve" origin="piphi"><target>Der Name sollte lowerCamelCase und im Modell eindeutig sein</target></alt-trans></trans-unit>
+			<trans-unit id="extensionProperties" approved="yes">
+				<source>Extension properties</source>
+			<target state="translated">Eigenschaften der Erweiterung</target><alt-trans xml:space="preserve" origin="piphi"><target>Eigenschaften der Erweiterung</target></alt-trans></trans-unit>
+			<trans-unit id="tab_label" approved="yes">
+				<source>Tab label</source>
+			<target state="translated">Tab-Beschriftung</target><alt-trans xml:space="preserve" origin="andrehajo"><target>Tab Beschriftung</target></alt-trans></trans-unit>
+			<trans-unit id="lazyLoading" approved="yes">
+				<source>Lazy loading</source>
+			<target state="translated">Verzögertes Laden</target><alt-trans xml:space="preserve" origin="piphi"><target>Verzögertes Laden</target></alt-trans></trans-unit>
+			<trans-unit id="descr_lazyLoading" approved="yes">
+				<source>Make this relation lazy loading</source>
+			<target state="translated">Diese Beziehung verzögert laden (lazy loading)</target><alt-trans xml:space="preserve" origin="bego68"><target>Mache, dass die Beziehung  verzögert lädt (lazy loading)</target></alt-trans></trans-unit>
+			<trans-unit id="foreignRelationClass">
+				<source>Relation to external class</source>
+			<target/></trans-unit>
+			<trans-unit id="descr_foreignRelationClass">
+				<source>If this is a relation to an external model, enter the (full qualified) class name here. The class must exist and be loadable</source>
+			<target/></trans-unit>
+		</body>
+	</file>
+</xliff>
