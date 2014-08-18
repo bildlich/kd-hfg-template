@@ -26,3 +26,6 @@
 
 # Ignore temp directory.
 /typo3temp/
+
+# Ignore log files
+*.log
