@@ -2,11 +2,11 @@
 
 ## What this is code is about
 
-This repository contains the website of the Communication Design department at HfG Karlsruhe (Karlsruhe University of Arts and Design) runs on Typo3.
+This repository contains the website of the Communication Design department at HfG Karlsruhe (Karlsruhe University of Arts and Design). The website runs on Typo3.
 
-## Transferring the project
+## Transferring the project to you
 
-The nature of schools is that students and staff fluctuate. I am happy to hand the project over to you. Drop me an email. I can add you as a collaborator or transfer the repository to you. You will also get control over the dploy account to deploy the files to the server.
+This repo is currently maintained by Matthias Gieselmann. The nature of schools is that students and staff fluctuate. I am happy to hand the project over to you. Drop me an email. I can add you as a collaborator or transfer the repository to you.
 
 ## Whom to contact
 
@@ -21,13 +21,13 @@ If you want to make changes to the frontend code, you need to understand (or lea
   * [SASS](http://sass-lang.com/), a CSS preprocessor, and [Compass](http://compass-style.org/)
   * JavaScript and jQuery
  
- If you want to make changes to the backend code, you need to understand (or learn):
+ If you want to make changes to the backend code, you need to understand:
 
   * PHP
   * Typo3
   * MySQL
 
-  In both cases, you need to know:
+  In both cases, you need to understand:
 
   * Version control with [Git](http://git-scm.com/book/en/Getting-Started-About-Version-Control)
   * How to connect to a remote server with SSH keys
