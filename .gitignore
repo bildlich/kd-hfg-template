@@ -7,9 +7,6 @@
 ### CodeKit ###
 */codekit-config.json
 
-# Ignore .htaccess for security reasons
-.htaccess
-
 # Ignore serveral upload and file directories
 /fileadmin/user_upload/
 /fileadmin/_temp_/
