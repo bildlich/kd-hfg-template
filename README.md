@@ -14,20 +14,21 @@ The frontend code was created by and is currently maintained by Matthias Gieselm
 
 For general questions about the website, contact the current website Hiwi of the Communication Design department or Juliane Hohlbaum (teaching assistant) or Indra Häussler (teaching assistant).
 
-## Skills you need
+## Prerequisites
 
 If you want to make changes to the frontend code, you need to understand (or learn):
 
   * [SASS](http://sass-lang.com/), a CSS preprocessor, and [Compass](http://compass-style.org/)
   * JavaScript and jQuery
  
- If you want to make changes to the backend code, you need to understand:
+If you want to make changes to the backend code, you need to understand:
 
   * PHP
   * Typo3
   * MySQL
 
-  In both cases, you need to understand:
+
+In both cases, you need to understand:
 
   * Version control with [Git](http://git-scm.com/book/en/Getting-Started-About-Version-Control)
   * How to connect to a remote server with SSH keys
