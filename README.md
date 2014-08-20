@@ -164,8 +164,8 @@ The stylesheet imports [Compass](http://compass-style.org/), a CSS authoring fra
 
   * **Responsive Design:** The website is responsive, meaning the visitor's experience is good no matter what device he uses (cellphone, laptop, tv). Developing it [mobile-first](http://zurb.com/word/mobile-first) would have been good but we didn't. The stylesheet is structured desktop-first: All styles are created for desktops, then exceptions are made for smaller devices. Specifically, we have breakpoints for
      * **Desktop browsers** (> 1024px). Default design.
-     * **Tablets and smaller PCs** (<= 1024px). Target tablets: No hover, no drag'n'drop, bigger touch targets, smaller typography, layout adjustments, no videos in slideshows
-     * **Smartphones and smaller tables** (<= 799px). Completely different navigation to save space at the sides, no hover, no drag'n'drop, bigger touch targets, smaller typography, smaller images, still zoomable, less drop shadows, no videos in slideshows
+     * **Tablets and smaller PCs** (≤ 1024px). Target tablets: No hover, no drag'n'drop, bigger touch targets, smaller typography, layout adjustments, no videos in slideshows
+     * **Smartphones and smaller tables** (≤ 799px). Completely different navigation to save space at the sides, no hover, no drag'n'drop, bigger touch targets, smaller typography, smaller images, still zoomable, less drop shadows, no videos in slideshows
 
   Delivering different designs for different browser sizes means: Whenever you change the design or add a feature, you have to design it for all of them. Sometimes this means creating a different design, like a bigger font-size for mobile readers or a different kind of navigation. Sometimes it means eliminating a feature entirely. For instance, we don't show the stacked project thumbnails to touchscreen users because drag 'n' drop does not work well on mobile browsers.
 
