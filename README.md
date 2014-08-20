@@ -40,7 +40,7 @@ Do not develop on the remote server. Modifying a live website is bad practice, p
 1. The website runs on Typo3. Requirements can be found [here](http://typo3.org/typo3-cms/overview/requirements/). The gist is: You need PHP and MySQL. Set up your computer in a way this works, e.g. with [MAMP](http://www.mamp.info/).
 2. Create a folder on your harddrive that will contain your working copy. In my case, it is located in `~/htdocs/kd-hfg-template/`
 3. Clone this repository into the folder.
-4. Media folders are not included in this repository because they cause unnecessary bloat. Copy them from the server through SFTP. Connect to the remote server ([details below](#if-you-have-to-transfer-individual-files-from-and-to-the-production-server)) and copy the missing folders (`/fileadmin/user_upload/`, /uploads/) to your local copy.
+4. Media folders are not included in this repository because they cause unnecessary bloat. Copy them from the server through SFTP. Connect to the remote server ([details below](#if-you-have-to-transfer-individual-files-from-and-to-the-production-server)) and copy the missing folders (`/fileadmin/user_upload/`, `/uploads/`) to your local copy.
 5. Another file is missing in the repository: `/typo3conf/LocalConfiguration.php`. Copy it from the server as well. We'll make some changes to it in a minute.
 6. Download the MySQL database as a .sql file from the production server as [described here](#download-the-mysql-database).
 7. Set up a local MySQL database named `kd_t3`. Import the .sql file. Tip: The file may be too big to import it through the browser (e.g. with phpMyAdmin). Use the MySql command line to import it anyway:
@@ -51,8 +51,8 @@ Do not develop on the remote server. Modifying a live website is bad practice, p
         mysql > source path/to/your/file.sql;
 
 
-8. Next we need Typo3 how to connect to the local database. Do this by editing the file `/typo3conf/LocalConfiguration.php`.
-9. Configure Typo3 so it knows where it's located. Login to the backend. In the middle column, select the page "Home" (the one with the  earth icon). In the left column, select "Template". In the right column, click the pen next to "Vollständigen Template-Datensatz bearbeiten." Under "setup", change the value of `config.baseURL` to something like `http://localhost:8888/kd20/` (depending on how your local server is configured and where you have placed the working copy).
+8. Next we need to tell Typo3 how to connect to the local database. Do this by editing the file `/typo3conf/LocalConfiguration.php`.
+9. Configure Typo3 so it knows where it's located. Login to the backend. In the middle column, select the page "Home" (the one with the  earth icon). In the left column, select "Template". In the right column, click the pen next to "Vollständigen Template-Datensatz bearbeiten." Under "setup", change the value of `config.baseURL` to something like `http://localhost:8888/kd-hfg-website/` (depending on how your local server is configured and where you have placed the working copy).
 10. Open the website in the browser to see if everything is working.
 11. If necessary, use Typo3's Install Tool to update the location of ImageMagick so it can transform images.
 
@@ -133,7 +133,6 @@ What does this mean for development? We only modify `scripts.js`. Then we concat
  * Do modify scripts.js
  * Don't modify plugin files directly, your changes will be overwritten on update
  * Don't forget to concatenate and minify. The browser will never see `scripts.js` directly, only `combined-ck.js`.
- * Don't commit the concatenated files to the repository; all we need are the raw files.
 
 #### JS architecture
 
