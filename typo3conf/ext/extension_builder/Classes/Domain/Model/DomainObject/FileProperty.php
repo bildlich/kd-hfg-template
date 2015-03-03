@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
@@ -23,42 +24,57 @@
  ***************************************************************/
 
 /**
- *
  * File property
- *
- * @version $ID:$
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_FileProperty extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
+class FileProperty extends AbstractProperty {
+	/**
+	 * the property's default value
+	 *
+	 * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+	 */
+	protected $defaultValue = NULL;
 
 	/**
 	 * allowed file types for this property
+	 *
 	 * @var string (comma separated filetypes)
 	 */
 	protected $allowedFileTypes = '*';
 
 	/**
-	 * not allowed file types for this property
-	 * @var string (comma separated filetypes)
+	 * not allowed file types for this property (comma-separated file types)
+	 *
+	 * @var string
 	 */
 	protected $disallowedFileTypes = 'php';
 
 	/**
 	 * flag that this property needs an upload folder
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $needsUploadFolder = TRUE;
 
+	/**
+	 * @var int
+	 */
+	protected $maxItems = 1;
+
+	/**
+	 * @var string
+	 */
+	protected $type = 'File';
+
 	public function getTypeForComment() {
-		return '\\string';
+		return '\TYPO3\CMS\Extbase\Domain\Model\FileReference';
 	}
 
 	public function getTypeHint() {
-		return '';
+		return '\TYPO3\CMS\Extbase\Domain\Model\FileReference';
 	}
 
 	public function getSqlDefinition() {
-		return $this->getFieldName() . " text NOT NULL,";
+		return $this->getFieldName() . " int(11) unsigned NOT NULL default '0',";
 	}
 
 	/**
@@ -96,6 +112,28 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_FileProperty extends Tx_Exte
 	public function setDisallowedFileTypes($disallowedFileTypes) {
 		return $this->disallowedFileTypes = $disallowedFileTypes;
 	}
-}
 
-?>
+	/**
+	 * The string to be used inside object accessors to display this property.
+	 *
+	 * @return string
+	 */
+	public function getNameToBeDisplayedInFluidTemplate() {
+		return $this->name . '.originalResource.name';
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMaxItems() {
+		return $this->maxItems;
+	}
+
+	/**
+	 * @param int $maxItems
+	 */
+	public function setMaxItems($maxItems) {
+		$this->maxItems = $maxItems;
+	}
+
+}

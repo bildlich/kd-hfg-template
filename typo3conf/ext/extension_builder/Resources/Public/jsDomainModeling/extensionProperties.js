@@ -5,7 +5,8 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 		inputParams: {
 			name: "name",
 			label: TYPO3.settings.extensionBuilder._LOCAL_LANG.name,
-			typeInvite: TYPO3.settings.extensionBuilder._LOCAL_LANG.extensionTitle
+			typeInvite: TYPO3.settings.extensionBuilder._LOCAL_LANG.extensionTitle,
+			required: true
 		}
 	},
 	{
@@ -13,11 +14,13 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 		inputParams: {
 			name: "vendorName",
 			label: TYPO3.settings.extensionBuilder._LOCAL_LANG.vendorName,
-			value: 'TYPO3',
-			forceLowerCase: false,
-			forceAlphaNumericUnderscore: true,
+			placeholder: TYPO3.settings.extensionBuilder._LOCAL_LANG.vendorName,
+			value: '',
+			ucFirst: true,
+			forceAlphaNumeric: true,
 			cols: 30,
-			description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_vendorName
+			description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_vendorName,
+			required: true
 		}
 	},
 	{
@@ -29,7 +32,8 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 			forceLowerCase: true,
 			forceAlphaNumericUnderscore: true,
 			cols: 30,
-			description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_extensionKey
+			description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_extensionKey,
+			required: true
 		}
 	},
 	{
@@ -52,7 +56,7 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 		inputParams: {
 			collapsible: true,
 			collapsed: true,
-			className: 'bottomBorder',
+			className: 'emConf mainGroup',
 			legend: TYPO3.settings.extensionBuilder._LOCAL_LANG.moreOptions,
 			name: "emConf",
 			fields: [
@@ -62,7 +66,7 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 							label: TYPO3.settings.extensionBuilder._LOCAL_LANG.category,
 							name: "category",
 							description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_category,
-							selectValues: [ "plugin", "module", "misc", "be", "fe", "services","templates", "example", "doc"],
+							selectValues: [ "plugin", "module", "misc", "be", "fe", "services", "templates", "distribution", "example", "doc"],
 							selectOptions: [
 								TYPO3.settings.extensionBuilder._LOCAL_LANG.plugins,
 								TYPO3.settings.extensionBuilder._LOCAL_LANG.backendModules,
@@ -72,6 +76,7 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 								TYPO3.settings.extensionBuilder._LOCAL_LANG.services,
 								TYPO3.settings.extensionBuilder._LOCAL_LANG.templates,
 								TYPO3.settings.extensionBuilder._LOCAL_LANG.examples,
+								TYPO3.settings.extensionBuilder._LOCAL_LANG.distribution,
 								TYPO3.settings.extensionBuilder._LOCAL_LANG.documentation
 							]
 						}
@@ -110,25 +115,6 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 						}
 					},
 					{
-						type: "string",
-						inputParams: {
-							name: "priority",
-							description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_priority,
-							label: TYPO3.settings.extensionBuilder._LOCAL_LANG.priority,
-							cols: 30
-						}
-					},
-					{
-						type: "boolean",
-						inputParams: {
-							name: "shy",
-							label: TYPO3.settings.extensionBuilder._LOCAL_LANG.shy,
-							description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_shy,
-							value: 0,
-							postText: TYPO3.settings.extensionBuilder._LOCAL_LANG.extension_api_link
-						}
-					},
-					{
 						type: "boolean",
 						inputParams: {
 							name: "disableVersioning",
@@ -137,16 +123,38 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 							value: 0
 						}
 					},
+					{
+						type: "boolean",
+						inputParams: {
+							name: "disableLocalization",
+							label: TYPO3.settings.extensionBuilder._LOCAL_LANG.disableLocalization,
+							description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_disableLocalization,
+							value: 0
+						}
+					},
+					{
+						type: "string",
+						inputParams: {
+							name: "sourceLanguage",
+							description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_sourceLanguage,
+							label: TYPO3.settings.extensionBuilder._LOCAL_LANG.sourceLanguage,
+							value: 'en',
+							cols: 30
+						}
+					},
                     {
                         type: "select",
                         inputParams: {
                             name: "targetVersion",
+							id: 'targetVersionSelector',
                             label: TYPO3.settings.extensionBuilder._LOCAL_LANG.target_version,
                             description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_target_version,
                             selectOptions: [
-                                'TYPO3 v 6.0'
+								'TYPO3 v 6.1',
+								'TYPO3 v 6.2'
                             ],
-                            selectValues: ["6.0"]
+                            selectValues: ["6.1","6.2"],
+							value: '6.2'
                         }
                     },
 					{
@@ -154,10 +162,11 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 						inputParams: {
 							label: TYPO3.settings.extensionBuilder._LOCAL_LANG.dependsOn,
 							name: "dependsOn",
+							id: 'extensionDependencies',
 							description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_dependsOn,
 							cols:20,
 							rows:6,
-							value : "extbase => 6.0\nfluid => 6.0\ntypo3 => 6.0\n"
+							value : "typo3 => 6.2\n"
 						}
 					}
 			]
@@ -169,7 +178,7 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 			label: TYPO3.settings.extensionBuilder._LOCAL_LANG.persons,
 			name: "persons",
 			sortable: true,
-			className: 'bottomBorder',
+			className: 'persons mainGroup',
 			elementType: {
 				type: "group",
 				inputParams: {
@@ -218,9 +227,8 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 		inputParams: {
 			name: "plugins",
 			label: TYPO3.settings.extensionBuilder._LOCAL_LANG.plugins,
-			description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_plugins,
 			sortable: true,
-			className: 'bottomBorder',
+			className: 'plugins mainGroup',
 			elementType: {
 				type: "group",
 				inputParams: {
@@ -258,6 +266,7 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 											name: "controllerActionCombinations",
 											label: TYPO3.settings.extensionBuilder._LOCAL_LANG.controller_action_combinations,
 											description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_controller_action_combinations,
+											placeholder: 'ControllerName => action1,action2',
 											cols: 38,
 											rows: 3
 										}
@@ -267,6 +276,7 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 										inputParams: {
 											name: "noncacheableActions",
 											label: TYPO3.settings.extensionBuilder._LOCAL_LANG.noncacheable_actions,
+											placeholder: 'ControllerName => action1,action2',
 											description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_noncacheable_actions,
 											cols: 38,
 											rows: 3
@@ -303,7 +313,7 @@ extbaseModeling_wiringEditorLanguage.propertiesFields =
 		inputParams: {
 			label: TYPO3.settings.extensionBuilder._LOCAL_LANG.backendModules,
 			name: "backendModules",
-			className: 'bottomBorder',
+			className: 'bottomBorder mainGroup',
 			sortable: true,
 			elementType: {
 				type: "group",

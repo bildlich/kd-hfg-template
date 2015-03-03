@@ -56,7 +56,7 @@ class Projekte extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @var \string
 	 * @validate NotEmpty
 	 */
-	protected $mainimage;
+	public $mainimage;
 
 	/**
 	 * techniques
@@ -84,7 +84,7 @@ class Projekte extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @var \string
 	 */
-	protected $description;
+	public $description;
 
 	/**
 	 * metaabstract

@@ -1,3 +1,42 @@
+2014-12-05  Andreas Beutel  <typo3@mehrwert.de>
+	* Version 4.18.5
+	* Feature: Updated pMA to the latest stable 4.0.x release (4.0.10.7)
+	* Security: Includes several security fixes
+		* PMASA-2014-13: Multiple XSS vulnerabilities.
+		* PMASA-2014-14: Local file inclusion vulnerability.
+		* PMASA-2014-17: DoS vulnerability with long passwords.
+
+2014-11-01  Andreas Beutel  <typo3@mehrwert.de>
+	* Version 4.18.4
+	* Feature: Updated pMA to the latest stable 4.0.x release (4.0.10.5)
+	* Security: Includes several security fixes
+		* PMASA-2014-11: XSS vulnerabilities in table search and table structure pages.
+		* PMASA-2014-12: XSS vulnerabilities in SQL debug output and server monitor page.
+
+2014-09-25  Andreas Beutel  <typo3@mehrwert.de>
+	* Version 4.18.3
+	* Feature: Updated pMA to the latest stable 4.0.x release (4.0.10.3)
+	* Security: Includes several security fixes
+		* PMASA-2014-10: XSRF/CSRF due to DOM based XSS in the micro history feature
+		* PMASA-2014-8: Multiple XSS vulnerabilities in browse table, ENUM editor, monitor, query charts and table relations pages
+
+2014-07-20  Andreas Beutel  <typo3@mehrwert.de>
+	* Version 4.18.2
+	* Feature: Updated pMA to the latest stable 4.0.x release (4.0.10.1)
+	* Security: Includes non-critical security fixes
+		* PMASA-2014-5: Self-XSS due to unescaped HTML output in database triggers page.
+		* PMASA-2014-6: Multiple XSS in AJAX confirmation messages.
+	* Feature: #56522: Do not remove PL language on packaging for T3O
+
+2014-03-03  Andreas Beutel  <typo3@mehrwert.de>
+	* Version 4.18.1
+	* Set TYPO3 6.2 compatibility
+
+2014-01-31  Andreas Beutel  <typo3@mehrwert.de>
+	* Version 4.18.0
+	* Set TYPO3 6.1 compatibility
+	* Feature: Updated pMA to the stable release (4.0.10)
+
 2013-09-01  Andreas Beutel  <typo3@mehrwert.de>
 	* Version 4.17.0
 	* Feature: #51384: Add EM-config option to disable Ajax in pMA (thanks to Gabriel Kaufmann for the suggestion)

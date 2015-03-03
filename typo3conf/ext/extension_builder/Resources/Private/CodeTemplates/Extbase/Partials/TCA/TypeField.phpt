@@ -1,27 +1,20 @@
-{namespace k=Tx_ExtensionBuilder_ViewHelpers}
-t3lib_div::loadTCA('{domainObject.databaseTableName}');
-if (!isset($TCA['{domainObject.databaseTableName}']['ctrl']['type'])) {
+{namespace k=EBT\ExtensionBuilder\ViewHelpers}
+if (!isset($GLOBALS['TCA']['{databaseTableName}']['ctrl']['type'])) {
+	if (file_exists($GLOBALS['TCA']['{databaseTableName}']['ctrl']['dynamicConfigFile'])) {
+		require_once($GLOBALS['TCA']['{databaseTableName}']['ctrl']['dynamicConfigFile']);
+	}
 	// no type field defined, so we define it here. This will only happen the first time the extension is installed!!
-	$TCA['{domainObject.databaseTableName}']['ctrl']['type'] = 'tx_extbase_type';
+	$GLOBALS['TCA']['{databaseTableName}']['ctrl']['type'] = 'tx_extbase_type';
 	$tempColumns = array();
-	$tempColumns[$TCA['{domainObject.databaseTableName}']['ctrl']['type']] = array(
+	$tempColumns[$GLOBALS['TCA']['{databaseTableName}']['ctrl']['type']] = array(
 		'exclude' => 1,
-		'label'   => 'LLL:EXT:{domainObject.extension.extensionKey}/Resources/Private/Language/locallang_db.xlf:{domainObject.labelNamespace}.tx_extbase_type',
+		'label'   => 'LLL:EXT:{extension.extensionKey}/Resources/Private/Language/locallang_db.xlf:{extension.shortExtensionKey}.tx_extbase_type',
 		'config' => array(
 			'type' => 'select',
-			'items' => array(
-				array('LLL:EXT:{domainObject.extension.extensionKey}/Resources/Private/Language/locallang_db.xlf:{domainObject.labelNamespace}.tx_extbase_type.0','0'),
-			),
+			'items' => array(),
 			'size' => 1,
 			'maxitems' => 1,
-			'default' => '{domainObject.recordType}'
 		)
 	);
-	t3lib_extMgm::addTCAcolumns('{domainObject.databaseTableName}', $tempColumns, 1);
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('{databaseTableName}', $tempColumns, 1);
 }
-
-<k:recordType domainObject="{domainObject}" >
-$TCA['{domainObject.databaseTableName}']['types']['{domainObject.recordType}']['showitem'] = $TCA['{domainObject.databaseTableName}']['types']['{parentRecordType}']['showitem'];
-$TCA['{domainObject.databaseTableName}']['columns'][$TCA['{domainObject.databaseTableName}']['ctrl']['type']]['config']['items'][] = array('LLL:EXT:{domainObject.extension.extensionKey}/Resources/Private/Language/locallang_db.xlf:{domainObject.labelNamespace}','{domainObject.recordType}');
-t3lib_extMgm::addToAllTCAtypes('{domainObject.databaseTableName}', $TCA['{domainObject.databaseTableName}']['ctrl']['type'],'','after:hidden');
-</k:recordType>

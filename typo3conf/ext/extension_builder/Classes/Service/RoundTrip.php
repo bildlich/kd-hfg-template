@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Service;
 /***************************************************************
  *  Copyright notice
  *
@@ -21,34 +22,47 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use EBT\ExtensionBuilder\Domain\Model;
+use EBT\ExtensionBuilder\Utility\Inflector;
+use EBT\ExtensionBuilder\Configuration\ConfigurationManager;
+use EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation\AbstractRelation;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Performs all changes that are required to adapt the
  * existing classes and methods to the changes in the configurations
  */
-class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\SingletonInterface {
-
+class RoundTrip implements \TYPO3\CMS\Core\SingletonInterface {
+	/**
+	 * @var string
+	 */
 	const SPLIT_TOKEN = '## EXTENSION BUILDER DEFAULTS END TOKEN - Everything BEFORE this line is overwritten with the defaults of the extension builder';
 
-	const OLD_SPLIT_TOKEN = '## KICKSTARTER DEFAULTS END TOKEN - Everything BEFORE this line is overwritten with the defaults of the kickstarter';
-
-
+	/**
+	 * @var \EBT\ExtensionBuilder\Domain\Model\Extension
+	 */
 	protected $previousExtension = NULL;
 
 	/**
-	 * if an extension was renamed this property keeps the original extensionDirectory
+	 * @var \EBT\ExtensionBuilder\Domain\Model\Extension
+	 */
+	protected $extension = NULL;
+
+	/**
+	 * if an extension was renamed this property keeps the
+	 * original extensionDirectory
 	 * otherwise it is set to the current extensionDir
 	 *
-	 * @var string path
+	 * @var string
 	 */
-	protected $previousExtensionDirectory;
+	protected $previousExtensionDirectory = '';
 
 	/**
 	 * the directory of the current extension
-	 * @var string path
+	 *
+	 * @var string
 	 */
-	protected $extensionDirectory;
-
+	protected $extensionDirectory = '';
 
 	/**
 	 * if an extension was renamed this property keeps the old key
@@ -56,26 +70,32 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	 *
 	 * @var string
 	 */
-	protected $previousExtensionKey;
+	protected $previousExtensionKey = '';
 
-	protected $oldDomainObjects = array();
+	/**
+	 * @var \EBT\ExtensionBuilder\Domain\Model\DomainObject[]
+	 */
+	protected $previousDomainObjects = array();
 
+	/**
+	 * @var \EBT\ExtensionBuilder\Domain\Model\DomainObject[]
+	 */
 	protected $renamedDomainObjects = array();
 
 	/**
-	 * @var Tx_ExtensionBuilder_Utility_ClassParser
+	 * @var \EBT\ExtensionBuilder\Service\Parser
 	 */
-	protected $classParser;
+	protected $parserService = NULL;
 
 	/**
-	 * @var Tx_ExtensionBuilder_Service_ClassBuilder
+	 * @var \EBT\ExtensionBuilder\Service\ClassBuilder
 	 */
-	protected $classBuilder;
+	protected $classBuilder = NULL;
 
 	/**
-	 * @var Tx_ExtensionBuilder_Configuration_ConfigurationManager
+	 * @var \EBT\ExtensionBuilder\Configuration\ConfigurationManager
 	 */
-	protected $configurationManager;
+	protected $configurationManager = NULL;
 
 	/**
 	 * was the extension renamed?
@@ -85,26 +105,42 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	protected $extensionRenamed = FALSE;
 
 	/**
-	 * @param Tx_ExtensionBuilder_Utility_ClassParser $classParser
+	 * @var \EBT\ExtensionBuilder\Domain\Model\ClassObject\ClassObject
+	 */
+	protected $classObject = NULL;
+
+	/**
+	 * The file object parsed from existing files
+	 * @var \EBT\ExtensionBuilder\Domain\Model\File
+	 */
+	protected $classFileObject = NULL;
+
+	/**
+	 * @var array
+	 */
+	protected $settings = array();
+
+	/**
+	 * @param \EBT\ExtensionBuilder\Service\Parser $parserService
 	 * @return void
 	 */
-	public function injectClassParser(Tx_ExtensionBuilder_Utility_ClassParser $classParser) {
-		$this->classParser = $classParser;
+	public function injectParserService(\EBT\ExtensionBuilder\Service\Parser $parserService) {
+		$this->parserService = $parserService;
 	}
 
 	/**
-	 * @param Tx_ExtensionBuilder_Service_ClassBuilder $classBuilder
+	 * @param \EBT\ExtensionBuilder\Service\ClassBuilder $classBuilder
 	 * @return void
 	 */
-	public function injectClassBuilder(Tx_ExtensionBuilder_Service_ClassBuilder $classBuilder) {
+	public function injectClassBuilder(\EBT\ExtensionBuilder\Service\ClassBuilder $classBuilder) {
 		$this->classBuilder = $classBuilder;
 	}
 
 	/**
-	 * @param Tx_ExtensionBuilder_Configuration_ConfigurationManager $configurationManager
+	 * @param \EBT\ExtensionBuilder\Configuration\ConfigurationManager $configurationManager
 	 * @return void
 	 */
-	public function injectConfigurationManager(Tx_ExtensionBuilder_Configuration_ConfigurationManager $configurationManager) {
+	public function injectConfigurationManager(ConfigurationManager $configurationManager) {
 		$this->configurationManager = $configurationManager;
 	}
 
@@ -113,15 +149,15 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	 * of the extension is build to compare it with the new configuration coming
 	 * from the extension builder input
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 */
-	public function initialize(Tx_ExtensionBuilder_Domain_Model_Extension $extension) {
+	public function initialize(Model\Extension $extension) {
 
 		$this->extension = $extension;
 		$this->extensionDirectory = $this->extension->getExtensionDir();
 
-		if (!$this->classParser instanceof Tx_ExtensionBuilder_Utility_ClassParser) {
-			$this->injectClassParser(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_ExtensionBuilder_Utility_ClassParser'));
+		if (!$this->parserService instanceof \EBT\ExtensionBuilder\Service\Parser) {
+			$this->injectParserService(GeneralUtility::makeInstance('EBT\\ExtensionBuilder\\Service\\Parser'));
 		}
 		$this->settings = $this->configurationManager->getExtensionBuilderSettings();
 		// defaults
@@ -132,48 +168,63 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 			$this->previousExtensionDirectory = $extension->getPreviousExtensionDirectory();
 			$this->previousExtensionKey = $extension->getOriginalExtensionKey();
 			$this->extensionRenamed = TRUE;
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Extension renamed: ' . $this->previousExtensionKey . ' => ' . $this->extension->getExtensionKey(), 'extension_builder', 1, array('$previousExtensionDirectory ' => $this->previousExtensionDirectory));
+			GeneralUtility::devlog('Extension renamed: ' . $this->previousExtensionKey . ' => ' . $this->extension->getExtensionKey(), 'extension_builder', 1, array('$previousExtensionDirectory ' => $this->previousExtensionDirectory));
 		}
 
 		// Rename the old kickstarter.json file to ExtensionBuilder.json
 		if (file_exists($this->previousExtensionDirectory . 'kickstarter.json')) {
 			rename(
 				$this->previousExtensionDirectory . 'kickstarter.json',
-				$this->previousExtensionDirectory . Tx_ExtensionBuilder_Configuration_ConfigurationManager::EXTENSION_BUILDER_SETTINGS_FILE
+				$this->previousExtensionDirectory . ConfigurationManager::EXTENSION_BUILDER_SETTINGS_FILE
 			);
 		}
 
-		if (file_exists($this->previousExtensionDirectory . Tx_ExtensionBuilder_Configuration_ConfigurationManager::EXTENSION_BUILDER_SETTINGS_FILE)) {
-			$extensionSchemaBuilder = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_ExtensionBuilder_Service_ExtensionSchemaBuilder');
+		if (file_exists($this->previousExtensionDirectory . ConfigurationManager::EXTENSION_BUILDER_SETTINGS_FILE)) {
+			$extensionSchemaBuilder = GeneralUtility::makeInstance('EBT\\ExtensionBuilder\\Service\\ExtensionSchemaBuilder');
 			$jsonConfig = $this->configurationManager->getExtensionBuilderConfiguration($this->previousExtensionKey, FALSE);
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('old JSON:' . $this->previousExtensionDirectory . 'ExtensionBuilder.json', 'extension_builder', 0, $jsonConfig);
+			GeneralUtility::devlog(
+				'old JSON:' . $this->previousExtensionDirectory . 'ExtensionBuilder.json',
+				'extension_builder',
+				0,
+				$jsonConfig
+			);
 			$this->previousExtension = $extensionSchemaBuilder->build($jsonConfig);
-			$oldDomainObjects = $this->previousExtension->getDomainObjects();
-			foreach ($oldDomainObjects as $oldDomainObject) {
-				$this->oldDomainObjects[$oldDomainObject->getUniqueIdentifier()] = $oldDomainObject;
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Old domain object: ' . $oldDomainObject->getName() . ' - ' . $oldDomainObject->getUniqueIdentifier(), 'extension_builder');
+			$previousDomainObjects = $this->previousExtension->getDomainObjects();
+			/** @var $previousDomainObjects \EBT\ExtensionBuilder\Domain\Model\DomainObject[] */
+			foreach ($previousDomainObjects as $oldDomainObject) {
+				$this->previousDomainObjects[$oldDomainObject->getUniqueIdentifier()] = $oldDomainObject;
+				$this->log(
+					'Old domain object: ' . $oldDomainObject->getName() . ' - ' . $oldDomainObject->getUniqueIdentifier(),
+					0,
+					$jsonConfig
+					);
 			}
 
-			// now we store all renamed domainObjects in an array to enable detection of renaming in
-			// relationProperties (property->getForeignModel)
-			// we also build an array with the new unique identifiers to detect deleting of domainObjects
+			/**
+			 * now we store all renamed domainObjects in an array to enable
+			 * detection of renaming in relationProperties (property->getForeignModel)
+			 * we also build an array with the new unique identifiers to detect
+			 * deleting of domainObjects
+			 */
 			$currentDomainsObjects = array();
 			foreach ($this->extension->getDomainObjects() as $domainObject) {
-				if (isset($this->oldDomainObjects[$domainObject->getUniqueIdentifier()])) {
-					if ($this->oldDomainObjects[$domainObject->getUniqueIdentifier()]->getName() != $domainObject->getName()) {
+				/** @var \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject */
+				if (isset($this->previousDomainObjects[$domainObject->getUniqueIdentifier()])) {
+					if ($this->previousDomainObjects[$domainObject->getUniqueIdentifier()]->getName() != $domainObject->getName()) {
 						$renamedDomainObjects[$domainObject->getUniqueIdentifier()] = $domainObject;
 					}
 				}
 				$currentDomainsObjects[$domainObject->getUniqueIdentifier()] = $domainObject;
 			}
 			// remove deleted objects
-			foreach ($oldDomainObjects as $oldDomainObject) {
+			foreach ($previousDomainObjects as $oldDomainObject) {
 				if (!isset($currentDomainsObjects[$oldDomainObject->getUniqueIdentifier()])) {
 					$this->removeDomainObjectFiles($oldDomainObject);
 				}
 			}
 		}
-		spl_autoload_register('Tx_ExtensionBuilder_Utility_ClassLoader::loadClass', FALSE, TRUE);
+		//TODO: not needed anymore?
+		spl_autoload_register('EBT\\ExtensionBuilder\\Utility\\ClassLoader::loadClass', FALSE, TRUE);
 	}
 
 	/**
@@ -182,37 +233,32 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	 * parses the existing class file for that domain model
 	 * compares all properties and methods with the previous version.
 	 *
-	 * Methods are either removed/added or updated according to the new property names
+	 * Methods are either removed/added or updated according to
+	 * the new property names
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject The new domain object
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject The new domain object
 	 *
-	 * @return Tx_ExtensionBuilder_Domain_Model_Class OR NULL
+	 * @return \EBT\ExtensionBuilder\Domain\Model\ClassObject\ClassObject OR NULL
 	 */
-	public function getDomainModelClass(Tx_ExtensionBuilder_Domain_Model_DomainObject $currentDomainObject) {
-		if (isset($this->oldDomainObjects[$currentDomainObject->getUniqueIdentifier()])) {
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('domainObject identified:' . $currentDomainObject->getName(), 'extension_builder', 0);
-			$oldDomainObject = $this->oldDomainObjects[$currentDomainObject->getUniqueIdentifier()];
+	public function getDomainModelClassFile(Model\DomainObject $currentDomainObject) {
+		if (isset($this->previousDomainObjects[$currentDomainObject->getUniqueIdentifier()])) {
+				$this->log('domainObject identified:' . $currentDomainObject->getName());
+			$oldDomainObject = $this->previousDomainObjects[$currentDomainObject->getUniqueIdentifier()];
+			/** @var \EBT\ExtensionBuilder\Domain\Model\DomainObject $oldDomainObject */
 			$extensionDir = $this->previousExtensionDirectory;
-			$fileName = Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Model', FALSE) . $oldDomainObject->getName() . '.php';
+			$fileName = FileGenerator::getFolderForClassFile($extensionDir, 'Model', FALSE) . $oldDomainObject->getName() . '.php';
 			if (file_exists($fileName)) {
 				// import the classObject from the existing file
-				include_once($fileName);
-				$className = $oldDomainObject->getFullQualifiedClassName();
-				$this->classObject = $this->classParser->parse($className);
-					// it seems there is no way to distinguish between full qualified and qualified namespace in reflection
-				$this->classObject->setParentClass('\\' . $this->classObject->getParentClass());
-
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Model class namespace: '. $this->classObject->getNameSpace(),'extension_builder',0);
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Model class parent: '. $this->classObject->getParentClass(),'extension_builder',0);
+				$this->classFileObject = $this->parserService->parseFile($fileName);
+				$this->classObject = $this->classFileObject->getFirstClass();
 				if ($oldDomainObject->getName() != $currentDomainObject->getName() || $this->extensionRenamed) {
 					if (!$this->extensionRenamed) {
-						\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('domainObject renamed. old: ' . $oldDomainObject->getName() . ' new: ' . $currentDomainObject->getName(), 'extension_builder');
+						$this->log('domainObject renamed. old: ' . $oldDomainObject->getName() . ' new: ' . $currentDomainObject->getName(), 'extension_builder');
 					}
-
 					$newClassName = $currentDomainObject->getName();
 					$this->classObject->setName($newClassName);
 					$this->classObject->setFileName($currentDomainObject->getName() . '.php');
-					$this->cleanUp(Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Model'), $oldDomainObject->getName() . '.php');
+					$this->cleanUp(FileGenerator::getFolderForClassFile($extensionDir, 'Model'), $oldDomainObject->getName() . '.php');
 					$this->cleanUp($extensionDir . 'Configuration/TCA/', $oldDomainObject->getName() . '.php');
 
 				} else {
@@ -227,9 +273,13 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 				}
 				$oldActions = $oldDomainObject->getActions();
 
-				if ((empty($newActions) && !$currentDomainObject->isAggregateRoot()) && (!empty($oldActions) || $oldDomainObject->isAggregateRoot())) {
+				if ((empty($newActions) && !$currentDomainObject->isAggregateRoot())
+						&& (!empty($oldActions) || $oldDomainObject->isAggregateRoot())) {
 					// remove the controller
-					$this->cleanUp(Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Controller'), $oldDomainObject->getName() . 'Controller.php');
+					$this->cleanUp(
+						FileGenerator::getFolderForClassFile($extensionDir, 'Controller'),
+						$oldDomainObject->getName() . 'Controller.php'
+					);
 				}
 
 				// the parent class settings configuration
@@ -238,42 +288,49 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 				if (!empty($parentClass)) {
 					if ($oldParentClass != $parentClass) {
 						// the parent class was just new added
-						$this->classObject->setParentClass($parentClass);
+						$this->classObject->setParentClassName($parentClass);
 					}
-				} else if (!empty($oldParentClass)) {
+				} elseif (!empty($oldParentClass)) {
 					// the old object had a parent class setting, but it's removed now
 					if ($currentDomainObject->isEntity()) {
 						$parentClass = $this->configurationManager->getParentClassForEntityObject($this->extension->getExtensionKey());
 					} else {
 						$parentClass = $this->configurationManager->getParentClassForValueObject($this->extension->getExtensionKey());
 					}
-					$this->classObject->setParentClass($parentClass);
+					$this->classObject->setParentClassName($parentClass);
 				}
 
-				if($currentDomainObject->isEntity() && !$oldDomainObject->isEntity()) {
+				if ($currentDomainObject->isEntity() && !$oldDomainObject->isEntity()) {
 					// the object type was changed in the modeler
-					$this->classObject->setParentClass($this->configurationManager->getParentClassForEntityObject($this->extension->getExtensionKey()));
+					$this->classObject->setParentClassName(
+						$this->configurationManager->getParentClassForEntityObject($this->extension->getExtensionKey())
+					);
 				} elseif (!$currentDomainObject->isEntity() && $oldDomainObject->isEntity()) {
 					// the object type was changed in the modeler
-					$this->classObject->setParentClass($this->configurationManager->getParentClassForValueObject($this->extension->getExtensionKey()));
+					$this->classObject->setParentClassName(
+						$this->configurationManager->getParentClassForValueObject($this->extension->getExtensionKey())
+					);
 				}
-				return $this->classObject;
+				$this->classFileObject->setClasses(array($this->classObject));
+				return $this->classFileObject;
 			}
 			else {
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('class file didn\'t exist:' . $fileName, 'extension_builder', 0);
+				GeneralUtility::devLog('class file didn\'t exist:' . $fileName, 'extension_builder', 0);
 			}
 		}
 		else {
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('domainObject not identified:' . $currentDomainObject->getName(), 'extension_builder', 0, $this->oldDomainObjects);
-			$fileName = Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($this->extensionDirectory, 'Model', FALSE) . $currentDomainObject->getName() . '.php';
+			$this->log('domainObject not identified:' . $currentDomainObject->getName(), 0, $this->previousDomainObjects);
+			$fileName = FileGenerator::getFolderForClassFile($this->extensionDirectory, 'Model', FALSE);
+			$fileName .= $currentDomainObject->getName() . '.php';
 			if (file_exists($fileName)) {
 				// import the classObject from the existing file
-				include_once($fileName);
-				$className = $currentDomainObject->getQualifiedClassName();
-				$this->classObject = $this->classParser->parse($className);
+				$this->classFileObject = $this->parserService->parseFile($fileName);
+				$this->classObject = $this->classFileObject->getFirstClass();
+				$this->classObject->setFileName($fileName);
 				$this->classObject->setName($currentDomainObject->getName());
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('class file found:' . $currentDomainObject->getName() . '.php', 'extension_builder', 0, (array)$this->classObject->getNameSpace());
-				return $this->classObject;
+				$this->log('class file found:' . $currentDomainObject->getName() . '.php', 0, $this->classObject->getNamespaceName());
+				$this->classFileObject->setClasses(array($this->classObject));
+				return $this->classFileObject;
 			}
 		}
 		return NULL;
@@ -281,27 +338,24 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 
 	/**
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject
 	 *
-	 * @return Tx_ExtensionBuilder_Domain_Model_Class OR NULL
+	 * @return \EBT\ExtensionBuilder\Domain\Model\File|NULL
 	 */
-	public function getControllerClass(Tx_ExtensionBuilder_Domain_Model_DomainObject $currentDomainObject) {
+	public function getControllerClassFile(Model\DomainObject $currentDomainObject) {
 		$extensionDir = $this->previousExtensionDirectory;
-		if (isset($this->oldDomainObjects[$currentDomainObject->getUniqueIdentifier()])) {
-			$oldDomainObject = $this->oldDomainObjects[$currentDomainObject->getUniqueIdentifier()];
-			$fileName = Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Controller', FALSE) . $oldDomainObject->getName() . 'Controller.php';
+		if (isset($this->previousDomainObjects[$currentDomainObject->getUniqueIdentifier()])) {
+			$oldDomainObject = $this->previousDomainObjects[$currentDomainObject->getUniqueIdentifier()];
+			$fileName = FileGenerator::getFolderForClassFile($extensionDir, 'Controller', FALSE);
+			$fileName .= $oldDomainObject->getName() . 'Controller.php';
 			if (file_exists($fileName)) {
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('existing controller class:' . $fileName, 'extension_builder', 0);
-				include_once($fileName);
-				$className = $this->extension->getNameSpace() . '\\Controller\\' . $oldDomainObject->getName() . 'Controller';
-				$this->classObject = $this->classParser->parse($className);
+				$this->classFileObject = $this->parserService->parseFile($fileName);
+				$this->classObject = $this->classFileObject->getFirstClass();
 				$this->classObject->setName($currentDomainObject->getName() . 'Controller');
-				$this->classObject->setParentClass('\\' . $this->classObject->getParentClass());
-				//\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Controller class methods','extension_builder',0,$this->classObject->getMethods());
 				if ($oldDomainObject->getName() != $currentDomainObject->getName() || $this->extensionRenamed) {
 					$this->mapOldControllerToCurrentClassObject($oldDomainObject, $currentDomainObject);
-				} else if ($oldDomainObject->isAggregateRoot() && !$currentDomainObject->isAggregateRoot()) {
-					$injectMethodName = 'inject' . \TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($oldDomainObject->getName()) . 'Repository';
+				} elseif ($oldDomainObject->isAggregateRoot() && !$currentDomainObject->isAggregateRoot()) {
+					$injectMethodName = 'inject' . GeneralUtility::lcfirst($oldDomainObject->getName()) . 'Repository';
 					$this->classObject->removeMethod($injectMethodName);
 				}
 
@@ -310,46 +364,51 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 					$newActions[$newAction->getName()] = $newAction;
 				}
 				$oldActions = $oldDomainObject->getActions();
-				if (isset($this->oldDomainObjects[$currentDomainObject->getUniqueIdentifier()])) {
+				if (isset($this->previousDomainObjects[$currentDomainObject->getUniqueIdentifier()])) {
 					// now we remove old action methods
 					foreach ($oldActions as $oldAction) {
 						if (!isset($newActions[$oldAction->getName()])) {
 							// an action was removed
 							$this->classObject->removeMethod($oldAction->getName() . 'Action');
-							\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Action method removed:' . $oldAction->getName(), 'extension_builder', 0, $this->classObject->getMethods());
+							$this->log('Action method removed:' . $oldAction->getName(), 0, $this->classObject->getMethods());
 						}
 					}
 					// we don't have to add new ones, this will be done automatically by the class builder
 				}
-				return $this->classObject;
+				$this->classFileObject->setClasses(array($this->classObject));
+				return $this->classFileObject;
 			}
 			else {
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('class file didn\'t exist:' . $fileName, 'extension_builder', 2);
+				GeneralUtility::devLog('class file didn\'t exist:' . $fileName, 'extension_builder', 2);
 				return NULL;
 			}
 		}
 		else {
-			$fileName = Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Controller', FALSE) . $currentDomainObject->getName() . 'Controller.php';
+			$fileName = FileGenerator::getFolderForClassFile($extensionDir, 'Controller', FALSE);
+			$fileName .= $currentDomainObject->getName() . 'Controller.php';
 			if (file_exists($fileName)) {
-				include_once($fileName);
+				$this->classFileObject = $this->parserService->parseFile($fileName);
+				$this->classObject = $this->classFileObject->getFirstClass();
+				$this->classObject->setFileName($fileName);
 				$className = $currentDomainObject->getControllerClassName();
-				$this->classObject = $this->classParser->parse($className);
-				return $this->classObject;
+				$this->classObject->setName($className);
+				$this->classFileObject->setClasses(array($this->classObject));
+				return $this->classFileObject;
 			}
-			else \TYPO3\CMS\Core\Utility\GeneralUtility::devlog('No existing controller class:' . $fileName, 'extension_builder', 2);
+			else $this->log('No existing controller class:' . $fileName, 2);
 		}
-		\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('No existing controller class:' . $currentDomainObject->getName(), 'extension_builder', 2);
+		$this->log('No existing controller class:' . $currentDomainObject->getName(), 2);
 		return NULL;
 	}
 
 	/**
 	 * If a domainObject was renamed
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $oldDomainObject
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $currentDomainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $oldDomainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $currentDomainObject
 	 * @return void
 	 */
-	protected function mapOldControllerToCurrentClassObject(Tx_ExtensionBuilder_Domain_Model_DomainObject $oldDomainObject, Tx_ExtensionBuilder_Domain_Model_DomainObject $currentDomainObject) {
+	protected function mapOldControllerToCurrentClassObject(Model\DomainObject $oldDomainObject, Model\DomainObject $currentDomainObject) {
 		$extensionDir = $this->previousExtensionDirectory;
 		$newClassName = $currentDomainObject->getName() . 'Controller';
 		$newName = $currentDomainObject->getName();
@@ -359,27 +418,39 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 		if ($oldDomainObject->isAggregateRoot()) {
 
 			// should we keep the old properties comments and tags?
-			$this->classObject->removeProperty(\TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($oldName) . 'Repository');
+			$this->classObject->removeProperty(GeneralUtility::lcfirst($oldName) . 'Repository');
 			$injectMethodName = 'inject' . $oldName . 'Repository';
 			if ($currentDomainObject->isAggregateRoot()) {
 				// update the initializeAction method body
 				$initializeMethod = $this->classObject->getMethod('initializeAction');
 				if ($initializeMethod != NULL) {
-					$initializeMethodBody = $initializeMethod->getBody();
-					$newInitializeMethodBody = str_replace($oldDomainObject->getDomainRepositoryClassName(), $currentDomainObject->getDomainRepositoryClassName(), $initializeMethodBody);
-					$newInitializeMethodBody = str_replace(\TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($oldName) . 'Repository', \TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($newName) . 'Repository', $newInitializeMethodBody);
-					$initializeMethod->setBody($newInitializeMethodBody);
+					$initializeMethodBodyStmts = $initializeMethod->getBodyStmts();
+					$initializeMethodBodyStmts = str_replace(
+						$oldDomainObject->getDomainRepositoryClassName(),
+						$currentDomainObject->getDomainRepositoryClassName(),
+						$initializeMethodBodyStmts
+					);
+					$initializeMethodBodyStmts = str_replace(
+						GeneralUtility::lcfirst($oldName) . 'Repository',
+						GeneralUtility::lcfirst($newName) . 'Repository',
+						$initializeMethodBodyStmts
+					);
+					$initializeMethod->setBodyStmts($initializeMethodBodyStmts);
 					$this->classObject->setMethod($initializeMethod);
 				}
 
 				$injectMethod = $this->classObject->getMethod($injectMethodName);
 				if ($injectMethod != NULL) {
 					$this->classObject->removeMethod($injectMethodName);
-					$newInjectMethodBody = str_replace(\TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($oldName), \TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($newName), $injectMethod->getBody());
-					$injectMethod->setBody($newInjectMethodBody);
+					$initializeMethodBodyStmts = str_replace(
+						GeneralUtility::lcfirst($oldName),
+						GeneralUtility::lcfirst($newName),
+						$injectMethod->getBodyStmts()
+					);
+					$injectMethod->setBodyStmts($initializeMethodBodyStmts);
 					$injectMethod->setTag('param', $currentDomainObject->getDomainRepositoryClassName() . ' $' . $newName . 'Repository');
 					$injectMethod->setName('inject' . $newName . 'Repository');
-					$parameter = new Tx_ExtensionBuilder_Domain_Model_Class_MethodParameter(\TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($newName) . 'Repository');
+					$parameter = new Model\ClassObject\MethodParameter(GeneralUtility::lcfirst($newName) . 'Repository');
 					$parameter->setTypeHint($currentDomainObject->getDomainRepositoryClassName());
 					$parameter->setPosition(0);
 					$injectMethod->replaceParameter($parameter);
@@ -387,12 +458,16 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 				}
 
 				foreach ($oldDomainObject->getActions() as $action) {
-					// here we have to update all the occurences of domain object names in action methods 
+					// here we have to update all the occurences of domain object names in action methods
 					$actionMethod = $this->classObject->getMethod($action->getName() . 'Action');
 					if ($actionMethod != NULL) {
-						$actionMethodBody = $actionMethod->getBody();
-						$newActionMethodBody = str_replace(\TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($oldName) . 'Repository', \TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($newName) . 'Repository', $actionMethodBody);
-						$actionMethod->setBody($newActionMethodBody);
+						$actionMethodBody = $actionMethod->getBodyStmts();
+						$newActionMethodBody = str_replace(
+							GeneralUtility::lcfirst($oldName) . 'Repository',
+							GeneralUtility::lcfirst($newName) . 'Repository',
+							$actionMethodBody
+						);
+						$actionMethod->setBodyStmts($newActionMethodBody);
 						$actionMethod->setTag('param', $currentDomainObject->getQualifiedClassName());
 
 						$parameters = $actionMethod->getParameters();
@@ -413,7 +488,7 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 						$actionMethod->setDescription($this->replaceUpperAndLowerCase($oldName, $newName, $actionMethod->getDescription()));
 
 						//TODO: this is not safe. Could rename unwanted variables
-						$actionMethod->setBody($this->replaceUpperAndLowerCase($oldName, $newName, $actionMethod->getBody()));
+						$actionMethod->setBodyStmts($this->replaceUpperAndLowerCase($oldName, $newName, $actionMethod->getBodyStmts()));
 						$this->classObject->setMethod($actionMethod);
 					}
 				}
@@ -421,55 +496,58 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 			else {
 				$this->classObject->removeMethod('initializeAction');
 				$this->classObject->removeMethod($injectMethodName);
-				$this->cleanUp(Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Repository'), $oldName . 'Repository.php');
+				$this->cleanUp(FileGenerator::getFolderForClassFile($extensionDir, 'Repository'), $oldName . 'Repository.php');
 			}
 		}
 
 		$this->classObject->setFileName($newName . 'Controller.php');
-		$this->cleanUp(Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Controller'), $oldName . 'Controller.php');
+		$this->cleanUp(FileGenerator::getFolderForClassFile($extensionDir, 'Controller'), $oldName . 'Controller.php');
 	}
 
 	/**
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $currentDomainObject
 	 *
-	 * @return Tx_ExtensionBuilder_Domain_Model_Class OR NULL
+	 * @return \EBT\ExtensionBuilder\Domain\Model\ClassObject\ClassObject|NULL
 	 */
-	public function getRepositoryClass(Tx_ExtensionBuilder_Domain_Model_DomainObject $currentDomainObject) {
+	public function getRepositoryClassFile(Model\DomainObject $currentDomainObject) {
 		$extensionDir = $this->previousExtensionDirectory;
-		if (isset($this->oldDomainObjects[$currentDomainObject->getUniqueIdentifier()])) {
-			$oldDomainObject = $this->oldDomainObjects[$currentDomainObject->getUniqueIdentifier()];
-			$fileName = Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Repository', FALSE) . $oldDomainObject->getName() . 'Repository.php';
+		if (isset($this->previousDomainObjects[$currentDomainObject->getUniqueIdentifier()])) {
+			$oldDomainObject = $this->previousDomainObjects[$currentDomainObject->getUniqueIdentifier()];
+			$fileName = FileGenerator::getFolderForClassFile($extensionDir, 'Repository', FALSE);
+			$fileName .= $oldDomainObject->getName() . 'Repository.php';
 			if (file_exists($fileName)) {
-				include_once($fileName);
-				$className = $oldDomainObject->getDomainRepositoryClassName();
-				$this->classObject = $this->classParser->parse($className);
+				$this->classFileObject = $this->parserService->parseFile($fileName);
+				$this->classObject = $this->classFileObject->getFirstClass();
 				$this->classObject->setName($currentDomainObject->getName() . 'Repository');
-				$this->classObject->setParentClass('\\' . $this->classObject->getParentClass());
 				if ($oldDomainObject->getName() != $currentDomainObject->getName() || $this->extensionRenamed) {
-					$newClassName = $currentDomainObject->getDomainRepositoryClassName();
+					$newClassName = $currentDomainObject->getFullyQualifiedDomainRepositoryClassName();
 					$this->classObject->setName($newClassName);
-					$this->classObject->setFileName($currentDomainObject->getName() . 'Repository.php');
-					$this->cleanUp(Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Repository'), $oldDomainObject->getName() . 'Repository.php');
+					$this->cleanUp(
+						FileGenerator::getFolderForClassFile($extensionDir, 'Repository'),
+						$oldDomainObject->getName() . 'Repository.php'
+					);
 				}
-				return $this->classObject;
+				return $this->classFileObject;
 			}
 			else {
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('class file didn\'t exist:' . $fileName, 'extension_builder', 2);
+				GeneralUtility::devLog('class file didn\'t exist:' . $fileName, 'extension_builder', 2);
 			}
 		}
 		else {
-			$fileName = Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($extensionDir, 'Repository', FALSE) . $currentDomainObject->getName() . 'Repository.php';
+			$fileName = FileGenerator::getFolderForClassFile($extensionDir, 'Repository', FALSE);
+			$fileName .= $currentDomainObject->getName() . 'Repository.php';
 			if (file_exists($fileName)) {
-				include_once($fileName);
-				$className = $currentDomainObject->getDomainRepositoryClassName();
-				$this->classObject = $this->classParser->parse($className);
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('existing Repository class:' . $fileName, 'extension_builder', 0, (array)$this->classObject);
-				return $this->classObject;
+				$this->classFileObject = $this->parserService->parseFile($fileName);
+				$this->classObject = $this->classFileObject->getFirstClass();
+				$this->classObject->setFileName($fileName);
+				$this->classObject->setFileName($fileName);
+				$this->log('existing Repository class:' . $fileName, 0, (array)$this->classObject);
+				return $this->classFileObject;
 			}
 
 		}
-		\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('No existing Repository class:' . $currentDomainObject->getName(), 'extension_builder', 2);
+		$this->log('No existing Repository class:' . $currentDomainObject->getName(), 2);
 		return NULL;
 	}
 
@@ -477,38 +555,43 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	 * Compare the properties of each object and remove/update
 	 * the properties and the related methods
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $oldDomainObject
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $newDomainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $oldDomainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $newDomainObject
 	 *
 	 * return void (all actions are performed on $this->classObject
 	 */
-	protected function updateModelClassProperties(Tx_ExtensionBuilder_Domain_Model_DomainObject $oldDomainObject, Tx_ExtensionBuilder_Domain_Model_DomainObject $newDomainObject) {
+	protected function updateModelClassProperties(Model\DomainObject $oldDomainObject, Model\DomainObject $newDomainObject) {
 		$newProperties = array();
 		foreach ($newDomainObject->getProperties() as $property) {
 			$newProperties[$property->getUniqueIdentifier()] = $property;
 		}
-		//\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('properties new:','extension_builder',0,$newProperties);
 
 		// compare all old properties with new ones
 		foreach ($oldDomainObject->getProperties() as $oldProperty) {
+			/* @var  Model\DomainObject\AbstractProperty $oldProperty
+			 * @var  Model\DomainObject\AbstractProperty $newProperty
+			 */
 			if (isset($newProperties[$oldProperty->getUniqueIdentifier()])) {
 				$newProperty = $newProperties[$oldProperty->getUniqueIdentifier()];
 
 				// relation type changed
 				if ($oldProperty->isAnyToManyRelation() != $newProperty->isAnyToManyRelation()) {
-					\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('property type changed:' . $oldProperty->getName() . ' ' . $newProperty->getName(), 'extension_builder', 0, $newProperties);
-					// remove old methods since we won't convert getter and setter methods to add/remove methods
+					// remove old methods since we won't convert getter and setter methods
+					//to add/remove methods
 					if ($oldProperty->isAnyToManyRelation()) {
-						$this->classObject->removeMethod('add' . ucfirst(Tx_ExtensionBuilder_Utility_Inflector::singularize($oldProperty->getName())));
-						$this->classObject->removeMethod('remove' . ucfirst(Tx_ExtensionBuilder_Utility_Inflector::singularize($oldProperty->getName())));
+						$this->classObject->removeMethod('add' . ucfirst(Inflector::singularize($oldProperty->getName())));
+						$this->classObject->removeMethod('remove' . ucfirst(Inflector::singularize($oldProperty->getName())));
 					}
 					$this->classObject->removeMethod('get' . ucfirst($oldProperty->getName()));
 					$this->classObject->removeMethod('set' . ucfirst($oldProperty->getName()));
 					if ($oldProperty->isBoolean()) {
-						$this->classObject->removeMethod('is' . ucfirst(Tx_ExtensionBuilder_Utility_Inflector::singularize($oldProperty->getName())));
+						$this->classObject->removeMethod('is' . ucfirst(Inflector::singularize($oldProperty->getName())));
 					}
 					$this->classObject->removeProperty($oldProperty->getName());
-					\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('property type changed => removed old property:' . $oldProperty->getName(), 'extension_builder', 1);
+					$this->log(
+						'property type changed => removed old property:' . $oldProperty->getName(),
+						1
+					);
 				}
 				else {
 					$this->updateProperty($oldProperty, $newProperty);
@@ -523,7 +606,7 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 
 	/**
 	 * Removes all related methods, if a property was removed
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty $propertyToRemove
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty $propertyToRemove
 	 *
 	 * @return void
 	 */
@@ -531,22 +614,22 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 		$propertyName = $propertyToRemove->getName();
 		$this->classObject->removeProperty($propertyName);
 		if ($propertyToRemove->isAnyToManyRelation()) {
-			$this->classObject->removeMethod('add' . ucfirst(Tx_ExtensionBuilder_Utility_Inflector::singularize($propertyName)));
-			$this->classObject->removeMethod('remove' . ucfirst(Tx_ExtensionBuilder_Utility_Inflector::singularize($propertyName)));
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Methods removed: ' . 'add' . ucfirst(Tx_ExtensionBuilder_Utility_Inflector::singularize($propertyName)), 'extension_builder');
+			$this->classObject->removeMethod('add' . ucfirst(Inflector::singularize($propertyName)));
+			$this->classObject->removeMethod('remove' . ucfirst(Inflector::singularize($propertyName)));
+			GeneralUtility::devLog('Methods removed: ' . 'add' . ucfirst(Inflector::singularize($propertyName)), 'extension_builder');
 		}
 		$this->classObject->removeMethod('get' . ucfirst($propertyName));
 		$this->classObject->removeMethod('set' . ucfirst($propertyName));
 		if ($propertyToRemove->isBoolean()) {
 			$this->classObject->removeMethod('is' . ucfirst($propertyName));
 		}
-		\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Methods removed: ' . 'get' . ucfirst($propertyName), 'extension_builder');
+		GeneralUtility::devLog('Methods removed: ' . 'get' . ucfirst($propertyName), 'extension_builder');
 	}
 
 	/**
 	 * Rename a property and update comment (var tag and description)
-	 * @param Tx_ExtensionBuilder_Domain_Model_AbstractDomainObjectProperty $oldProperty
-	 * @param Tx_ExtensionBuilder_Domain_Model_AbstractDomainObjectProperty $newProperty
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty $oldProperty
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty $newProperty
 	 *
 	 * @return void
 	 */
@@ -570,8 +653,8 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 
 	/**
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_AbstractDomainObjectProperty $oldProperty
-	 * @param Tx_ExtensionBuilder_Domain_Model_AbstractDomainObjectProperty $newProperty
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty $oldProperty
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty $newProperty
 	 *
 	 * @return boolean
 	 */
@@ -580,17 +663,24 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 			return TRUE;
 		}
 		if ($newProperty->getName() != $oldProperty->getName()) {
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('property renamed:' . $oldProperty->getName() . ' ' . $newProperty->getName(), 'extension_builder', 0);
+			$this->log('property renamed:' . $oldProperty->getName() . ' ' . $newProperty->getName());
 			return TRUE;
 		}
 		if ($newProperty->getTypeForComment() != $this->updateExtensionKey($oldProperty->getTypeForComment())) {
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('property type changed from ' . $this->updateExtensionKey($oldProperty->getTypeForComment()) . ' to ' . $newProperty->getTypeForComment(), 'extension_builder', 0);
+			$this->log(
+				'property type changed from ' . $this->updateExtensionKey($oldProperty->getTypeForComment())
+					. ' to ' . $newProperty->getTypeForComment()
+			);
 			return TRUE;
 		}
 		if ($newProperty->isRelation()) {
+			/** @var $oldProperty \EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation\AbstractRelation */
 			// if only the related domain object was renamed
-			if ($this->getForeignClassName($newProperty) != $this->updateExtensionKey($oldProperty->getForeignClassName())) {
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('related domainObject was renamed:' . $this->updateExtensionKey($oldProperty->getForeignClassName()) . ' ->' . $this->getForeignClassName($newProperty), 'extension_builder');
+			$previousClassName = $this->updateExtensionKey($oldProperty->getForeignClassName());
+			if ($this->getForeignClassName($newProperty) != $previousClassName) {
+				$this->log(
+					'related domainObject was renamed:' . $previousClassName . ' ->' . $this->getForeignClassName($newProperty)
+				);
 				return TRUE;
 			}
 		}
@@ -600,19 +690,28 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	 * replace occurences of the old extension key with the new one
 	 * used to compare classNames
 	 * @param $stringToParse
-	 * @return unknown_type
+	 * @return string
 	 */
 	protected function updateExtensionKey($stringToParse) {
 		if (!$this->extensionRenamed) {
 			return $stringToParse;
 		}
-		return str_replace('_' . ucfirst($this->previousExtensionKey) . '_', '_' . ucfirst($this->extension->getExtensionKey()) . '_', $stringToParse);
+		$separatorToken = '\\\\';
+		if (strpos($stringToParse, $separatorToken) === FALSE) {
+			$separatorToken = '_';
+		}
+		$result = str_replace(
+			$separatorToken . ucfirst($this->previousExtensionKey) . $separatorToken,
+			$separatorToken . ucfirst($this->extension->getExtensionKey()) . $separatorToken,
+			$stringToParse
+		);
+		return $result;
 	}
 
 	/**
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_AbstractDomainObjectProperty $oldProperty
-	 * @param Tx_ExtensionBuilder_Domain_Model_AbstractDomainObjectProperty $newProperty
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty $oldProperty
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty $newProperty
 	 *
 	 * @return void
 	 */
@@ -629,17 +728,20 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 		if ($newProperty->getTypeForComment() != $this->updateExtensionKey($oldProperty->getTypeForComment())) {
 			if ($oldProperty->isBoolean() && !$newProperty->isBoolean()) {
 				$this->classObject->removeMethod($this->classBuilder->getMethodName($oldProperty, 'is'));
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Method removed:' . $this->classBuilder->getMethodName($oldProperty, 'is'),
-								  'extension_builder', 1, $this->classObject->getMethods());
+				$this->log(
+					'Method removed:' . $this->classBuilder->getMethodName($oldProperty, 'is'),
+					1,
+					$this->classObject->getMethods());
 			}
 		}
 	}
 
 	/**
-	 * update means renaming of method name, parameter and replacing parameter names in method body
+	 * update means renaming of method name, parameter and replacing
+	 * parameter names in method body
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_AbstractDomainObjectProperty $oldProperty
-	 * @param Tx_ExtensionBuilder_Domain_Model_AbstractDomainObjectProperty $newProperty
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty $oldProperty
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty $newProperty
 	 * @param string $methodType get,set,add,remove,is
 	 *
 	 * @return void
@@ -655,36 +757,40 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 			return;
 		}
 		$newMethodName = $this->classBuilder->getMethodName($newProperty, $methodType);
-		\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('updateMethod:' . $oldMethodName . '=>' . $newMethodName, 'extension_builder');
+		$this->log('updateMethod:' . $oldMethodName . '=>' . $newMethodName, 'extension_builder');
 
 		if ($oldProperty->getName() != $newProperty->getName()) {
 			// rename the method
 			$mergedMethod->setName($newMethodName);
 
-			$oldMethodBody = $mergedMethod->getBody();
+			$oldMethodBody = $mergedMethod->getBodyStmts();
 			$oldComment = $mergedMethod->getDocComment();
 
 			$newMethodBody = $this->replacePropertyNameInMethodBody($oldProperty->getName(), $newProperty->getName(), $oldMethodBody);
-			$mergedMethod->setBody($newMethodBody);
+			$mergedMethod->setBodyStmts($newMethodBody);
 		}
 
 		// update the method parameters
 		$methodParameters = $mergedMethod->getParameters();
 
 		if (!empty($methodParameters)) {
-			$parameterTags = $mergedMethod->getTagsValues('param');
+			$parameterTags = $mergedMethod->getTagValues('param');
 			foreach ($methodParameters as $methodParameter) {
 				$oldParameterName = $methodParameter->getName();
 				if ($oldParameterName == $this->classBuilder->getParameterName($oldProperty, $methodType)) {
 					$newParameterName = $this->classBuilder->getParameterName($newProperty, $methodType);
 					$methodParameter->setName($newParameterName);
-					$newMethodBody = $this->replacePropertyNameInMethodBody($oldParameterName, $newParameterName, $mergedMethod->getBody());
-					$mergedMethod->setBody($newMethodBody);
+					$newMethodBody = $this->replacePropertyNameInMethodBody($oldParameterName, $newParameterName, $mergedMethod->getBodyStmts());
+					$mergedMethod->setBodyStmts($newMethodBody);
 				}
 				$typeHint = $methodParameter->getTypeHint();
 				if ($typeHint) {
-					if ($oldProperty->isRelation() && $typeHint == $oldProperty->getForeignClassName()) {
-						$methodParameter->setTypeHint($this->updateExtensionKey($this->getForeignClassName($newProperty)));
+					if ($oldProperty->isRelation()) {
+						/** @var $oldProperty \EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation\AbstractRelation */
+						if ($typeHint == $oldProperty->getForeignClassName()) {
+
+							$methodParameter->setTypeHint($this->updateExtensionKey($this->getForeignClassName($newProperty)));
+						}
 					}
 				}
 				$parameterTags[$methodParameter->getPosition()] = $this->classBuilder->getParamTag($newProperty, $methodType);
@@ -693,15 +799,21 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 			$mergedMethod->setTag('param', $parameterTags);
 		}
 
-		$returnTagValue = trim($mergedMethod->getTagsValues('return'));
+		$returnTagValue = $mergedMethod->getTagValues('return');
 		if ($returnTagValue != 'void') {
 			$mergedMethod->setTag('return', $newProperty->getTypeForComment() . ' ' . $newProperty->getName());
 		}
 
 		// replace property names in description
 		$mergedMethod->setDescription(str_replace($oldProperty->getName(), $newProperty->getName(), $mergedMethod->getDescription()));
-		if (method_exists($oldProperty, 'getForeignModel') && method_exists($newProperty, 'getForeignModel')) {
-			$mergedMethod->setDescription(str_replace($oldProperty->getForeignClassName(), $newProperty->getForeignClassName(), $mergedMethod->getDescription()));
+		if ($oldProperty instanceof AbstractRelation && $newProperty instanceof AbstractRelation) {
+			$mergedMethod->setDescription(
+				str_replace(
+					$oldProperty->getForeignClassName(),
+					$newProperty->getForeignClassName(),
+					$mergedMethod->getDescription()
+				)
+			);
 		}
 		$this->classObject->removeMethod($oldMethodName);
 		$this->classObject->addMethod($mergedMethod);
@@ -716,7 +828,7 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	 */
 	protected function replaceUpperAndLowerCase($search, $replace, $haystack) {
 		$result = str_replace(ucfirst($search), ucfirst($replace), $haystack);
-		$result = str_replace(\TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($search), \TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($replace), $result);
+		$result = str_replace(GeneralUtility::lcfirst($search), GeneralUtility::lcfirst($replace), $result);
 		return $result;
 	}
 
@@ -729,23 +841,25 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	 *
 	 * @return string
 	 */
-	protected function replacePropertyNameInMethodBody($oldName, $newName, $string) {
-		$regex = '/([\$|>])' . $oldName . '([^a-zA-Z0-9_])/';
-		$result = preg_replace($regex, '$1' . $newName . '$2', $string);
-		return $result;
+	protected function replacePropertyNameInMethodBody($oldName, $newName, $methodBodyStmts) {
+		return $this->parserService->replaceNodeProperty(
+			$methodBodyStmts,
+			array($oldName => $newName)
+		);
 	}
 
 
 	/**comments
 	 * if the foreign DomainObject was renamed, the relation has to be updated also
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRelation $relation
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation\AbstractRelation $relation
 	 * @return string className of foreign class
 	 */
 	public function getForeignClassName($relation) {
 		if ($relation->getForeignModel() && isset($this->renamedDomainObjects[$relation->getForeignModel()->getUniqueIdentifier()])) {
+			/** @var $renamedObject \EBT\ExtensionBuilder\Domain\Model\DomainObject */
 			$renamedObject = $this->renamedDomainObjects[$relation->getForeignModel()->getUniqueIdentifier()];
-			return $renamedObject->getQualifiedClassName;
+			return $renamedObject->getQualifiedClassName();
 		}
 		else return $relation->getForeignClassName();
 	}
@@ -753,18 +867,31 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	/**
 	 * remove domainObject related files if a domainObject was deleted
 	 *
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject
 	 * @return void
 	 */
-	protected function removeDomainObjectFiles($domainObject) {
-		\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Remove domainObject ' . $domainObject->getName(), 'extension_builder', 0);
-		$this->cleanUp(Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($this->previousExtensionDirectory, 'Model', FALSE), $domainObject->getName() . '.php');
+	protected function removeDomainObjectFiles(Model\DomainObject $domainObject) {
+		$this->log('Remove domainObject ' . $domainObject->getName());
+		$this->cleanUp(
+			FileGenerator::getFolderForClassFile($this->previousExtensionDirectory, 'Model', FALSE),
+			$domainObject->getName() . '.php'
+		);
 		$this->cleanUp($this->previousExtensionDirectory . 'Configuration/TCA/', $domainObject->getName() . '.php');
 		if ($domainObject->isAggregateRoot()) {
-			$this->cleanUp(Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($this->previousExtensionDirectory, 'Controller', FALSE), $domainObject->getName() . 'Controller.php');
-			$this->cleanUp(Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($this->previousExtensionDirectory, 'Repository', FALSE), $domainObject->getName() . 'Repository.php');
+			$this->cleanUp(
+				FileGenerator::getFolderForClassFile($this->previousExtensionDirectory, 'Controller', FALSE),
+				$domainObject->getName() . 'Controller.php'
+			);
+			$this->cleanUp(
+				FileGenerator::getFolderForClassFile($this->previousExtensionDirectory, 'Repository', FALSE),
+				$domainObject->getName() . 'Repository.php'
+			);
 		}
 		if (count($domainObject->getActions()) > 0) {
-			$this->cleanUp(Tx_ExtensionBuilder_Service_CodeGenerator::getFolderForClassFile($this->previousExtensionDirectory, 'Controller', FALSE), $domainObject->getName() . 'Controller.php');
+			$this->cleanUp(
+				FileGenerator::getFolderForClassFile($this->previousExtensionDirectory, 'Controller', FALSE),
+				$domainObject->getName() . 'Controller.php'
+			);
 		}
 		// other files
 		$iconsDirectory = $this->extensionDirectory . 'Resources/Public/Icons/';
@@ -774,19 +901,20 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 		if (file_exists($locallang_cshFile)) {
 			// no overwrite settings check here...
 			unlink($locallang_cshFile);
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('locallang_csh file removed: ' . $locallang_cshFile, 'extension_builder', 1);
+			GeneralUtility::devLog('locallang_csh file removed: ' . $locallang_cshFile, 'extension_builder', 1);
 		}
 		if (file_exists($iconFile)) {
 			unlink($iconFile);
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('icon file removed: ' . $iconFile, 'extension_builder', 1);
+			GeneralUtility::devLog('icon file removed: ' . $iconFile, 'extension_builder', 1);
 		}
 	}
 
 	/**
-	 * remove class files that are not required any more, due to renaming of ModelObjects or changed types
+	 * remove class files that are not required any more, due to
+	 * renaming of ModelObjects or changed types
 	 * @param string $path
 	 * @param string $file
-	 * @return unknown_type
+	 * @return void
 	 */
 	public function cleanUp($path, $fileName) {
 		if ($this->extensionRenamed) {
@@ -794,7 +922,7 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 			return;
 		}
 		if (!is_file($path . $fileName)) {
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('cleanUp File not found: ' . $path . $fileName, 'extension_builder', 1);
+			GeneralUtility::devLog('cleanUp File not found: ' . $path . $fileName, 'extension_builder', 1);
 			return;
 		}
 		unlink($path . $fileName);
@@ -818,7 +946,7 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	 * 2  for keep existing file
 	 *
 	 * @param string $path of the file to get the settings for
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @return int overWriteSetting
 	 */
 	public static function getOverWriteSettingForPath($path, $extension) {
@@ -830,7 +958,7 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 
 		$settings = $extension->getSettings();
 		if (!is_array($settings)) {
-			throw new Exception('overWrite settings could not be parsed');
+			throw new \Exception('overWrite settings could not be parsed');
 		}
 		if (strpos($path, $extension->getExtensionDir()) === 0) {
 			$path = str_replace($extension->getExtensionDir(), '', $path);
@@ -855,7 +983,7 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	/**
 	 * parse existing tca and set appropriate properties
 	 *
-	 * @param $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @return void
 	 */
 	public static function prepareExtensionForRoundtrip(&$extension) {
@@ -864,8 +992,14 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 			if ($existingTca) {
 				foreach ($domainObject->getAnyToManyRelationProperties() as $relationProperty) {
 					if (isset($existingTca['columns'][$relationProperty->getName()]['config']['MM'])) {
-						\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Relation table for Model ' . $domainObject->getName() . ' relation ' . $relationProperty->getName(), 'extension_builder', 0, $existingTca['columns'][$relationProperty->getName()]['config']);
-						$relationProperty->setRelationTableName($existingTca['columns'][$relationProperty->getName()]['config']['MM']);
+						self::log(
+							'Relation table for Model ' . $domainObject->getName() . ' relation ' . $relationProperty->getName(),
+							0,
+							$existingTca['columns'][$relationProperty->getName()]['config']
+						);
+						$relationProperty->setRelationTableName(
+							$existingTca['columns'][$relationProperty->getName()]['config']['MM']
+						);
 					}
 				}
 			}
@@ -873,16 +1007,17 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	}
 
 	/**
-	 * Returns the current TCA for a domain objects table if the extension is installed
+	 * Returns the current TCA for a domain objects table if the
+	 * extension is installed
 	 * TODO: check for previous table name if an extension is renamed
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject
 	 *
 	 * @return array
 	 */
-	protected static function getTcaForDomainObject($domainObject, $extension) {
+	protected static function getTcaForDomainObject($domainObject) {
 		$tableName = $domainObject->getDatabaseTableName();
-		\TYPO3\CMS\Core\Utility\GeneralUtility::loadTca($tableName);
+		GeneralUtility::loadTca($tableName);
 		if (isset($GLOBALS['TCA'][$tableName])) {
 			return $GLOBALS['TCA'][$tableName];
 		}
@@ -891,21 +1026,19 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 
 	/**
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @param string $backupDir
 	 *
 	 * @return void
 	 */
-	static function backupExtension($extension, $backupDir) {
+	static function backupExtension(Model\Extension $extension, $backupDir) {
 		if (empty($backupDir)) {
-			throw new Exception('Please define a backup directory in extension configuration!');
-		}
-		else if (!\TYPO3\CMS\Core\Utility\GeneralUtility::validPathStr($backupDir)) {
-			throw new Exception('Backup directory is not a valid path: ' . $backupDir);
-		}
-		else if (\TYPO3\CMS\Core\Utility\GeneralUtility::isAbsPath($backupDir)) {
-			if (!\TYPO3\CMS\Core\Utility\GeneralUtility::isAllowedAbsPath($backupDir)) {
-				throw new Exception('Backup directory is not an allowed absolute path: ' . $backupDir);
+			throw new \Exception('Please define a backup directory in extension configuration!');
+		} elseif (!GeneralUtility::validPathStr($backupDir)) {
+			throw new \Exception('Backup directory is not a valid path: ' . $backupDir);
+		} elseif (GeneralUtility::isAbsPath($backupDir)) {
+			if (!GeneralUtility::isAllowedAbsPath($backupDir)) {
+				throw new \Exception('Backup directory is not an allowed absolute path: ' . $backupDir);
 			}
 		}
 		else {
@@ -915,33 +1048,41 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 			$backupDir .= '/';
 		}
 		if (!is_dir($backupDir)) {
-			throw new Exception('Backup directory does not exist: ' . $backupDir);
-		}
-		else if (!is_writable($backupDir)) {
-			throw new Exception('Backup directory is not writable: ' . $backupDir);
+			throw new \Exception('Backup directory does not exist: ' . $backupDir);
+		} elseif (!is_writable($backupDir)) {
+			throw new \Exception('Backup directory is not writable: ' . $backupDir);
 		}
 
 
 		$backupDir .= $extension->getExtensionKey();
 		// create a subdirectory for this extension
 		if (!is_dir($backupDir)) {
-			\TYPO3\CMS\Core\Utility\GeneralUtility::mkdir($backupDir);
+			GeneralUtility::mkdir($backupDir);
 		}
 		if (strrpos($backupDir, '/') < strlen($backupDir) - 1) {
 			$backupDir .= '/';
 		}
 		$backupDir .= date('Y-m-d-') . time();
 		if (!is_dir($backupDir)) {
-			\TYPO3\CMS\Core\Utility\GeneralUtility::mkdir($backupDir);
+			GeneralUtility::mkdir($backupDir);
 		}
 		$extensionDir = substr($extension->getExtensionDir(), 0, strlen($extension->getExtensionDir()) - 1);
 		try {
 			self::recurse_copy($extensionDir, $backupDir);
 		}
-		catch (Exception $e) {
-			throw new Exception('Code generation aborted:' . $e->getMessage());
+		catch (\Exception $e) {
+			throw new \Exception('Code generation aborted:' . $e->getMessage());
 		}
-		\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Backup created in ' . $backupDir, 'extension_builder', 0);
+		self::log('Backup created in ' . $backupDir);
+	}
+
+	protected function log($message, $severity = 0, $data = array()) {
+		GeneralUtility::devLog(
+			$message,
+			'extension_builder',
+			$severity,
+			$data
+		);
 	}
 
 	/**
@@ -962,7 +1103,7 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 				else {
 					$success = copy($src . '/' . $file, $dst . '/' . $file);
 					if (!$success) {
-						throw new Exception('Could not copy ' . $src . '/' . $file . ' to ' . $dst . '/' . $file);
+						throw new \Exception('Could not copy ' . $src . '/' . $file . ' to ' . $dst . '/' . $file);
 					}
 				}
 			}
@@ -971,5 +1112,3 @@ class Tx_ExtensionBuilder_Service_RoundTrip implements \TYPO3\CMS\Core\Singleton
 	}
 
 }
-
-?>

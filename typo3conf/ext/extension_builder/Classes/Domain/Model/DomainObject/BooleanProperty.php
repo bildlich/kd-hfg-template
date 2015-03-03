@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
@@ -26,14 +27,13 @@
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_BooleanProperty extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
-
+class BooleanProperty extends AbstractProperty {
 	/**
-	 * string representation of the default value
+	 * the property's default value
 	 *
-	 * @var string
+	 * @var bool
 	 */
-	protected $defaultValue = 'FALSE';
+	protected $defaultValue = FALSE;
 
 	/*
 	 * @return string
@@ -57,5 +57,3 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_BooleanProperty extends Tx_E
 	}
 
 }
-
-?>

@@ -1,8 +1,9 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009 Ingmar Schlecht
+ *  (c) 2009 Ingmar Schlecht, 2013 Nico de Haen
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,15 +28,12 @@
  * by TS Setup, Flexform and returns the content to the v4 framework.
  *
  * This class is the main entry point for extbase extensions in the frontend.
- *
- * @version $ID:$
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_ZeroToManyRelation extends Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AnyToManyRelation {
-
+class ZeroToManyRelation extends AnyToManyRelation {
 	/**
 	 * @var string
 	 */
-	protected $foreignKeyName;
+	protected $foreignKeyName = '';
 
 	public function getTypeForComment() {
 		return '\\TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage<' . $this->getForeignClassName() . '>';
@@ -46,8 +44,12 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_ZeroToManyRelation 
 	}
 
 	public function getForeignKeyName() {
-		if(empty($this->foreignKeyName)) {
-			return strtolower($this->getDomainObject()->getName());
+		if (empty($this->foreignKeyName)) {
+			$foreignKeyName = strtolower($this->getDomainObject()->getName());
+			if (\EBT\ExtensionBuilder\Service\ValidationService::isReservedMYSQLWord($foreignKeyName)) {
+				$foreignKeyName = 'tx_' . $foreignKeyName;
+			}
+			return $foreignKeyName;
 		} else {
 			return $this->foreignKeyName;
 		}
@@ -60,12 +62,18 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_ZeroToManyRelation 
 	/**
 	 * Overwrite parent function
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function getUseMMTable() {
 		return FALSE;
 	}
 
-}
+	/**
+	 *
+	 * @return boolean TRUE (if property is of type relation any to many)
+	 */
+	public function isZeroToManyRelation() {
+		return TRUE;
+	}
 
-?>
+}

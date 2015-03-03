@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Tests\Unit;
 /***************************************************************
  *  Copyright notice
  *
@@ -26,20 +27,25 @@
  ***************************************************************/
 
 
-class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Tests_BaseTest {
+class ObjectSchemaBuilderTest extends \EBT\ExtensionBuilder\Tests\BaseTest {
+	/**
+	 * @var \EBT\ExtensionBuilder\Configuration\ConfigurationManager
+	 */
+	protected $configurationManager = NULL;
 
-	public function setUp() {
+	/**
+	 * @var \EBT\ExtensionBuilder\Service\ObjectSchemaBuilder
+	 */
+	protected $objectSchemaBuilder = NULL;
 
-		$this->objectSchemaBuilder = $this->getMock($this->buildAccessibleProxy('Tx_ExtensionBuilder_Service_ObjectSchemaBuilder'), array('dummy'));
-		$concreteConfigurationManager = new Tx_Extbase_Configuration_BackendConfigurationManager();
-		if(class_exists(Tx_Extbase_Service_TypoScriptService)) {
-			// this is needed in TYPO3 versions > 4.5
-			$typoscriptService = new Tx_Extbase_Service_TypoScriptService();
-			$concreteConfigurationManager->injectTypoScriptService($typoscriptService);
-		}
-		$configurationManager = $this->getMock($this->buildAccessibleProxy('Tx_ExtensionBuilder_Configuration_ConfigurationManager'),array('dummy'));
-		$configurationManager->_set('concreteConfigurationManager',$concreteConfigurationManager);
-		$this->objectSchemaBuilder->injectConfigurationManager($configurationManager);
+	protected function setUp() {
+		$this->objectSchemaBuilder = $this->getMock($this->buildAccessibleProxy('EBT\\ExtensionBuilder\\Service\\ObjectSchemaBuilder'), array('dummy'));
+		$concreteConfigurationManager = $this->getMock($this->buildAccessibleProxy('TYPO3\\CMS\Extbase\\Configuration\\BackendConfigurationManager'));
+		$typoScriptService = new \TYPO3\CMS\Extbase\Service\TypoScriptService ();
+		$concreteConfigurationManager->_set('typoScriptService',$typoScriptService);
+		$this->configurationManager = $this->getMock($this->buildAccessibleProxy('EBT\\ExtensionBuilder\\Configuration\\ConfigurationManager'),array('getExtbaseClassConfiguration'));
+		$this->configurationManager->_set('concreteConfigurationManager',$concreteConfigurationManager);
+		$this->objectSchemaBuilder->injectConfigurationManager($this->configurationManager);
 	}
 
 
@@ -77,23 +83,23 @@ class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Te
 			'relationGroup' => array()
 		);
 
-		$expected = new Tx_ExtensionBuilder_Domain_Model_DomainObject();
+		$expected = new \EBT\ExtensionBuilder\Domain\Model\DomainObject();
 		$expected->setName($name);
 		$expected->setDescription($description);
 		$expected->setEntity(TRUE);
 		$expected->setAggregateRoot(TRUE);
 
-		$property0 = new Tx_ExtensionBuilder_Domain_Model_DomainObject_StringProperty('name');
+		$property0 = new \EBT\ExtensionBuilder\Domain\Model\DomainObject\StringProperty('name');
 		$property0->setRequired(TRUE);
-		$property1 = new Tx_ExtensionBuilder_Domain_Model_DomainObject_IntegerProperty('type');
+		$property1 = new \EBT\ExtensionBuilder\Domain\Model\DomainObject\IntegerProperty('type');
 		$expected->addProperty($property0);
 		$expected->addProperty($property1);
 
-		$testAction = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_ExtensionBuilder_Domain_Model_DomainObject_Action');
+		$testAction = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('EBT\\ExtensionBuilder\\Domain\\Model\\DomainObject\\Action');
 		$testAction->setName('test');
 		$expected->addAction($testAction);
 
-		$listAction = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_ExtensionBuilder_Domain_Model_DomainObject_Action');
+		$listAction = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('EBT\\ExtensionBuilder\\Domain\\Model\\DomainObject\\Action');
 		$listAction->setName('list');
 		$expected->addAction($listAction);
 
@@ -108,6 +114,7 @@ class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Te
 	public function domainObjectHasExpectedRelations() {
 		$name = 'MyDomainObject';
 		$description = 'My long domain object description';
+		$className = '\\TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser';
 
 		$input = array(
 			'name' => $name,
@@ -122,38 +129,41 @@ class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Te
 						'relationName' => 'relation 1',
 						'relationType' => 'manyToMany',
 						'propertyIsExcludeField' => FALSE,
-						'foreignRelationClass' => 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser'
+						'foreignRelationClass' => $className
 					),
 					1 => array(
 						'relationName' => 'relation 2',
 						'relationType' => 'manyToMany',
 						'propertyIsExcludeField' => FALSE,
-						'foreignRelationClass' => 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser'
+						'foreignRelationClass' => $className
 					),
 				)
 			),
 		);
 
-		$expected = new Tx_ExtensionBuilder_Domain_Model_DomainObject();
+		$expected = new \EBT\ExtensionBuilder\Domain\Model\DomainObject();
 		$expected->setName($name);
 		$expected->setDescription($description);
 		$expected->setEntity(TRUE);
 		$expected->setAggregateRoot(TRUE);
 
-		$relation1 = new Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_ManyToManyRelation('relation 1');
-		$relation1->setForeignClassName('\\TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser');
+		$relation1 = new \EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation\ManyToManyRelation('relation 1');
+		$relation1->setForeignClassName($className);
 		$relation1->setRelatedToExternalModel(TRUE);
 		$relation1->setExcludeField(FALSE);
 		$relation1->setForeignDatabaseTableName('fe_users');
-		$relation2 = new Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_ManyToManyRelation('relation 2');
-		$relation2->setForeignClassName('\\TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser');
+		$relation2 = new \EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation\ManyToManyRelation('relation 2');
+		$relation2->setForeignClassName($className);
 		$relation2->setRelatedToExternalModel(TRUE);
 		$relation2->setExcludeField(FALSE);
 		$relation2->setForeignDatabaseTableName('fe_users');
 		$expected->addProperty($relation1);
 		$expected->addProperty($relation2);
 
-
+		$extbaseConfiguration = array(
+			'tableName' => 'fe_users'
+		);
+		$this->configurationManager->expects($this->atLeastOnce())->method('getExtbaseClassConfiguration')->with($className)->will($this->returnValue($extbaseConfiguration));
 		$actual = $this->objectSchemaBuilder->build($input);
 		$this->assertEquals($actual, $expected, 'Domain Object not built correctly.');
 
@@ -166,6 +176,8 @@ class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Te
 		$name = 'MyDomainObject';
 		$description = 'My long domain object description';
 		$relationName = 'Relation1';
+		$className = '\\TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser';
+
 		$input = array(
 			'name' => $name,
 			'objectsettings' => array(
@@ -179,14 +191,19 @@ class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Te
 						'relationName' => $relationName,
 						'relationType' => 'manyToMany',
 						'propertyIsExcludeField' => FALSE,
-						'foreignRelationClass' => 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser'
+						'foreignRelationClass' => $className
 					),
 				)
 			),
 		);
 
+		$extbaseConfiguration = array(
+			'tableName' => 'fe_users'
+		);
+		$this->configurationManager->expects($this->atLeastOnce())->method('getExtbaseClassConfiguration')->with($className)->will($this->returnValue($extbaseConfiguration));
+
 		$domainObject = $this->objectSchemaBuilder->build($input);
-		$dummyExtension = new Tx_ExtensionBuilder_Domain_Model_Extension();
+		$dummyExtension = new \EBT\ExtensionBuilder\Domain\Model\Extension();
 		$dummyExtension->setExtensionKey('dummy');
 		$domainObject->setExtension($dummyExtension);
 
@@ -234,7 +251,7 @@ class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Te
 		$input['name'] = $domainObjectName2;
 		$domainObject2 = $this->objectSchemaBuilder->build($input);
 
-		$dummyExtension = new Tx_ExtensionBuilder_Domain_Model_Extension();
+		$dummyExtension = new \EBT\ExtensionBuilder\Domain\Model\Extension();
 		$dummyExtension->setExtensionKey('dummy');
 		$domainObject1->setExtension($dummyExtension);
 		$domainObject2->setExtension($dummyExtension);
@@ -257,6 +274,8 @@ class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Te
 		$domainObjectName1 = 'DomainObject1';
 		$description = 'My long domain object description';
 		$relationName = 'Relation1';
+		$className = '\\TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser';
+
 		$input = array(
 			'name' => $domainObjectName1,
 			'objectsettings' => array(
@@ -270,11 +289,16 @@ class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Te
 						'relationName' => $relationName,
 						'relationType' => 'zeroToMany',
 						'propertyIsExcludeField' => FALSE,
-						'foreignRelationClass' => 'TYPO3\\CMS\\Extbase\\Domain\\Model\\FrontendUser'
+						'foreignRelationClass' => $className
 					),
 				)
 			),
 		);
+
+		$extbaseConfiguration = array(
+			'tableName' => 'fe_users'
+		);
+		$this->configurationManager->expects($this->atLeastOnce())->method('getExtbaseClassConfiguration')->with($className)->will($this->returnValue($extbaseConfiguration));
 
 		$domainObject1 = $this->objectSchemaBuilder->build($input);
 
@@ -286,5 +310,3 @@ class Tx_ExtensionBuilder_ObjectSchemaBuilderTest extends Tx_ExtensionBuilder_Te
 
 	}
 }
-
-?>

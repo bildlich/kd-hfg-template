@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
@@ -22,14 +23,16 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-/**
- *
- * @version $ID:$
- */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_SelectProperty extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
+class SelectProperty extends AbstractProperty {
+	/**
+	 * the property's default value
+	 *
+	 * @var int
+	 */
+	protected $defaultValue = 0;
 
 	public function getTypeForComment() {
-		return '\\integer';
+		return 'integer';
 	}
 
 	public function getTypeHint() {
@@ -40,5 +43,3 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_SelectProperty extends Tx_Ex
 		return $this->getFieldName() . " int(11) DEFAULT '0' NOT NULL,";
 	}
 }
-
-?>

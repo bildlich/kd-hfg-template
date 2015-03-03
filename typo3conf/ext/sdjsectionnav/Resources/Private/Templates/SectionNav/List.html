@@ -1,0 +1,18 @@
+<f:layout name="Default" />
+<f:section name="main">
+<nav class="sub-nav ajax-load-me" id="table-of-contents">
+	<ul>
+		<f:for each="{links}" as="link">
+			<li><a href="#section-{link.uid}">{link.title}</a></li>
+		</f:for>
+	</ul>
+	<f:if condition="{L}==2">
+		<f:then>
+			<f:link.page pageUid="{pageid}" additionalParams="{L: '0'}" class="ajax" additionalAttributes="{data-pageslug: 'info'}">Deutsch?</f:link.page>
+		</f:then>
+		<f:else>
+			<f:link.page pageUid="{pageid}" additionalParams="{L: '2'}" class="ajax" additionalAttributes="{data-pageslug: 'info'}">English?</f:link.page>
+		</f:else>
+	</f:if>
+</nav>
+</f:section>

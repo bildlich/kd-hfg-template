@@ -23,8 +23,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
 
-require_once(PATH_tslib . 'class.tslib_pibase.php');
-
 /**
  * The main class of fl_realurl_image
  *
@@ -117,6 +115,7 @@ class tx_flrealurlimage extends tslib_cObj {
 
 	/**
 	 * Add the absrefprefix
+	 *
 	 * @param $url
 	 *
 	 * @return string
@@ -130,30 +129,36 @@ class tx_flrealurlimage extends tslib_cObj {
 	 *
 	 * @param array $conf IMAGE-Object configuration array
 	 * @param array $info image info array:
+	 * @param mixed $file
 	 *
 	 * @return string
 	 */
-	public function main($conf, $info, $file = NULL) {
-		$this->init($conf, $info, $file);
+	public function main($conf, $info, $file = NULL, $cObj = NULL) {
+		$this->init($conf, $info, $file, $cObj);
 
 		if ($this->enable && trim($this->org_fileName) != '') {
-			return $this->generateFileName();
-		} else {
-			return $this->org_fileName;
+			$new = $this->generateFileName();
+			if ($new !== '') {
+				return $new;
+			}
 		}
+		return $this->org_fileName;
+
 	}
 
 	/**
 	 * initializing tx_flrealurlimage class
 	 *
-	 * @param       array       IMAGE-Object configuration array
-	 * @param       array       image info array:
+	 * @param array $conf  IMAGE-Object configuration array
+	 * @param array $image image info array:
+	 * @param mixed $file
 	 *
-	 * @return        nothing
+	 * @return
 	 */
-	private function init($conf, $image, $file) {
+	private function init($conf, $image, $file, $cObj) {
 		// IMAGE_conf
 		$this->IMAGE_conf = $conf;
+		$this->cObj = $cObj;
 
 		// fl_conf
 		$global_conf = array();
@@ -164,7 +169,14 @@ class tx_flrealurlimage extends tslib_cObj {
 		if (is_array($conf['fl_realurl_image.'])) {
 			$local_conf = $conf['fl_realurl_image.'];
 		}
-		$this->fl_conf = t3lib_div::array_merge_recursive_overrule($global_conf, $local_conf, 0, 0);
+
+		if(method_exists('t3lib_div', 'array_merge_recursive_overrule')) {
+			$global_conf = t3lib_div::array_merge_recursive_overrule($global_conf, $local_conf, FALSE, FALSE);
+		} else {
+			t3lib_utility_Array::mergeRecursiveWithOverrule($global_conf, $local_conf, TRUE, FALSE);
+		}
+
+		$this->fl_conf = $global_conf;
 
 		// fl_config
 		$this->fl_config = $GLOBALS['fl_realurl_image'];
@@ -183,6 +195,11 @@ class tx_flrealurlimage extends tslib_cObj {
 		}
 		if ($this->new_fileName == '1') {
 			$this->new_fileName = '';
+		}
+
+		$enableByConfiguration = (bool)$this->fl_conf['enable'];
+		if(!$enableByConfiguration) {
+			$this->enable = $enableByConfiguration;
 		}
 
 		// enable
@@ -211,6 +228,9 @@ class tx_flrealurlimage extends tslib_cObj {
 		if ($this->fl_conf['data'] && $this->new_fileName == '') {
 			$this->new_fileName = $this->generateTextBase();
 		}
+		if ($this->new_fileName === '') {
+			return $this->new_fileName;
+		}
 		unset($this->fl_conf['data']); // important otherwise stdWrap overwrites so far generated new_fileName
 		// if $textBase is already a filename then get only the name itself with no path or ending
 		if (strstr($this->new_fileName, '/')) {
@@ -218,15 +238,15 @@ class tx_flrealurlimage extends tslib_cObj {
 		}
 		if (strstr($this->new_fileName, '.')) {
 			$this->new_fileName = str_replace(array(
-			                                       '.jpg',
-			                                       '.JPG',
-			                                       '.jpeg',
-			                                       '.JPEG',
-			                                       '.png',
-			                                       '.PNG',
-			                                       '.gif',
-			                                       '.GIF'
-			                                  ), '', $this->new_fileName);
+				'.jpg',
+				'.JPG',
+				'.jpeg',
+				'.JPEG',
+				'.png',
+				'.PNG',
+				'.gif',
+				'.GIF'
+			), '', $this->new_fileName);
 		}
 		// make this text basis suitable for a file name
 		$this->new_fileName = $this->smartEncoding($this->new_fileName);
@@ -250,37 +270,66 @@ class tx_flrealurlimage extends tslib_cObj {
 	 * @return        string       Text name base
 	 */
 	private function generateTextBase() {
-		$textBase = '';
 		// get info to image
 		$damInfo = $this->getDAMinfo();
 		$pageInfo = $this->getPAGEinfo();
 		$falInfo = $this->getFALInfo();
+		$falReferenceInfo = $this->getFALReferenceInfo();
 		$mediaInfo = $this->getMEDIAInfo();
 
 		// walk the options until a possible base for a file-name is found
 		$parts = t3lib_div::trimExplode('//', $this->fl_conf['data'], TRUE);
 		$partSize = sizeof($parts);
-		for ($i = 0; $i < $partSize && $textBase == ''; $i++) {
-			list($source, $item) = explode(':', $parts[$i]);
+		for ($i = 0; $i < $partSize; $i++) {
+			list($source, $item) = t3lib_div::trimExplode(':', $parts[$i], TRUE);
 
-			if ($source == 'fal' && $falInfo[$item]) {
-				return $falInfo[$item];
-			} elseif ($source == 'media' && $mediaInfo[$item]) {
-				return $mediaInfo[$item];
-			} elseif ($source == 'dam' && $damInfo[$item]) {
-				return $damInfo[$item];
-			} elseif ($source == 'ts' && ($this->IMAGE_conf[$item] || $this->IMAGE_conf[$item . '.'])) {
-				$textBase = $this->stdWrap($this->IMAGE_conf[$item], $this->IMAGE_conf[$item . '.']);
-			} elseif ($source == 'file' && $this->image[$item]) {
-				$textBase = $this->image[$item];
-			} elseif ($source == 'page' && $pageInfo[$item]) {
-				$textBase = $pageInfo[$item];
-			} elseif ($source != 'page' && $source != 'dam' && $source != 'file' && $source != 'ts' && $source != 'media' && $source != 'fal') {
-				$textBase = $parts[$i];
+			switch ($source) {
+				case 'falref':
+					if ($falReferenceInfo[$item] && strlen(trim($falReferenceInfo[$item]))) {
+						return trim($falReferenceInfo[$item]);
+					}
+					break;
+				case 'fal':
+					if ($falInfo[$item] && strlen(trim($falInfo[$item]))) {
+						return trim($falInfo[$item]);
+					}
+					break;
+				case 'media':
+					if ($mediaInfo[$item] && strlen(trim($mediaInfo[$item]))) {
+						return trim($mediaInfo[$item]);
+					}
+					break;
+				case 'dam':
+					if ($damInfo[$item] && strlen(trim($damInfo[$item]))) {
+						return trim($damInfo[$item]);
+					}
+					break;
+				case 'ts':
+					if ($this->IMAGE_conf[$item] || $this->IMAGE_conf[$item . '.']) {
+						$tsResult = $this->stdWrap($this->IMAGE_conf[$item], $this->IMAGE_conf[$item . '.']);
+						if (strlen(trim($tsResult))) {
+							return trim($tsResult);
+						}
+					}
+					break;
+				case 'file':
+					if ($this->image[$item] && strlen(trim($this->image[$item]))) {
+						return trim($this->image[$item]);
+					}
+					break;
+				case 'page':
+					if ($pageInfo[$item] && strlen(trim($pageInfo[$item]))) {
+						return trim($pageInfo[$item]);
+					}
+					break;
+				default:
+					if ($parts[$i] && strlen(trim($parts[$i]))) {
+						return trim($parts[$i]);
+					}
+					break;
 			}
-			$textBase = trim($textBase);
 		}
-		return $textBase;
+		return '';
 	}
 
 	/**
@@ -292,6 +341,16 @@ class tx_flrealurlimage extends tslib_cObj {
 			return new Tx_FlRealurlImage_Service_FileInformation();
 		}
 		return FALSE;
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function getFALReferenceInfo() {
+		if ($fileInformation = $this->getFileInformation()) {
+			return $fileInformation->getByFalReference($this->image, $this->fileTypeInformation, $this->IMAGE_conf, $this->cObj);
+		}
+		return array();
 	}
 
 	/**
@@ -556,7 +615,7 @@ class tx_flrealurlimage extends tslib_cObj {
 
 		// create folder if required
 		$new_folder = t3lib_div::dirname($new_path);
-		if (!is_dir($new_folder)) {
+		if ($new_folder && !is_dir($new_folder)) {
 			if (!t3lib_div::mkdir($new_folder)) {
 				throw new Exception('Can\'t create the fl_realurl_image Folder "' . $new_folder . '"');
 			}

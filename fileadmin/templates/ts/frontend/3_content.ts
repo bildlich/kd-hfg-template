@@ -56,17 +56,35 @@ temp.con {
 }
 
 #index content
-temp.indexcon = CONTENT
-temp.indexcon {
-    table = tt_content
-    select.orderBy = sorting
-    select.where = colPos=7
-    select.pidInList=3
-    select.languageField = sys_language_uid
-    renderObj.stdWrap.innerWrap.cObject.default {
-      10.cObject.default.value =
-      30.cObject.default.value = |
+temp.indexcon=CONTENT
+temp.indexcon{
+  table=tt_content
+  select{
+    languageField=sys_language_uid
+    selectFields=image
+    where=colPos=7
+    orderBy = sorting
+    pidInList=3
+  }
+  
+  renderObj=COA
+  renderObj{   
+    10 = FILES
+	10 {
+		references {
+			fieldName = image
+		}
+		renderObj = COA
+		renderObj {
+			10 = IMG_RESOURCE
+			10 {
+				file.import.data = file:current:publicUrl
+				file.maxW < config.homeMaxW
+				stdWrap.wrap = <li style="background-image:url(|)"></li>
+			}
+		}
     }
+  }
 }
 
 #Smallmenu

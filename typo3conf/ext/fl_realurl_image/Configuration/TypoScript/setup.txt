@@ -1,5 +1,6 @@
-config.fl_realurl_image = {$fl_realurl_image.conf_enable}
 config.fl_realurl_image {
+	enable = {$fl_realurl_image.conf_enable}
+
 	# generation of a text basis for a speaking file name
 	data = {$fl_realurl_image.conf_data}
 

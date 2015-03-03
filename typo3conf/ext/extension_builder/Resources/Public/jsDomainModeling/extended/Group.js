@@ -26,7 +26,7 @@ inputEx.Group = function(options) {
 };
 lang.extend(inputEx.Group, inputEx.Field, 
 /**
- * @scope inputEx.Group.prototype   
+ * @scope inputEx.Group.prototype
  */   
 {
    
@@ -71,9 +71,12 @@ lang.extend(inputEx.Group, inputEx.Field,
     * Render the group
     */
    render: function() {
-   
-      // Create the div wrapper for this group
-	   this.divEl = inputEx.cn('div', {className: this.options.className});
+	   var className = this.options.className;
+		if (this.options.collapsible) {
+			className += ' expanded';
+		}
+		// Create the div wrapper for this group
+		this.divEl = inputEx.cn('div', {className: className});
 	   if(this.options.id) {
    	   this.divEl.id = this.options.id;
    	}
@@ -115,18 +118,17 @@ lang.extend(inputEx.Group, inputEx.Field,
          var input = this.options.fields[i];
         
          // Render the field
-         if(typeof roundtrip != 'undefined'){
-        	 input = roundtrip.renderFieldHook(input);
-         }
-         
+		// input = this.createUniqueIdForUidField(input);
+
+		if(input.inputParams.name == 'uid' && typeof input.inputParams.value == 'undefined') {
+			var d = new Date,
+			uniqueUid = parseInt(d.getTime() * Math.random());
+			input.inputParams.value = uniqueUid;
+		}
+
          var field = this.renderField(input);
          
-         if(typeof roundtrip != 'undefined'){ 
-        	 field.updatedEvt.subscribe(function(e,params) {
-     			roundtrip.updateEvtListener(params);
-        	 });
-         }
-         
+
          this.fieldset.appendChild(field.getEl() );
   	   }
   	
@@ -181,9 +183,20 @@ lang.extend(inputEx.Group, inputEx.Field,
    toggleCollapse: function() {
       if(Dom.hasClass(this.fieldset, 'inputEx-Expanded')) {
          Dom.replaceClass(this.fieldset, 'inputEx-Expanded', 'inputEx-Collapsed');
+		  Dom.replaceClass(this.divEl, 'expanded', 'collapsed');
       }
       else {
-         Dom.replaceClass(this.fieldset, 'inputEx-Collapsed','inputEx-Expanded');
+		  if(Dom.getAncestorByClassName(this.divEl, 'WireIt-Container')) {
+				var containerId = Dom.getAncestorByClassName(this.divEl, 'WireIt-Container').id;
+			  Dom.getElementsByClassName('inputEx-Expanded', 'fieldset', containerId).each(function(el) {
+				Dom.replaceClass(el, 'inputEx-Expanded', 'inputEx-Collapsed');
+			  });
+			  Dom.getElementsByClassName('expanded').each(function(el) {
+				  Dom.replaceClass(el, 'expanded', 'collapsed');
+			  });
+		  }
+		  Dom.replaceClass(this.fieldset, 'inputEx-Collapsed','inputEx-Expanded');
+		  Dom.replaceClass(this.divEl, 'collapsed', 'expanded');
       }
    },
    

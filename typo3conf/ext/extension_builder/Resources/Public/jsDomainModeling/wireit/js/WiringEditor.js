@@ -119,15 +119,24 @@
 		this.confirmPanel.setBody("<div id='wireEditorConfirmMessageBox'></div><button id='confirmPanelButton'>Ok</button>&nbsp;&nbsp;<button id='confirmPanelCancelButton'>Cancel</button>");
 		this.confirmPanel.render(document.body);
 
+		this.confirmUpdatesPanel = new widget.Panel('confirmUpdatesPanel', {
+			fixedcenter: true,
+			draggable: true,
+			visible: false,
+			modal: true
+		});
+		this.confirmUpdatesPanel.setBody("<div id='wireEditorConfirmUpdatesMessageBox'></div><button id='confirmUpdatePanelButton'>Ok</button>&nbsp;&nbsp;<button id='confirmUpdatePanelCancelButton'>Cancel</button>");
+		this.confirmUpdatesPanel.render(document.body);
+
 		this.showSpinnerPanel = new YAHOO.widget.Panel("wait",
-													   { width:"240px",
-														   fixedcenter:true,
-														   close:true,
-														   draggable:false,
-														   zindex:4,
-														   modal:true,
-														   visible:false
-													   }
+			{ width:"240px",
+				fixedcenter:true,
+				close:true,
+				draggable:false,
+				zindex:4,
+				modal:true,
+				visible:false
+			}
 		);
 
 		this.showSpinnerPanel.setHeader("Saving, please wait...");
@@ -247,9 +256,9 @@
 		 */
 		renderPropertiesForm: function() {
 			this.propertiesForm = new inputEx.Group({
-														parentEl: YAHOO.util.Dom.get('propertiesForm'),
-														fields: this.options.propertiesFields
-													});
+				parentEl: YAHOO.util.Dom.get('propertiesForm'),
+				fields: this.options.propertiesFields
+			});
 		},
 
 		/**
@@ -323,8 +332,7 @@
 		 * WiringEditor uses a SMD to connect to the backend
 		 * @method loadSMD
 		 */
-		loadSMD: function() {
-
+			loadSMD: function() {
 			this.service = new YAHOO.rpc.Service(this.options.smdUrl, {
 				success: this.onSMDsuccess,
 				failure: this.onSMDfailure,
@@ -392,14 +400,18 @@
 
 			var value = this.getValue();
 
-			if (value.name == "") {
-				this.alert('Extension name missing', "Please enter an extension name in the left panel");
+			if (!this.propertiesForm.validate()) {
+				this.alert(
+					this.localize('modeler_invalidExtensionPropertiesTitle'),
+					this.localize('modeler_invalidExtensionProperties')
+				);
 				return;
 			}
-			if (value.extensionKey == "") {
-				this.alert('Extension key missing', "Please enter an extension key in the left panel");
-				return;
+
+			if (!this.validateModels(value)) {
+				return false;
 			}
+
 			this.showSpinnerPanel.show();
 			this.dataToSubmit.name = value.name;
 			this.dataToSubmit.working = JSON.stringify(value.working);
@@ -411,17 +423,79 @@
 
 		},
 
+
+		validateModels: function(value) {
+			var modelNames = {},
+				propertyNames = {},
+				modelName,
+				propertyName,
+				model,
+				modelForm;
+			if (value.working.modules) {
+				for (var modelIndex = 0; modelIndex < value.working.modules.length; modelIndex++) {
+					model = value.working.modules[modelIndex].value;
+					modelName = model.name;
+					if (!modelName || modelName.length < 2) {
+						this.alert(this.localize('modeler_invalidConfigurationTitle'), this.localize('modeler_missingModelName'));
+						return false;
+					}
+					if (modelNames[modelName] !== undefined) {
+						this.alert(this.localize('modeler_duplicateModelNamesTitle'),'2 x "' + modelName + '"');
+						return false;
+					}
+					modelNames[modelName] = 1;
+					modelForm = this.layer.containers[modelIndex].form;
+					if(!modelForm.validate()) {
+						this.alert(this.localize('modeler_invalidConfigurationTitle'), this.localize('modeler_invalidModelConfiguration') + modelName);
+						return false;
+					}
+					propertyNames = {};
+					for (var propertyIndex = 0; propertyIndex < model.propertyGroup.properties.length; propertyIndex++) {
+						propertyName = model.propertyGroup.properties[propertyIndex].propertyName;
+						if (propertyNames[propertyName] !== undefined) {
+							this.alert(this.localize('modeler_duplicatePropertyNamesTitle'),'2 x "' + propertyName + '" in model "' + modelName + '"');
+							return false;
+						}
+						propertyNames[propertyName] = 1;
+					}
+					for (var relationIndex = 0; relationIndex < model.relationGroup.relations.length; relationIndex++) {
+						propertyName = model.relationGroup.relations[relationIndex].relationName;
+						if (propertyNames[propertyName] !== undefined) {
+							this.alert(this.localize('modeler_duplicatePropertyNamesTitle'),'2 x "' + propertyName + '" in model "' + modelName + '"');
+							return false;
+						}
+						propertyNames[propertyName] = 1;
+					}
+				}
+			}
+			return true;
+		},
+
+		localize: function(key) {
+			if (TYPO3.settings.extensionBuilder._LOCAL_LANG[key] !== undefined) {
+				return TYPO3.settings.extensionBuilder._LOCAL_LANG[key];
+			}
+			return key;
+		},
+
 		/**
 		 * saveModule success callback
 		 * @method saveModuleSuccess
 		 */
 		saveModuleSuccess: function(o) {
 			this.showSpinnerPanel.hide();
-
+			console.log(o);
 			if (typeof o.confirm != 'undefined') {
 				title = 'Please confirm';
 				message = o.confirm;
 				this.confirm(title, message, o.confirmFieldName);
+				return;
+			}
+
+			if (typeof o.confirmUpdate != 'undefined') {
+				title = 'Success';
+				message = o.success;
+				this.confirmUpdates(title, message);
 				return;
 			}
 
@@ -431,12 +505,12 @@
 			}
 			else if (typeof o.error != 'undefined') {
 				title = '<span style="color:red">Error!</span>';
-				message = "Extension could not be saved:\n " + o.error;
+				message = this.localize('modeler_extensionSaveError') + "\n " + o.error;
 			}
 			else if (typeof o.warning != 'undefined') {
-					title = 'Warning';
-					message = o.warning;
-				}
+				title = 'Warning';
+				message = o.warning;
+			}
 
 			this.alert(title, message);
 
@@ -469,6 +543,55 @@
 			}, this, true);
 		},
 
+		updateEventListenerAdded: false,
+
+		confirmUpdates: function(title, message) {
+			this.confirmPanel.setHeader(title);
+			Dom.get('wireEditorConfirmUpdatesMessageBox').innerHTML = message;
+			this.confirmUpdatesPanel.show();
+			if (!this.updateEventListenerAdded) {
+				Event.addListener(
+						'confirmUpdatePanelButton',
+						'click',
+						function() {
+							console.log('confirmUpdatePanelButton clicked');
+							this.confirmUpdatesPanel.hide();
+							this.performDbUpdates();
+						}, this, true);
+				Event.addListener('confirmUpdatePanelCancelButton', 'click', function() {
+					this.confirmUpdatesPanel.hide();
+				}, this, true);
+				this.updateEventListenerAdded = true;
+			}
+
+		},
+
+		performDbUpdates: function() {
+			var extensionProperties = this.propertiesForm.getValue();
+			var updateStatements = [];
+			Dom.getElementsBy(
+				function(el){
+					if (el.checked) {
+						updateStatements.push(el.value);
+					}
+				},
+				'input',
+				'confirmUpdatesPanel'
+			);
+
+			this.dataToSubmit.updateStatements = updateStatements;
+			this.dataToSubmit.extensionKey = extensionProperties.extensionKey;
+			this.dataToSubmit.vendorName = extensionProperties.vendorName;
+			console.log(this.service);
+			this.showSpinnerPanel.show();
+			this.service.updateDb(this.dataToSubmit, {
+				success: this.saveModuleSuccess,
+				failure: this.saveModuleFailure,
+				scope: this
+			});
+			this.updatePerformed  = true;
+		},
+
 		/**
 		 * saveModule failure callback
 		 * @method saveModuleFailure
@@ -491,7 +614,7 @@
 		 * @method onNew
 		 */
 		onNew: function() {
-			if (!confirm('Do you really want to clear the current working board and load the selected pipe? Unsaved changes will get lost!')) {
+			if (!confirm('modeler_loadPipeConfirmMessage')) {
 				return false;
 			}
 			this.layer.removeAllContainers();
@@ -575,18 +698,22 @@
 		onLoad: function() {
 
 			this.service.listWirings({language: this.options.languageName}, {
-										 success: function(result) {
-											 this.pipes = result.result;
-											 this.pipesByName = {};
-											 this.renderLoadPanel();
-											 this.updateLoadPanelList();
-											 this.loadPanel.show();
-											 this.layout.getUnitById('left').collapse();
-										 },
-										 scope: this
-									 }
+				 success: function(result) {
+					 this.pipes = result.result;
+					 this.pipesByName = {};
+					 this.renderLoadPanel();
+					 this.updateLoadPanelList();
+					 this.loadPanel.show();
+					 this.layout.getUnitById('left').collapse();
+				 },
+				 scope: this
+			 }
 			);
 
+		},
+
+		onPipeLoaded: function() {
+			roundtrip.onModuleLoaded();
 		},
 
 		/**
@@ -622,7 +749,7 @@
 
 			// TODO: check if current pipe is saved...
 
-			if (!confirm('Do you really want to clear the current working board and load the selected pipe?')) return false;
+			if (!confirm(this.localize('modeler_loadPipeConfirmMessage'))) return false;
 
 			this.layer.removeAllContainers();
 
@@ -656,6 +783,7 @@
 			}
 
 			this.loadPanel.hide();
+			this.onPipeLoaded();
 		},
 
 
@@ -683,8 +811,8 @@
 				}
 
 				var wireObj = {
-					src: {moduleId: WireIt.indexOf(wire.terminal1.container, this.layer.containers), terminal: wire.terminal1.options.name, uid:roundtrip.getUidForTerminal(wire.terminal1)},
-					tgt: {moduleId: WireIt.indexOf(wire.terminal2.container, this.layer.containers), terminal: wire.terminal2.options.name, uid:roundtrip.getUidForTerminal(wire.terminal2)}
+					src: {moduleId: WireIt.indexOf(wire.terminal1.container, this.layer.containers), terminal: wire.terminal1.options.name, uid:this.getUidForTerminal(wire.terminal1)},
+					tgt: {moduleId: WireIt.indexOf(wire.terminal2.container, this.layer.containers), terminal: wire.terminal2.options.name, uid:this.getUidForTerminal(wire.terminal2)}
 				};
 				obj.wires.push(wireObj);
 			}
@@ -695,6 +823,24 @@
 				name: obj.properties.name,
 				working: obj
 			};
+		},
+
+		// add uids to terminals to identify the connection from relations
+		// to other models
+		getUidForTerminal	:	function(terminal) {
+			var parentId,
+				terminalUid;
+			if (terminal.el.getAttribute('title') == 'SOURCES') {
+				// id of the module
+				parentId = terminal.el.parentNode.id;
+			}
+			else {
+				// id of the wrapper of the first field in the fieldset
+				parentId = YAHOO.util.Dom.getAncestorByTagName(terminal.el, 'fieldset').firstChild.id;
+			}
+			// find uid for terminal (needs prototype since YAHOO.util.Dom does not provide such function)
+			terminalUid = $$('#' + parentId + ' input[name="uid"]')[0].value;
+			return terminalUid;
 		}
 
 

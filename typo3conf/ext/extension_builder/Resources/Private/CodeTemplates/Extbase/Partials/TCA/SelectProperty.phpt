@@ -1,7 +1,9 @@
-'type' => 'select',
-'items' => array(
-	array('-- Label --', 0),
+array(
+	'type' => 'select',
+	'items' => array(
+		array('-- Label --', 0),
+	),
+	'size' => 1,
+	'maxitems' => 1,
+	'eval' => '<f:if condition="{property.required}">required</f:if>'
 ),
-'size' => 1,
-'maxitems' => 1,
-'eval' => '<f:if condition="{property.required}">required</f:if>'

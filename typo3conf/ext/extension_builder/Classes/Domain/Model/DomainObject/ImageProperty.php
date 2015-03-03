@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
@@ -23,17 +24,20 @@
  ***************************************************************/
 
 /**
- *
  * Image property
- *
- * @version $ID:$
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_ImageProperty extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
+class ImageProperty extends AbstractProperty {
+	/**
+	 * the property's default value
+	 *
+	 * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+	 */
+	protected $defaultValue = NULL;
 
 	/**
 	 * flag that this property needs an upload folder
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $needsUploadFolder = TRUE;
 
@@ -49,16 +53,26 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_ImageProperty extends Tx_Ext
 	 */
 	protected $disallowedFileTypes = '';
 
+	/**
+	 * @var string
+	 */
+	protected $type = 'Image';
+
+	/**
+	 * @var int
+	 */
+	protected $maxItems = 1;
+
 	public function getTypeForComment() {
-		return '\\string';
+		return '\TYPO3\CMS\Extbase\Domain\Model\FileReference';
 	}
 
 	public function getTypeHint() {
-		return '';
+		return '\TYPO3\CMS\Extbase\Domain\Model\FileReference';
 	}
 
 	public function getSqlDefinition() {
-		return $this->getFieldName() . " text NOT NULL,";
+		return $this->getFieldName() . " int(11) unsigned NOT NULL default '0',";
 	}
 
 	/**
@@ -99,6 +113,28 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_ImageProperty extends Tx_Ext
 	public function setDisallowedFileTypes($disallowedFileTypes) {
 		return $this->disallowedFileTypes = $disallowedFileTypes;
 	}
-}
 
-?>
+	/**
+	 * The string to be used inside object accessors to display this property.
+	 *
+	 * @return string
+	 */
+	public function getNameToBeDisplayedInFluidTemplate() {
+		return $this->name . '.originalResource.name';
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMaxItems() {
+		return $this->maxItems;
+	}
+
+	/**
+	 * @param int $maxItems
+	 */
+	public function setMaxItems($maxItems) {
+		$this->maxItems = $maxItems;
+	}
+
+}

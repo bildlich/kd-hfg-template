@@ -1,8 +1,9 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2009 Ingmar Schlecht
+ *  (c) 2009 Ingmar Schlecht, 2013 Nico de Haen
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,39 +28,45 @@
  * by TS Setup, Flexform and returns the content to the v4 framework.
  *
  * This class is the main entry point for extbase extensions in the frontend.
- *
- * @version $ID:$
  */
-abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRelation extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
-
+abstract class AbstractRelation extends \EBT\ExtensionBuilder\Domain\Model\DomainObject\AbstractProperty {
 	/**
-	 * The schema of the foreign class
-	 * @var Tx_ExtensionBuilder_Domain_Model_DomainObject
+	 * the schema of the foreign class
+	 *
+	 * @var \EBT\ExtensionBuilder\Domain\Model\DomainObject
 	 */
-	protected $foreignModel;
+	protected $foreignModel = NULL;
 
 	/**
-	 * The schema of the foreign class
+	 * the schema of the foreign class
+	 *
 	 * @var string
 	 */
-	protected $foreignClassName;
+	protected $foreignClassName = NULL;
 
 	/**
 	 * @var string
 	 */
-	protected $foreignDatabaseTableName;
+	protected $foreignDatabaseTableName = '';
 
 	/**
-	 * If this flag is set to TRUE the relation is rendered as IRRE field (Inline Relational Record Editing). Default is FALSE.
-	 * @var boolean
+	 * If this flag is set to TRUE, the relation is rendered as IRRE field (Inline Relational Record Editing).
+	 * Default is FALSE.
+	 *
+	 * @var bool
 	 */
 	protected $inlineEditing = FALSE;
 
 	/**
-	 * If this flag is set to TRUE the relation will be lazy loading. Default is FALSE
+	 * If this flag is set to TRUE, the relation will be lazy loading. Default is FALSE
+	 *
+	 * @var bool
 	 */
 	protected $lazyLoading = FALSE;
 
+	/**
+	 * @var bool
+	 */
 	protected $relatedToExternalModel = FALSE;
 
 	public function setRelatedToExternalModel($relatedToExternalModel) {
@@ -72,7 +79,7 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRe
 
 	/**
 	 *
-	 * @return Tx_ExtensionBuilder_Domain_Model_DomainObject The foreign class
+	 * @return \EBT\ExtensionBuilder\Domain\Model\DomainObject The foreign class
 	 */
 	public function getForeignModel() {
 		return $this->foreignModel;
@@ -82,7 +89,7 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRe
 	 * @return string
 	 */
 	public function getForeignDatabaseTableName() {
-		if(is_object($this->foreignModel)) {
+		if (is_object($this->foreignModel)) {
 			return $this->foreignModel->getDatabaseTableName();
 		} else {
 			return $this->foreignDatabaseTableName;
@@ -101,17 +108,17 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRe
 	 * @return string The foreign class
 	 */
 	public function getForeignClassName() {
-		if(isset($this->foreignClassName)) {
+		if (isset($this->foreignClassName)) {
 			return $this->foreignClassName;
 		}
-		if(is_object($this->foreignModel)) {
+		if (is_object($this->foreignModel)) {
 			return $this->foreignModel->getFullQualifiedClassName();
 		}
 		return NULL;
 	}
 
 	public function getForeignModelName() {
-		if(is_object($this->foreignModel)) {
+		if (is_object($this->foreignModel)) {
 			return $this->foreignModel->getName();
 		}
 		$parts = explode('\\Domain\\Model\\', $this->foreignClassName);
@@ -120,15 +127,15 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRe
 
 	/**
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $foreignModel Set the foreign DomainObject of the relation
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $foreignModel Set the foreign DomainObject of the relation
 	 */
-	public function setForeignModel(Tx_ExtensionBuilder_Domain_Model_DomainObject $foreignModel) {
+	public function setForeignModel(\EBT\ExtensionBuilder\Domain\Model\DomainObject $foreignModel) {
 		$this->foreignModel = $foreignModel;
 	}
 
 	/**
 	 *
-	 * @param string  Set the foreign class nsme of the relation
+	 * @param string $foreignClassName Set the foreign class nsme of the relation
 	 */
 	public function setForeignClassName( $foreignClassName) {
 		$this->foreignClassName = $foreignClassName;
@@ -176,11 +183,25 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRe
 		return $this->getFieldName() . " int(11) unsigned DEFAULT '0' NOT NULL,";
 	}
 
+	/**
+	 * is displayable in the auto generated properties template
+	 *
+	 * this is only true for files and images
+	 *
+	 * @return bool
+	 */
 	public function getIsDisplayable() {
+		return $this->isFileReference();
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isFileReference() {
+		if ($this->foreignClassName == '\\TYPO3\\CMS\\Extbase\\Domain\\Model\\FileReference') {
+			return TRUE;
+		}
 		return FALSE;
 	}
 
-
 }
-
-?>

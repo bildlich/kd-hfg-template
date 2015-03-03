@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\ViewHelpers;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -21,34 +23,46 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-class Tx_ExtensionBuilder_ViewHelpers_RecordTypeViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+/**
+ * Class RecordTypeViewHelper
+ * @package EBT\ExtensionBuilder\ViewHelpers
+ */
 
+class RecordTypeViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 	/**
-	 * @var Tx_ExtensionBuilder_Configuration_ConfigurationManager
+	 * @var \EBT\ExtensionBuilder\Configuration\ConfigurationManager
 	 */
-	protected $configurationManager;
+	protected $configurationManager = NULL;
 
 	/**
-	 * @param Tx_ExtensionBuilder_Configuration_ConfigurationManager $configurationManager
+	 * @param \EBT\ExtensionBuilder\Configuration\ConfigurationManager $configurationManager
 	 * @return void
 	 */
-	public function injectConfigurationManager(Tx_ExtensionBuilder_Configuration_ConfigurationManager $configurationManager) {
+	public function injectConfigurationManager(\EBT\ExtensionBuilder\Configuration\ConfigurationManager $configurationManager) {
 		$this->configurationManager = $configurationManager;
 	}
 
 	/**
 	 * Helper function to find the parents class recordType
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject
 	 * @return string
 	 */
-	public function render(Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject) {
+	public function render(\EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject) {
 		$classSettings = $this->configurationManager->getExtbaseClassConfiguration($domainObject->getParentClass());
 		if (isset($classSettings['recordType'])) {
-			$parentRecordType = $this->convertClassNameToRecordType($classSettings['recordType']);
+			$parentRecordType = \EBT\ExtensionBuilder\Utility\Tools::convertClassNameToRecordType($classSettings['recordType']);
 		} else {
-			$parentRecordType = $this->convertClassNameToRecordType($domainObject->getParentClass());
-			if (!isset($TCA[$domainObject->getDatabaseTableName()]['types'][$parentRecordType])) {
-				$parentRecordType = 1;
+			$parentRecordType = \EBT\ExtensionBuilder\Utility\Tools::convertClassNameToRecordType($domainObject->getParentClass());
+			$existingTypes = $GLOBALS['TCA'][$domainObject->getDatabaseTableName()]['types'];
+			\TYPO3\CMS\Core\Utility\GeneralUtility::devLog('Parent Record type: ' . $parentRecordType, 'extension_builder', 2, $existingTypes);
+			if (is_array($existingTypes) && !isset($existingTypes[$parentRecordType])) {
+				// no types field for parent record type configured, use the default type 1
+				if (isset($existingTypes['1'])) {
+					$parentRecordType = 1;
+				} else {
+					//if it not exists get first existing key
+					$parentRecordType = reset(array_keys($existingTypes));
+				}
 			}
 		}
 
@@ -59,17 +73,4 @@ class Tx_ExtensionBuilder_ViewHelpers_RecordTypeViewHelper extends \TYPO3\CMS\Fl
 		return $content;
 	}
 
-	protected function convertClassNameToRecordType($className) {
-		$classNameParts = explode('\\', $className);
-		if(count($classNameParts) > 5) {
-			return 'Tx_' . $classNameParts[2] . '_Domain_Model_' . $classNameParts[5];
-		} elseif(count($classNameParts) == 5) {
-			return 'Tx_' . $classNameParts[1] . '_Domain_Model_' . $classNameParts[4];
-		} else {
-			return $className;
-		}
-	}
-
 }
-
-?>

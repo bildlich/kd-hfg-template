@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-12-08T13:41:11Z" product-name="sdjseoog">
+		<header/>
+		<body>
+			<trans-unit id="image.description">
+				<source>Social-Media-Bild (wird vererbt)</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjseoog_domain_model_opengraph.title">
+				<source>Title-Tag</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjseoog_domain_model_opengraph.abstract">
+				<source>Abstract</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjseoog_domain_model_opengraph.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjseoog_domain_model_opengraph.keywords">
+				<source>Keywords</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjseoog_domain_model_opengraph.xmlprio">
+				<source>Priorität (0.0 - 1.0)</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjseoog_domain_model_opengraph.xmlinterval">
+				<source>Intervall (always, hourly, daily, weekly, monthly, yearly, never)</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

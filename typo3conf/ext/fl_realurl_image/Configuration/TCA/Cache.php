@@ -4,12 +4,12 @@ if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
-$TCA['tx_flrealurlimage_cache'] = Array(
-	'ctrl'        => $TCA['tx_flrealurlimage_cache']['ctrl'],
+$GLOBALS['TCA']['tx_flrealurlimage_cache'] = Array(
+	'ctrl'        => $GLOBALS['TCA']['tx_flrealurlimage_cache']['ctrl'],
 	'interface'   => Array(
 		'showRecordFieldList' => ''
 	),
-	'feInterface' => $TCA['tx_flrealurlimage_cache']['feInterface'],
+	'feInterface' => $GLOBALS['TCA']['tx_flrealurlimage_cache']['feInterface'],
 	'columns'     => Array(
 		'image_path'   => Array(
 			'exclude' => 0,

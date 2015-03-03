@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\ViewHelpers\Format;
+
 /*                                                                        *
  * This script belongs to the TYPO3 package "Extension Builder".                  *
  *                                                                        *
@@ -32,11 +34,10 @@
  * Output:
  * TextWithMixedCase
  *
- * @version $Id: $
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  * @scope prototype
  */
-class Tx_ExtensionBuilder_ViewHelpers_Format_LowercaseFirstViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class LowercaseFirstViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Lowercase first character
@@ -48,5 +49,3 @@ class Tx_ExtensionBuilder_ViewHelpers_Format_LowercaseFirstViewHelper extends \T
 		return \TYPO3\CMS\Core\Utility\GeneralUtility::lcfirst($content);
 	}
 }
-
-?>

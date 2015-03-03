@@ -35,7 +35,6 @@
 			 */
 			setOptions: function(options) {
 				inputEx.StringField.superclass.setOptions.call(this, options);
-
 				this.options.regexp = options.regexp;
 				this.options.size = options.size;
 				this.options.maxLength = options.maxLength;
@@ -48,7 +47,9 @@
 				this.options.noSpaces = options.noSpaces;
 				this.options.ucFirst = options.ucFirst;
 				this.options.lcFirst = options.lcFirst;
-
+				this.options.advancedMode = options.advancedMode ? options.advancedMode : false;
+				this.options.classname = options.classname;
+				this.options.placeholder = options.placeholder;
 			},
 
 
@@ -66,6 +67,7 @@
 				attributes.id = this.divEl.id ? this.divEl.id + '-field' : YAHOO.util.Dom.generateId();
 				if (this.options.size) attributes.size = this.options.size;
 				if (this.options.name) attributes.name = this.options.name;
+				if (this.options.placeholder) attributes.placeholder = this.options.placeholder;
 				if (this.options.readonly) attributes.readonly = 'readonly';
 
 				if (this.options.maxLength) attributes.maxLength = this.options.maxLength;
@@ -75,6 +77,13 @@
 
 				// Append it to the main element
 				this.wrapEl.appendChild(this.el);
+				Dom.addClass(this.divEl,'textfieldWrapper');
+				if(this.options.advancedMode) {
+				  Dom.addClass(this.divEl, "advancedMode");
+			    }
+				if(this.options.classname) {
+				  Dom.addClass(this.divEl, this.options.classname);
+				}
 				this.fieldContainer.appendChild(this.wrapEl);
 			},
 
@@ -114,7 +123,7 @@
 			 */
 			setValue: function(value, sendUpdatedEvt) {
 				this.el.value = value;
-
+				this.el.setAttribute('title', value);
 				// call parent class method to set style and fire updatedEvt
 				inputEx.StringField.superclass.setValue.call(this, value, sendUpdatedEvt);
 			},

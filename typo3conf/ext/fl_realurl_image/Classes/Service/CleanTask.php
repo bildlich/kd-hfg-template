@@ -48,26 +48,22 @@ class Tx_FlRealurlImage_CleanTask extends tx_scheduler_Task {
 	 */
 	protected function removeDoubleEntries() {
 		$sql = "SELECT COUNT( * ) c, image_path FROM  tx_flrealurlimage_cache GROUP BY image_path ORDER BY c DESC LIMIT 0, 20";
-		$res = $this
-		       ->getDatabase()
-		       ->sql_query($sql);
+		$res = $this->getDatabase()
+			->sql_query($sql);
 
-		while ($row = $this
-		              ->getDatabase()
-		              ->sql_fetch_assoc($res)) {
+		while ($row = $this->getDatabase()
+			->sql_fetch_assoc($res)) {
 			if ($row['c'] > 1) {
-				$rows = $this
-				        ->getDatabase()
-				        ->exec_SELECTgetRows('*', 'tx_flrealurlimage_cache', 'image_path="' . $row['image_path'] . '"', '', 'crdate ASC', $row['c'] - 1);
+				$rows = $this->getDatabase()
+					->exec_SELECTgetRows('*', 'tx_flrealurlimage_cache', 'image_path="' . $row['image_path'] . '"', '', 'crdate ASC', $row['c'] - 1);
 
 				$ids = array();
 				foreach ($rows as $r) {
 					$ids[] = $r['uid'];
 				}
 
-				$this
-				->getDatabase()
-				->exec_DELETEquery('tx_flrealurlimage_cache', 'uid IN (' . implode(',', $ids) . ')');
+				$this->getDatabase()
+					->exec_DELETEquery('tx_flrealurlimage_cache', 'uid IN (' . implode(',', $ids) . ')');
 
 				$msg = 'Found ' . $row['c'] . ' of "' . $row['image_path'] . '"-path and delete ' . sizeof($ids) . ' entries.';
 				t3lib_FlashMessageQueue::addMessage(t3lib_div::makeInstance('t3lib_FlashMessage', '', $msg, t3lib_FlashMessage::INFO));
@@ -79,13 +75,10 @@ class Tx_FlRealurlImage_CleanTask extends tx_scheduler_Task {
 	 * Chek the Image Path
 	 */
 	protected function checkImagePath() {
+		$db = $this->getDatabase();
 		$sql = "SELECT uid,image_path FROM tx_flrealurlimage_cache";
-		$res = $this
-		       ->getDatabase()
-		       ->sql_query($sql);
-		while ($row = $this
-		              ->getDatabase()
-		              ->sql_fetch_assoc($res)) {
+		$res = $db->sql_query($sql);
+		while ($row = $db->sql_fetch_assoc($res)) {
 			if (!file_exists(PATH_site . $row['image_path'])) {
 				echo $row['image_path'] . ' -- ' . $row['uid'] . '<br />';
 			}

@@ -23,7 +23,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
 
-require_once(PATH_tslib . 'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('fl_realurl_image') . 'Classes/class.tx_flrealurlimage.php');
 
 /**
@@ -42,8 +41,6 @@ class ux_tslib_cObj extends tslib_cObj {
 	 * @see  getImgResource()
 	 */
 	function IMG_RESOURCE($conf) {
-
-
 		$GLOBALS['TSFE']->lastImgResourceInfo = $this->getImgResource($conf['file'], $conf['file.']);
 
 		// ###################################
@@ -53,30 +50,42 @@ class ux_tslib_cObj extends tslib_cObj {
 		$tx_flrealurlimage = new tx_flrealurlimage();
 		$tx_flrealurlimage->start($this->data, $this->table);
 		$new_fileName = $tx_flrealurlimage->main($conf, $GLOBALS['TSFE']->lastImgResourceInfo);
-		// generate the image URL
-		$theValue = $tx_flrealurlimage->addAbsRefPrefix($new_fileName);
-		// stdWrap and return
-		return $this->stdWrap($theValue, $conf['stdWrap.']);
+		$imageResource = $tx_flrealurlimage->addAbsRefPrefix($new_fileName);
 		// ##################################
 		// ### Here ends RealURL_Image ######
 		// ##################################
-		/*
-		  return $this->stdWrap($GLOBALS['TSFE']->lastImgResourceInfo[3],$conf['stdWrap.']);
-		 */
+
+		$theValue = isset($conf['stdWrap.']) ? $this->stdWrap($imageResource, $conf['stdWrap.']) : $imageResource;
+		return $theValue;
+	}
+
+	/**
+	 * @param string $file
+	 * @param array  $conf
+	 *
+	 * @return string
+	 */
+	function cImage($file, $conf) {
+		if (t3lib_div::compat_version('6.0')) {
+			$value = $this->cImage6x($file, $conf);
+		} else {
+			$value = $this->cImage4x($file, $conf);
+		}
+		return $value;
 	}
 
 	/**
 	 * Returns a <img> tag with the image file defined by $file and processed according to the properties in the TypoScript array.
 	 * Mostly this function is a sub-function to the IMAGE function which renders the IMAGE cObject in TypoScript. This function is called by "$this->cImage($conf['file'],$conf);" from IMAGE().
 	 *
-	 * @param        string        File TypoScript resource
-	 * @param        array         TypoScript configuration properties for the IMAGE object
+	 * @param        string $file File TypoScript resource
+	 * @param        array  $conf TypoScript configuration properties for the IMAGE object
 	 *
 	 * @return        string        <img> tag, (possibly wrapped in links and other HTML) if any image found.
 	 * @access private
 	 * @see    IMAGE()
 	 */
-	function cImage($file, $conf) {
+	function cImage4x($file, $conf) {
 		$info = $this->getImgResource($file, $conf['file.']);
 		$GLOBALS['TSFE']->lastImageInfo = $info;
 
@@ -116,6 +125,95 @@ class ux_tslib_cObj extends tslib_cObj {
 			}
 			return $this->wrap($theValue, $conf['wrap']);
 		}
+	}
+
+	/**
+	 * Returns a <img> tag with the image file defined by $file and processed according to the properties in the TypoScript array.
+	 * Mostly this function is a sub-function to the IMAGE function which renders the IMAGE cObject in TypoScript.
+	 * This function is called by "$this->cImage($conf['file'], $conf);" from IMAGE().
+	 *
+	 * @param string $file File TypoScript resource
+	 * @param array  $conf TypoScript configuration properties
+	 *
+	 * @return string <img> tag, (possibly wrapped in links and other HTML) if any image found.
+	 * @access private
+	 * @see    IMAGE()
+	 */
+	public function cImage6x($file, $conf) {
+		$info = $this->getImgResource($file, $conf['file.']);
+		$GLOBALS['TSFE']->lastImageInfo = $info;
+
+		if (is_array($info)) {
+			if (is_file(PATH_site . $info['3'])) {
+				$source = t3lib_div::rawUrlEncodeFP(t3lib_div::png_to_gif_by_imagemagick($info[3]));
+				$source = $GLOBALS['TSFE']->absRefPrefix . $source;
+			} else {
+				$source = $info[3];
+			}
+
+			if (isset($conf['ignoreManipulation'])) {
+				$source = $info['origFile'];
+			}
+
+			$layoutKey = $this->stdWrap($conf['layoutKey'], $conf['layoutKey.']);
+			$imageTagTemplate = $this->getImageTagTemplate($layoutKey, $conf);
+			$sourceCollection = $this->getImageSourceCollection($layoutKey, $conf, $file);
+
+			// This array is used to collect the image-refs on the page...
+			$GLOBALS['TSFE']->imagesOnPage[] = $source;
+			$altParam = $this->getAltParam($conf);
+			$params = $this->stdWrapValue('params', $conf);
+			if ($params !== '' && $params{0} !== ' ') {
+				$params = ' ' . $params;
+			}
+
+			$imageTagValues = array(
+				'width'               => $info[0],
+				'height'              => $info[1],
+				'src'                 => htmlspecialchars($source),
+				'params'              => $params,
+				'altParams'           => $altParam,
+				'border'              => $this->getBorderAttr(' border="' . (int)$conf['border'] . '"'),
+				'sourceCollection'    => $sourceCollection,
+				'selfClosingTagSlash' => (!empty($GLOBALS['TSFE']->xhtmlDoctype) ? ' /' : ''),
+			);
+
+			// ###################################
+			// ## Here begins RealUrl_image ######
+			// ###################################
+			$tx_flrealurlimage = new tx_flrealurlimage();
+			$tx_flrealurlimage->start($this->data, $this->table);
+			$new_fileName = $tx_flrealurlimage->main($conf, $info, $file, $this);
+			$imageTagValues['src'] = htmlspecialchars($GLOBALS['TSFE']->absRefPrefix) . $new_fileName;
+			// ##################################
+			// ### Here ends RealURL_Image ######
+			// ##################################
+
+
+			$theValue = $this->substituteMarkerArray($imageTagTemplate, $imageTagValues, '###|###', TRUE, TRUE);
+
+			$linkWrap = isset($conf['linkWrap.']) ? $this->stdWrap($conf['linkWrap'], $conf['linkWrap.']) : $conf['linkWrap'];
+			if ($linkWrap) {
+				$theValue = $this->linkWrap($theValue, $linkWrap);
+			} elseif ($conf['imageLinkWrap']) {
+				$theValue = $this->imageLinkWrap($theValue, $info['originalFile'], $conf['imageLinkWrap.']);
+			}
+			$wrap = isset($conf['wrap.']) ? $this->stdWrap($conf['wrap'], $conf['wrap.']) : $conf['wrap'];
+			if ($wrap) {
+				$theValue = $this->wrap($theValue, $conf['wrap']);
+			}
+			return $theValue;
+		}
+	}
+
+	/**
+	 * @return \TYPO3\CMS\Core\Resource\ResourceFactory
+	 */
+	public function getRFactory() {
+		if (method_exists($this, 'getResourceFactory')) {
+			return $this->getResourceFactory();
+		}
+		return NULL;
 	}
 
 }

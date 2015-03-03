@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -22,63 +24,43 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-/**
- * A plugin in the extension
- *
- * @version $ID:$
- */
-
-class Tx_ExtensionBuilder_Domain_Model_Plugin {
+class Plugin {
 
 	/**
-	 * @var array
-	 */
-	protected static $TYPES = array('list_type', 'CType');
-
-	/**
-	 * The plugin name
-	 *
 	 * @var string
 	 */
 	protected $name = '';
 
 	/**
-	 * The type
-	 *
 	 * @var string
 	 */
 	protected $type = '';
 
 	/**
-	 * The plugin key
-	 *
 	 * @var string
 	 */
 	protected $key = '';
 
 	/**
-	 * array with configuration arrays
 	 * array('controller' => 'MyController', 'actions' => 'action1,action2')
 	 *
-	 * @var array
+	 * @var string[]
 	 */
-	protected $controllerActionCombinations;
+	protected $controllerActionCombinations = array();
 
 	/**
-	 * array with configuration arrays
 	 * array('controller' => 'MyController', 'actions' => 'action1,action2')
-	 * @var array
-	 */
-	protected $noncacheableControllerActions;
-
-	/**
-	 * @var array
-	 */
-	protected $switchableControllerActions;
-
-	/**
-	 * Gets the Name
 	 *
+	 * @var string[]
+	 */
+	protected $noncacheableControllerActions = array();
+
+	/**
+	 * @var string[]
+	 */
+	protected $switchableControllerActions = array();
+
+	/**
 	 * @return string
 	 */
 	public function getName() {
@@ -86,8 +68,6 @@ class Tx_ExtensionBuilder_Domain_Model_Plugin {
 	}
 
 	/**
-	 * Sets the Name
-	 *
 	 * @param string $name
 	 * @return void
 	 */
@@ -96,8 +76,6 @@ class Tx_ExtensionBuilder_Domain_Model_Plugin {
 	}
 
 	/**
-	 * Setter for type
-	 *
 	 * @param string $type
 	 * @return void
 	 */
@@ -106,17 +84,13 @@ class Tx_ExtensionBuilder_Domain_Model_Plugin {
 	}
 
 	/**
-	 * Getter for type
-	 *
-	 * @return string type
+	 * @return string
 	 */
 	public function getType() {
 		return $this->type;
 	}
 
 	/**
-	 * Setter for key
-	 *
 	 * @param string $key
 	 * @return void
 	 */
@@ -125,9 +99,7 @@ class Tx_ExtensionBuilder_Domain_Model_Plugin {
 	}
 
 	/**
-	 * Getter for key
-	 *
-	 * @return string key
+	 * @return string
 	 */
 	public function getKey() {
 		return $this->key;
@@ -135,20 +107,29 @@ class Tx_ExtensionBuilder_Domain_Model_Plugin {
 
 	/**
 	 * @param array $controllerActionCombinations
+	 * @return void
 	 */
 	public function setControllerActionCombinations(array $controllerActionCombinations) {
 		$this->controllerActionCombinations = $controllerActionCombinations;
 	}
 
 	/**
-	 * @return array
+	 * Used in fluid templates for localconf.php
+	 * if controllerActionCombinations are empty we have to
+	 * return NULL to enable test in condition
+	 *
+	 * @return array|NULL
 	 */
 	public function getControllerActionCombinations() {
+		if (empty($this->controllerActionCombinations)) {
+			return NULL;
+		}
 		return $this->controllerActionCombinations;
 	}
 
 	/**
 	 * @param array $noncacheableControllerActions
+	 * @return void
 	 */
 	public function setNoncacheableControllerActions(array $noncacheableControllerActions) {
 		$this->noncacheableControllerActions = $noncacheableControllerActions;
@@ -158,11 +139,15 @@ class Tx_ExtensionBuilder_Domain_Model_Plugin {
 	 * @return array
 	 */
 	public function getNoncacheableControllerActions() {
+		if (empty($this->noncacheableControllerActions)) {
+			return NULL;
+		}
 		return $this->noncacheableControllerActions;
 	}
 
 	/**
 	 * @param array $switchableControllerActions
+	 * @return void
 	 */
 	public function setSwitchableControllerActions($switchableControllerActions) {
 		$this->switchableControllerActions = $switchableControllerActions;
@@ -174,6 +159,5 @@ class Tx_ExtensionBuilder_Domain_Model_Plugin {
 	public function getSwitchableControllerActions() {
 		return $this->switchableControllerActions;
 	}
-}
 
-?>
+}

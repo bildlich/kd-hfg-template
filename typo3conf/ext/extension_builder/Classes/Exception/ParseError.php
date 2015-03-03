@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Exception;
 /***************************************************************
  *  Copyright notice
  *
@@ -23,10 +24,8 @@
  ***************************************************************/
 
 /**
- * An exception thrown if an error occured during parsing a php file
+ * An exception thrown if an error occurred during parsing a php file
  */
-class Tx_ExtensionBuilder_Exception_ParseError extends TYPO3\CMS\Extbase\Exception{
+class ParseError extends \TYPO3\CMS\Extbase\Exception{
 
 }
-
-?>

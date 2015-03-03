@@ -83,6 +83,13 @@ class News extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @var \string
 	 */
 	protected $metakeywords;
+	
+	/**
+	 * ogimage
+	 *
+	 * @var \string
+	 */
+	public $ogimage;
 
 	/**
 	 * media
@@ -208,6 +215,25 @@ class News extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	public function setMetadescription($metadescription) {
 		$this->metadescription = $metadescription;
+	}
+	
+	/**
+	 * Returns the ogimage
+	 *
+	 * @return \string $ogimage
+	 */
+	public function getOgimage() {
+		return $this->ogimage;
+	}
+
+	/**
+	 * Sets the ogimage
+	 *
+	 * @param \string $ogimage
+	 * @return void
+	 */
+	public function setOgimage($ogimage) {
+		$this->ogimage = $ogimage;
 	}
 
 	/**

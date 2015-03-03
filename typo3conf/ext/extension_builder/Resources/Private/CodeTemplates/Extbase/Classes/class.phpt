@@ -1,8 +1,7 @@
-{namespace k=Tx_ExtensionBuilder_ViewHelpers}<?php
+{namespace k=EBT\ExtensionBuilder\ViewHelpers}<?php
 <f:if condition="{classObject.nameSpace}">namespace {classObject.nameSpace};</f:if>
 <f:if condition="{classObject.aliasDeclarations}"><f:for each="{classObject.aliasDeclarations}" as="aliasDeclaration">
-use {aliasDeclaration};
-</f:for></f:if>
+use {aliasDeclaration};</f:for></f:if>
 {classObject.docComment}
 <f:if condition="{classObject.modifier}"><f:for each="{classObject.modifierNames}" as="modifierName">{modifierName} </f:for></f:if>class {classObject.name}<k:class classObject="{classObject}"  renderElement="parentClass" /> <k:class classObject="{classObject}"  renderElement="interfaces" />{
 <f:for each="{classObject.constants}" as="constant">
@@ -21,7 +20,7 @@ use {aliasDeclaration};
 	 *<f:for each="{property.annotations}" as="annotation">
 	 * @{annotation}</f:for>
 	 */
-	<f:for each="{property.modifierNames}" as="modifierName">{modifierName} </f:for>${property.name}<f:if condition="{property.hasValue}"><f:then> = {property.value}</f:then><f:else><f:if condition="{property.hasDefaultValue}"> = {property.default}</f:if></f:else></f:if>;
+	<f:for each="{property.modifierNames}" as="modifierName">{modifierName} </f:for>${property.name}<f:if condition="{property.hasValue}"> = {property.value}</f:if>;
 </f:for><f:for each="{classObject.methods}" as="method"><f:if condition="{method.precedingBlock}">
 	<k:format.removeMultipleNewlines>{method.precedingBlock}</k:format.removeMultipleNewlines>
 	</f:if>
@@ -31,8 +30,8 @@ use {aliasDeclaration};
 	 * @{annotation}</f:for>
 	 */
 	<f:for each="{method.modifierNames}" as="modifierName">{modifierName} </f:for>function {method.name}(<k:method methodObject="{method}"  renderElement="parameter" />) <![CDATA[{]]>
-{method.body}
+<f:format.raw>{method.body}</f:format.raw>
 	<![CDATA[}]]>
 </f:for>
 }
-{classObject.appendedBlock}?>
+{classObject.appendedBlock}

@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -25,71 +27,56 @@
 /**
  * Schema for a whole extension
  */
-class Tx_ExtensionBuilder_Domain_Model_Extension {
-
-
+class Extension {
 	/**
-	 * The extension key
-	 * @var string
-	 */
-	protected $extensionKey;
-
-	/**
-	 * @var string
-	 */
-	protected $vendorName;
-
-	/**
-	 * Extension's name
-	 * @var string
-	 */
-	protected $name;
-
-	/**
-	 * Extension dir
-	 * @var string
-	 */
-	protected $extensionDir;
-
-	/**
-	 * Extension's version
-	 * @var string
-	 */
-	protected $version;
-
-	/**
+	 * the extension key
 	 *
 	 * @var string
 	 */
-	protected $description;
+	protected $extensionKey = '';
+
+	/**
+	 * @var string
+	 */
+	protected $vendorName = '';
+
+	/**
+	 * extension's name
+	 *
+	 * @var string
+	 */
+	protected $name = '';
+
+	/**
+	 * extension directory
+	 *
+	 * @var string
+	 */
+	protected $extensionDir = '';
+
+	/**
+	 * extension's version
+	 *
+	 * @var string
+	 */
+	protected $version = '';
+
+	/**
+	 * @var string
+	 */
+	protected $description = '';
 
 	/**
 	 * The original extension key (if an extension was renamed)
+	 *
 	 * @var string
 	 */
-	protected $originalExtensionKey;
+	protected $originalExtensionKey = '';
 
 	/**
-	 *
 	 * @var array
 	 */
 	protected $settings = array();
-
-	/**
-	 * default settings for em_conf
-	 * @var array
-	 */
-	protected $emConfDefaults = array('dependencies' => 'cms,extbase,fluid', 'category' => 'plugin');
-
-	/**
-	 * @var string
-	 */
-	protected $priority = '';
-
-	/**
-	 * @var bool
-	 */
-	protected $shy = FALSE;
 
 	/**
 	 * @var string
@@ -101,6 +88,15 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	 */
 	protected $supportVersioning = TRUE;
 
+	/**
+	 * @var bool
+	 */
+	protected $supportLocalization = TRUE;
+
+	/**
+	 * @var string
+	 */
+	protected $sourceLanguage = 'en';
 
 	/**
 	 * The extension's state. One of the STATE_* constants.
@@ -125,31 +121,35 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	 *
 	 * an array keeping all md5 hashes of all files in the extension to detect modifications
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	protected $md5Hashes = array();
 
 	/**
-	 * All domain objects
-	 * @var array<Tx_ExtensionBuilder_Domain_Model_DomainObject>
+	 * all domain objects
+	 *
+	 * @var \EBT\ExtensionBuilder\Domain\Model\DomainObject[]
 	 */
 	protected $domainObjects = array();
 
 	/**
-	 * The Persons working on the Extension
-	 * @var array<Tx_ExtensionBuilder_Domain_Model_Person>
+	 * the Persons working on the Extension
+	 *
+	 * @var \EBT\ExtensionBuilder\Domain\Model\Person[]
 	 */
 	protected $persons = array();
 
 	/**
 	 * plugins
-	 * @var array<Tx_ExtensionBuilder_Domain_Model_Plugin>
+	 *
+	 * @var \EBT\ExtensionBuilder\Domain\Model\Plugin[]
 	 */
 	private $plugins;
 
 	/**
 	 * backend modules
-	 * @var array<Tx_ExtensionBuilder_Domain_Model_BackendModule>
+	 *
+	 * @var \EBT\ExtensionBuilder\Domain\Model\BackendModule[]
 	 */
 	private $backendModules;
 
@@ -164,12 +164,21 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	 */
 	private $dependencies = array();
 
-
 	/**
 	 * the lowest required TYPO3 version
 	 * @var float
 	 */
-	private $targetVersion = 4.5;
+	private $targetVersion = 6.0;
+
+	/**
+	 * @var string
+	 */
+	protected $previousExtensionDirectory = '';
+
+	/**
+	 * @var string
+	 */
+	protected $previousExtensionKey = '';
 
 	/**
 	 *
@@ -220,25 +229,12 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 
 	/**
 	 *
-	 *
-	 * @return array settings for Extension Manager
-	 */
-	public function getEmConf() {
-
-		if (isset($this->settings['emConf'])) {
-			return $this->settings['emConf'];
-		}
-		else return $this->emConfDefaults;
-	}
-
-	/**
-	 *
 	 * @return string
 	 */
 	public function getExtensionDir() {
 		if (empty($this->extensionDir)) {
 			if (empty($this->extensionKey)) {
-				throw new Exception('ExtensionDir can only be created if an extensionKey is defined first');
+				throw new \Exception('ExtensionDir can only be created if an extensionKey is defined first');
 			}
 			$this->extensionDir = PATH_typo3conf . 'ext/' . $this->extensionKey . '/';
 		}
@@ -333,7 +329,7 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 
 	/**
 	 *
-	 * @return array<Tx_ExtensionBuilder_Domain_Model_DomainObject>
+	 * @return \EBT\ExtensionBuilder\Domain\Model\DomainObject[]
 	 */
 	public function getDomainObjects() {
 		return $this->domainObjects;
@@ -341,16 +337,14 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 
 	/**
 	 * An array of domain objects for which a controller should be built.
-	 * This is done in the following two cases:
-	 * - Domain Objects which are aggregate roots
-	 * - Actions defined for these domain objects
+	 * Retruns tTRUE if there are any actions defined for these domain objects
 	 *
 	 * @return array
 	 */
 	public function getDomainObjectsForWhichAControllerShouldBeBuilt() {
 		$domainObjects = array();
 		foreach ($this->domainObjects as $domainObject) {
-			if (count($domainObject->getActions()) || $domainObject->isAggregateRoot()) {
+			if (count($domainObject->getActions()) > 0) {
 				$domainObjects[] = $domainObject;
 			}
 		}
@@ -359,7 +353,7 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 
 	/**
 	 * get all domainobjects that are mapped to existing tables
-	 * @return array|null
+	 * @return array|NULL
 	 */
 	public function getDomainObjectsThatNeedMappingStatements() {
 		$domainObjectsThatNeedMappingStatements = array();
@@ -376,15 +370,29 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	}
 
 	/**
-	 * get all domainobjects that are mapped to existing tables
-	 * @return array|null
+	 * return tables that need a type field to enable
+	 * single table inheritance or mapping to an existing table
 	 */
+	public function getTablesForTypeFieldDefinitions() {
+		$tableNames = array();
+		foreach ($this->getDomainObjects() as $domainObject) {
+			if ($domainObject->isMappedToExistingTable() || $domainObject->getParentClass()) {
+				$tableNames[] = $domainObject->getMapToTable();
+			}
+		}
+		return array_unique($tableNames);
+	}
+
+	/**
+	* get all domainobjects that are mapped to existing tables
+	* @return array|null
+	*/
 	public function getClassHierarchy() {
 		$classHierarchy = array();
 		foreach ($this->domainObjects as $domainObject) {
 			if ($domainObject->isSubclass()) {
 				$parentClass = $domainObject->getParentClass();
-				if(strpos($parentClass, '\\') === 0) {
+				if (strpos($parentClass, '\\') === 0) {
 					$parentClass = substr($parentClass, 1);
 				}
 				if (!is_array($classHierarchy[$parentClass])) {
@@ -400,46 +408,48 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 		}
 	}
 
+	/**
+	 * needed to get the right order for models
+	 * extending other models parents have to be ordered before their children
+	 */
 	public function getDomainObjectsInHierarchicalOrder() {
 		$domainObjects = $this->getDomainObjects();
-		$classHierarchy = $this->getClassHierarchy();
-		for ($i = 0; $i < count($domainObjects); $i++) {
-			for ($j = 0; $j < count($domainObjects); $j++) {
-				if (isParentOf($domainObjects[$i], $domainObjects[$j], $classHierarchy)) {
-					$tmp = $domainObjects[$j];
-					$domainObjects[$j] = $domainObjects[$i];
-					$domainObjects[$i] = $tmp;
-				}
+		$sortByParent = function(DomainObject $domainObject1, DomainObject $domainObject2) {
+			if ($domainObject1->getParentClass() === $domainObject2->getFullQualifiedClassName()) {
+				return 1;
 			}
-		}
+			if ($domainObject2->getParentClass() === $domainObject1->getFullQualifiedClassName()) {
+				return -1;
+			}
+			return 0;
+		};
+		usort($domainObjects, $sortByParent);
+		return $domainObjects;
 	}
 
+	/**
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject1
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject2
+	 * @param array $classHierarchy
+	 * @return bool
+	 */
 	protected function isParentOf($domainObject1, $domainObject2, $classHierarchy) {
-		if (isset($classHierarchy[$domainObject1->getQualifiedClassName()])) {
-			foreach ($classHierarchy[$domainObject1->getQualifiedClassName()] as $subClass) {
-				if ($subClass->getQualifiedClassName() == $domainObject2->getQualifiedClassName()) {
-					// $domainObject2 is parent of $domainObject1
-					return TRUE;
-				} else {
-					if ($this->isParentOf($subClass, $domainObject2, $classHierarchy)) {
-						// if a subclass of object1 is a parent class
-						return TRUE;
-					}
-				}
-			}
+		if ($domainObject2->getParentClass() === $domainObject1->getFullQualifiedClassName()) {
+			return TRUE;
+		} else {
+			return FALSE;
 		}
-		return FALSE;
 	}
 
 	/**
 	 * Add a domain object to the extension. Creates the reverse link as well.
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject
 	 */
-	public function addDomainObject(Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject) {
+	public function addDomainObject(\EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject) {
 		$domainObject->setExtension($this);
 		foreach(array_keys($this->domainObjects) as $existingDomainObjectName) {
-			if(strtolower($domainObject->getName()) == strtolower($existingDomainObjectName) ) {
-				throw new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('Duplicate domain object name "' . $domainObject->getName() . '".', Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator::ERROR_DOMAINOBJECT_DUPLICATE);
+			if (strtolower($domainObject->getName()) == strtolower($existingDomainObjectName) ) {
+				throw new \EBT\ExtensionBuilder\Domain\Exception\ExtensionException('Duplicate domain object name "' . $domainObject->getName() . '".', \EBT\ExtensionBuilder\Domain\Validator\ExtensionValidator::ERROR_DOMAINOBJECT_DUPLICATE);
 			}
 		}
 		if ($domainObject->getNeedsUploadFolder()) {
@@ -451,7 +461,7 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	/**
 	 *
 	 * @param string $domainObjectName
-	 * @return Tx_ExtensionBuilder_Domain_Model_DomainObject
+	 * @return \EBT\ExtensionBuilder\Domain\Model\DomainObject
 	 */
 	public function getDomainObjectByName($domainObjectName) {
 		if (isset($this->domainObjects[$domainObjectName])) {
@@ -470,7 +480,7 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	/**
 	 * Returns the Persons
 	 *
-	 * @return array<Tx_ExtensionBuilder_Domain_Model_Person>
+	 * @return array<\EBT\ExtensionBuilder\Domain\Model\Person>
 	 */
 	public function getPersons() {
 		return $this->persons;
@@ -479,7 +489,7 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	/**
 	 * Sets the Persons
 	 *
-	 * @param array<Tx_ExtensionBuilder_Domain_Model_Person> $persons
+	 * @param array<\EBT\ExtensionBuilder\Domain\Model\Person> $persons
 	 * @return void
 	 */
 	public function setPersons($persons) {
@@ -489,7 +499,7 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	/**
 	 * Adds a Person to the end of the current Set of Persons.
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_Person $person
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Person $person
 	 * @return void
 	 */
 	public function addPerson($person) {
@@ -499,17 +509,17 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	/**
 	 * Setter for plugin
 	 *
-	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\ObjectStorage()<Tx_ExtensionBuilder_Domain_Model_Plugin> $plugins
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\EBT\ExtensionBuilder\Domain\Model\Plugin> $plugins
 	 * @return void
 	 */
-	public function setPlugins(\TYPO3\CMS\Extbase\Persistence\Generic\ObjectStorage $plugins) {
+	public function setPlugins(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $plugins) {
 		$this->plugins = $plugins;
 	}
 
 	/**
 	 * Getter for $plugin
 	 *
-	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\ObjectStorage<Tx_ExtensionBuilder_Domain_Model_Plugin>
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\EBT\ExtensionBuilder\Domain\Model\Plugin>
 	 */
 	public function getPlugins() {
 		return $this->plugins;
@@ -530,27 +540,27 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	/**
 	 * Add $plugin
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_Plugin
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Plugin
 	 * @return void
 	 */
-	public function addPlugin(Tx_ExtensionBuilder_Domain_Model_Plugin $plugin) {
+	public function addPlugin(\EBT\ExtensionBuilder\Domain\Model\Plugin $plugin) {
 		$this->plugins[] = $plugin;
 	}
 
 	/**
 	 * Setter for backendModule
 	 *
-	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\ObjectStorage<Tx_ExtensionBuilder_Domain_Model_BackendModule> $backendModules
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\EBT\ExtensionBuilder\Domain\Model\BackendModule> $backendModules
 	 * @return void
 	 */
-	public function setBackendModules(\TYPO3\CMS\Extbase\Persistence\Generic\ObjectStorage $backendModules) {
+	public function setBackendModules(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $backendModules) {
 		$this->backendModules = $backendModules;
 	}
 
 	/**
 	 * Getter for $backendModule
 	 *
-	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\ObjectStorage<Tx_ExtensionBuilder_Domain_Model_Plugin>
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\EBT\ExtensionBuilder\Domain\Model\Plugin>
 	 */
 	public function getBackendModules() {
 		return $this->backendModules;
@@ -559,10 +569,10 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	/**
 	 * Add $backendModule
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_BackendModule
+	 * @param \EBT\ExtensionBuilder\Domain\Model\BackendModule
 	 * @return void
 	 */
-	public function addBackendModule(Tx_ExtensionBuilder_Domain_Model_BackendModule $backendModule) {
+	public function addBackendModule(\EBT\ExtensionBuilder\Domain\Model\BackendModule $backendModule) {
 		$this->backendModules[] = $backendModule;
 	}
 
@@ -636,7 +646,7 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	 * Get the previous extension directory
 	 * if the extension was renamed it is different from $this->extensionDir
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function getPreviousExtensionDirectory() {
 		if ($this->isRenamed()) {
@@ -682,35 +692,6 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	 */
 	public function getUploadFolder() {
 		return 'uploads/' . $this->getShortExtensionKey();
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getPriority() {
-		return $this->priority;
-	}
-
-	/**
-	 * @param string $priority
-	 */
-	public function setPriority($priority) {
-		$this->priority = $priority;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function getShy() {
-		return $this->shy;
-	}
-
-	/**
-	 * @param boolean $shy
-	 * @return void
-	 */
-	public function setShy($shy) {
-		$this->shy = $shy;
 	}
 
 	/**
@@ -772,10 +753,36 @@ class Tx_ExtensionBuilder_Domain_Model_Extension {
 	/**
 	 * @return string
 	 */
-	public function getNameSpace() {
+	public function getNamespaceName() {
 		return $this->getVendorName() . '\\' . \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($this->getExtensionKey());
 	}
 
-}
+	/**
+	 * @param boolean $supportLocalization
+	 */
+	public function setSupportLocalization($supportLocalization) {
+		$this->supportLocalization = $supportLocalization;
+	}
 
-?>
+	/**
+	 * @return boolean
+	 */
+	public function getSupportLocalization() {
+		return $this->supportLocalization;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSourceLanguage() {
+		return $this->sourceLanguage;
+	}
+
+	/**
+	 * @param string $sourceLanguage
+	 */
+	public function setSourceLanguage($sourceLanguage) {
+		$this->sourceLanguage = $sourceLanguage;
+	}
+
+}

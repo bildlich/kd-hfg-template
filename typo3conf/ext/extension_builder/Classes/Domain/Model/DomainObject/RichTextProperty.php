@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
@@ -26,12 +27,21 @@
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_RichTextProperty extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
+class RichTextProperty extends AbstractProperty {
+	/**
+	 * the property's default value
+	 *
+	 * @var string
+	 */
+	protected $defaultValue = '';
 
+	/**
+	 * @var bool
+	 */
 	protected $useRTE = TRUE;
-	
+
 	public function getTypeForComment() {
-		return '\\string';
+		return 'string';
 	}
 
 	public function getTypeHint() {
@@ -41,7 +51,5 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_RichTextProperty extends Tx_
 	public function getSqlDefinition() {
 		return $this->getFieldName() . " text NOT NULL,";
 	}
-	
-}
 
-?>
+}

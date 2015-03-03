@@ -1,5 +1,6 @@
 <?php
-/***************************************************************
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
+	/***************************************************************
  *  Copyright notice
  *
  *  (c) 2010 Nico de Haen, Ingmar Schlecht, Stephan Petzl
@@ -21,57 +22,63 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use EBT\ExtensionBuilder\Domain\Model\DomainObject;
 
 /**
  * property representing a "property" in the context of software development
- *
- * @version $ID:$
  */
-abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
-
+abstract class AbstractProperty {
+	/**
+	 * @var string
+	 */
+	protected $uniqueIdentifier = '';
 
 	/**
+	 * name of the property
 	 *
 	 * @var string
 	 */
-	protected $uniqueIdentifier;
+	protected $name = '';
 
 	/**
-	 * Name of the property
+	 * description of property
+	 *
 	 * @var string
 	 */
-	protected $name;
+	protected $description = '';
 
 	/**
-	 * Description of property
-	 * @var string
+	 * whether the property is required
+	 *
+	 * @var bool
 	 */
-	protected $description;
+	protected $required = FALSE;
 
 	/**
-	 * Whether the property is required
-	 * @var boolean
+	 * property's default value
+	 *
+	 * @var mixed
 	 */
-	protected $required;
+	protected $defaultValue = NULL;
 
 	/**
-	 * The string representation of the properties default value
-	 * @var string
+	 * @var mixed
 	 */
-	protected $defaultValue;
+	protected $value = NULL;
 
 	/**
 	 * Is an upload folder required for this property
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $needsUploadFolder = FALSE;
 
 	/**
 	 * The domain object this property belongs to.
-	 * @var Tx_ExtensionBuilder_Domain_Model_DomainObject
+	 *
+	 * @var \EBT\ExtensionBuilder\Domain\Model\DomainObject
 	 */
-	protected $class;
+	protected $class = NULL;
 
 	/**
 	 * is set to TRUE, if this property was new added
@@ -83,9 +90,24 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	/**
 	 * use RTE in Backend
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $useRTE = FALSE;
+
+	/**
+	 * @var string the property type of this property
+	 */
+	protected $type = '';
+
+	/**
+	 * @var \EBT\ExtensionBuilder\Domain\Model\DomainObject
+	 */
+	protected $domainObject = NULL;
+
+	/**
+	 * @var bool
+	 */
+	protected $excludeField = FALSE;
 
 	/**
 	 *
@@ -101,16 +123,16 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	/**
 	 * DO NOT CALL DIRECTLY! This is being called by addProperty() automatically.
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_Class_Schema $class the class this property belongs to
+	 * @param \EBT\ExtensionBuilder\Domain\Model\ClassObject\ClassObject $class the class this property belongs to
 	 */
-	public function setClass(Tx_ExtensionBuilder_Domain_Model_Class_Schema $class) {
+	public function setClass(\EBT\ExtensionBuilder\Domain\Model\ClassObject\ClassObject $class) {
 		$this->class = $class;
 	}
 
 	/**
 	 * Get the domain object this property belongs to.
 	 *
-	 * @return Tx_ExtensionBuilder_Domain_Model_Class_Schema
+	 * @return \EBT\ExtensionBuilder\Domain\Model\ClassObject\ClassObject
 	 */
 	public function getClass() {
 		return $this->class;
@@ -172,7 +194,7 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	/**
 	 * Set property uniqueIdentifier
 	 *
-	 * @param string Property uniqueIdentifier
+	 * @param string $uniqueIdentifier
 	 */
 	public function setUniqueIdentifier($uniqueIdentifier) {
 		$this->uniqueIdentifier = $uniqueIdentifier;
@@ -183,7 +205,15 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	 * @return boolean TRUE (if property is of type relation any to many)
 	 */
 	public function isAnyToManyRelation() {
-		return is_subclass_of($this, 'Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AnyToManyRelation');
+		return is_subclass_of($this, '\EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation\AnyToManyRelation');
+	}
+
+	/**
+	 *
+	 * @return boolean TRUE (if property is of type relation any to many)
+	 */
+	public function isZeroToManyRelation() {
+		return FALSE;
 	}
 
 
@@ -192,7 +222,7 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	 * @return boolean TRUE (if property is of type relation)
 	 */
 	public function isRelation() {
-		return is_subclass_of($this, 'Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRelation');
+		return is_subclass_of($this, '\EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation\AbstractRelation');
 	}
 
 	/**
@@ -200,7 +230,7 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	 * @return boolean TRUE (if property is of type boolean)
 	 */
 	public function isBoolean() {
-		return is_a($this, 'Tx_ExtensionBuilder_Domain_Model_DomainObject_BooleanProperty');
+		return is_a($this, '\EBT\ExtensionBuilder\Domain_Model\DomainObject\BooleanProperty');
 	}
 
 
@@ -234,7 +264,7 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	 */
 	public function getFieldName() {
 		$fieldName = \TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($this->name);
-		if (Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator::isReservedMYSQLWord($fieldName)) {
+		if (\EBT\ExtensionBuilder\Service\ValidationService::isReservedMYSQLWord($fieldName)) {
 			$fieldName = $this->domainObject->getExtension()->getShortExtensionKey() . '_' . $fieldName;
 		}
 		return $fieldName;
@@ -251,7 +281,7 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	/**
 	 * Template Method which should return the type hinting information
 	 * being used in PHPDoc Comments.
-	 * Examples: integer, string, Tx_FooBar_Something, \TYPO3\CMS\Extbase\Persistence\Generic\ObjectStorage<Tx_FooBar_Something>
+	 * Examples: integer, string, Tx_FooBar_Something, \TYPO3\CMS\Extbase\Persistence\ObjectStorage<Tx_FooBar_Something>
 	 *
 	 * @return string
 	 */
@@ -259,7 +289,7 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 
 	/**
 	 * Template method which should return the PHP type hint
-	 * Example: \TYPO3\CMS\Extbase\Persistence\Generic\ObjectStorage, array, Tx_FooBar_Something
+	 * Example: \TYPO3\CMS\Extbase\Persistence\ObjectStorage, array, Tx_FooBar_Something
 	 *
 	 * @return string
 	 */
@@ -315,12 +345,13 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	}
 
 	/**
-	 * Get the data type of this property. This is the last part after Tx_ExtensionBuilder_Domain_Model_DomainObject_*
+	 * Get the data type of this property. This is the last part after EBT\\ExtensionBuilder\\Domain\\Model\\DomainObject_*
 	 *
 	 * @return string the data type of this property
 	 */
 	public function getDataType() {
-		return substr(get_class($this), strlen('Tx_ExtensionBuilder_Domain_Model_DomainObject_'));
+		$shortClassNameParts = explode('\\', get_class($this));
+		return end($shortClassNameParts);
 	}
 
 	/**
@@ -353,15 +384,15 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 	/**
 	 * DO NOT CALL DIRECTLY! This is being called by addProperty() automatically.
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject the domain object this property belongs to
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject the domain object this property belongs to
 	 */
-	public function setDomainObject(Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject) {
+	public function setDomainObject(\EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject) {
 		$this->domainObject = $domainObject;
 	}
 
 	/**
 	 *
-	 * @return Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject
+	 * @return \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject
 	 */
 	public function getDomainObject() {
 		return $this->domainObject;
@@ -416,10 +447,51 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
 		return $this->useRTE;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getUnqualifiedType() {
-		return substr($this->getTypeForComment(),1);
+		$type = $this->getTypeForComment();
+		if (substr($type, 0, 1) === chr(92)) {
+			return substr($type, 1);
+		} else {
+			return $type;
+		}
+	}
+
+	/**
+	 * @param mixed $value
+	 */
+	public function setValue($value) {
+		$this->value = $value;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getValue() {
+		return $this->value;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getType() {
+		return $this->type;
+	}
+
+	/**
+	 * @param string $type
+	 */
+	public function setType($type) {
+		$this->type = $type;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isFileReference() {
+		return in_array($this->type, array('Image', 'File'));
 	}
 
 }
-
-?>

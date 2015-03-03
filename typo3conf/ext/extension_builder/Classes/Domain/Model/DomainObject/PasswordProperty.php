@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
@@ -26,10 +27,16 @@
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_PasswordProperty extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
+class PasswordProperty extends AbstractProperty {
+	/**
+	 * the property's default value
+	 *
+	 * @var string
+	 */
+	protected $defaultValue = '';
 
 	public function getTypeForComment() {
-		return '\\string';
+		return 'string';
 	}
 
 	public function getTypeHint() {
@@ -40,5 +47,3 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_PasswordProperty extends Tx_
 		return $this->getFieldName() . " varchar(255) DEFAULT '' NOT NULL,";
 	}
 }
-
-?>

@@ -1,7 +1,5 @@
-'type' => 'group',
-'internal_type' => 'file',
-'uploadfolder' => '{extension.uploadFolder}',
-'show_thumbs' => 1,
-'size' => 5,
-'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
-'disallowed' => '{property.disallowedFileTypes}',
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+	'{property.name}',
+	array(<f:if condition="{property.maxItems}">'maxitems' => {property.maxItems}</f:if>),
+	$GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+),

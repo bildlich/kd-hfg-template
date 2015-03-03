@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "phpmyadmin".
  *
- * Auto generated 23-01-2014 18:21
+ * Auto generated 17-12-2014 22:57
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -14,30 +14,20 @@ $EM_CONF[$_EXTKEY] = array (
 	'title' => 'phpMyAdmin',
 	'description' => 'Third party \'phpMyAdmin\' administration module. Access to admin-users only. 4.x releases require PHP 5.2, TYPO3 4.2 and MySQL 5. The 3.x branch is still supported: http://www.mehrwert.de/go/t3x',
 	'category' => 'module',
-	'shy' => 0,
-	'version' => '4.17.0',
-	'dependencies' => '',
-	'conflicts' => '',
-	'priority' => '',
-	'loadOrder' => '',
-	'module' => 'modsub',
+	'version' => '4.18.5',
 	'state' => 'stable',
-	'uploadfolder' => 1,
+	'uploadfolder' => false,
 	'createDirs' => '',
-	'modify_tables' => '',
-	'clearcacheonload' => 0,
-	'lockType' => '',
+	'clearcacheonload' => true,
 	'author' => 'Andreas Beutel - mehrwert',
 	'author_email' => 'typo3@mehrwert.de',
 	'author_company' => 'mehrwert intermediale kommunikation GmbH',
-	'CGLcompliance' => NULL,
-	'CGLcompliance_note' => NULL,
 	'constraints' => 
 	array (
 		'depends' => 
 		array (
 			'php' => '5.2.0-0.0.0',
-			'typo3' => '4.2.0-6.0.99',
+			'typo3' => '4.2.0-6.2.99',
 		),
 		'conflicts' => 
 		array (
@@ -48,4 +38,3 @@ $EM_CONF[$_EXTKEY] = array (
 	),
 );
 
-?>

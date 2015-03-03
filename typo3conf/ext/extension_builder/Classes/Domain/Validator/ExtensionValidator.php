@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Validator;
 /***************************************************************
  *  Copyright notice
  *
@@ -22,379 +23,213 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use EBT\ExtensionBuilder\Domain\Exception\ExtensionException;
 
 /**
  * Schema for a whole extension
  *
- * @version $ID:$
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator {
-
-	/**
+class ExtensionValidator extends \TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator {
+	/*
 	 * Error Codes:
 	 * 0 - 99: Errors concerning the Extension configuration
 	 * 100 - 199: Errors concerning the Domain Objects directly
 	 * 200 - 299: Errors concerning the Properties
 	 */
-	const	ERROR_EXTKEY_LENGTH = 0,
-	ERROR_EXTKEY_ILLEGAL_CHARACTERS = 1,
-	ERROR_EXTKEY_ILLEGAL_PREFIX = 2,
-	ERROR_EXTKEY_ILLEGAL_FIRST_CHARACTER = 3,
-	ERROR_DOMAINOBJECT_ILLEGAL_CHARACTER = 100,
-	ERROR_DOMAINOBJECT_NO_NAME = 101,
-	ERROR_DOMAINOBJECT_LOWER_FIRST_CHARACTER = 102,
-	ERROR_DOMAINOBJECT_DUPLICATE = 103,
-	ERROR_PROPERTY_NO_NAME = 200,
-	ERROR_PROPERTY_DUPLICATE = 201,
-	ERROR_PROPERTY_ILLEGAL_CHARACTER = 202,
-	ERROR_PROPERTY_UPPER_FIRST_CHARACTER = 203,
-	ERROR_PROPERTY_RESERVED_WORD = 204,
-	ERROR_PROPERTY_RESERVED_SQL_WORD = 205,
-	ERROR_PLUGIN_DUPLICATE_KEY = 300,
-	ERROR_PLUGIN_INVALID_KEY = 301,
-	ERROR_BACKENDMODULE_DUPLICATE_KEY = 400,
-	ERROR_BACKENDMODULE_INVALID_KEY = 401,
-	ERROR_ACTIONNAME_DUPLICATE = 501,
-	ERROR_ACTIONNAME_ILLEGAL_CHARACTER = 502,
-	ERROR_MISCONFIGURATION = 503,
-	ERROR_ACTION_MISCONFIGURATION = 504,
-	EXTENSION_DIR_EXISTS = 500,
-	ERROR_MAPPING_NO_TCA = 600,
-	ERROR_MAPPING_NO_PARENTCLASS = 601,
-	ERROR_MAPPING_NO_TABLE = 602,
-	ERROR_MAPPING_NO_FOREIGNCLASS = 603,
-	ERROR_MAPPING_WIRE_AND_FOREIGNCLASS = 604,
-	ERROR_MAPPING_WRONG_TYPEFIELD_CONFIGURATION = 605;
-
 	/**
-	 * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+	 * @var int
 	 */
-	protected $configurationManager;
+	const ERROR_EXTKEY_LENGTH = 0;
+	/**
+	 * @var int
+	 */
+	const ERROR_EXTKEY_ILLEGAL_CHARACTERS = 1;
+	/**
+	 * @var int
+	 */
+	const ERROR_EXTKEY_ILLEGAL_PREFIX = 2;
+	/**
+	 * @var int
+	 */
+	const ERROR_EXTKEY_ILLEGAL_FIRST_CHARACTER = 3;
+	/**
+	 * @var int
+	 */
+	const ERROR_DOMAINOBJECT_ILLEGAL_CHARACTER = 100;
+	/**
+	 * @var int
+	 */
+	const ERROR_DOMAINOBJECT_NO_NAME = 101;
+	/**
+	 * @var int
+	 */
+	const ERROR_DOMAINOBJECT_LOWER_FIRST_CHARACTER = 102;
+	/**
+	 * @var int
+	 */
+	const ERROR_DOMAINOBJECT_DUPLICATE = 103;
+	/**
+	 * @var int
+	 */
+	const ERROR_PROPERTY_NO_NAME = 200;
+	/**
+	 * @var int
+	 */
+	const ERROR_PROPERTY_DUPLICATE = 201;
+	/**
+	 * @var int
+	 */
+	const ERROR_PROPERTY_ILLEGAL_CHARACTER = 202;
+	/**
+	 * @var int
+	 */
+	const ERROR_PROPERTY_UPPER_FIRST_CHARACTER = 203;
+	/**
+	 * @var int
+	 */
+	const ERROR_PROPERTY_RESERVED_WORD = 204;
+	/**
+	 * @var int
+	 */
+	const ERROR_PROPERTY_RESERVED_SQL_WORD = 205;
+	/**
+	 * @var int
+	 */
+	const ERROR_PLUGIN_DUPLICATE_KEY = 300;
+	/**
+	 * @var int
+	 */
+	const ERROR_PLUGIN_INVALID_KEY = 301;
+	/**
+	 * @var int
+	 */
+	const ERROR_BACKENDMODULE_DUPLICATE_KEY = 400;
+	/**
+	 * @var int
+	 */
+	const ERROR_BACKENDMODULE_INVALID_KEY = 401;
+	/**
+	 * @var int
+	 */
+	const ERROR_ACTIONNAME_DUPLICATE = 501;
+	/**
+	 * @var int
+	 */
+	const ERROR_ACTIONNAME_ILLEGAL_CHARACTER = 502;
+	/**
+	 * @var int
+	 */
+	const ERROR_MISCONFIGURATION = 503;
+	/**
+	 * @var int
+	 */
+	const ERROR_ACTION_MISCONFIGURATION = 504;
+	/**
+	 * @var int
+	 */
+	const EXTENSION_DIR_EXISTS = 500;
+	/**
+	 * @var int
+	 */
+	const ERROR_MAPPING_NO_TCA = 600;
+	/**
+	 * @var int
+	 */
+	const ERROR_MAPPING_NO_PARENTCLASS = 601;
+	/**
+	 * @var int
+	 */
+	const ERROR_MAPPING_NO_TABLE = 602;
+	/**
+	 * @var int
+	 */
+	const ERROR_MAPPING_NO_FOREIGNCLASS = 603;
+	/**
+	 * @var int
+	 */
+	const ERROR_MAPPING_WIRE_AND_FOREIGNCLASS = 604;
+	/**
+	 * @var int
+	 */
+	const ERROR_MAPPING_WRONG_TYPEFIELD_CONFIGURATION = 605;
 
 	/**
-	 * @param Tx_ExtensionBuilder_Configuration_ConfigurationManager $configurationManager
+	 * @var \EBT\ExtensionBuilder\Configuration\ConfigurationManager
+	 */
+	protected $configurationManager = NULL;
+
+	/**
+	 * can be set in settings.yaml
+	 *
+	 * @var array
+	 */
+	protected $warningsToIgnore = array();
+
+	/**
+	 * @param \EBT\ExtensionBuilder\Configuration\ConfigurationManager $configurationManager
 	 * @return void
 	 */
-	public function injectConfigurationManager(Tx_ExtensionBuilder_Configuration_ConfigurationManager $configurationManager) {
+	public function injectConfigurationManager(\EBT\ExtensionBuilder\Configuration\ConfigurationManager $configurationManager) {
 		$this->configurationManager = $configurationManager;
 	}
 
-
-	/**
-	 * TODO: Check this list if it's still up to date
-	 * Reserved words by MySQL
-	 * @var array
-	 */
-	static protected $reservedMYSQLWords = array(
-		'ACCESSIBLE',
-		'ADD',
-		'ALL',
-		'ALTER',
-		'ANALYZE',
-		'AND',
-		'AS',
-		'ASC',
-		'ASENSITIVE',
-		'BEFORE',
-		'BETWEEN',
-		'BIGINT',
-		'BINARY',
-		'BLOB',
-		'BOTH',
-		'BY',
-		'CALL',
-		'CASCADE',
-		'CASE',
-		'CHANGE',
-		'CHAR',
-		'CHARACTER',
-		'CHECK',
-		'COLLATE',
-		'COLUMN',
-		'CONDITION',
-		'CONSTRAINT',
-		'CONTINUE',
-		'CONVERT',
-		'CREATE',
-		'CROSS',
-		'CURRENT_DATE',
-		'CURRENT_TIME',
-		'CURRENT_TIMESTAMP',
-		'CURRENT_USER',
-		'CURSOR',
-		'DATABASE',
-		'DATABASES',
-		'DAY_HOUR',
-		'DAY_MICROSECOND',
-		'DAY_MINUTE',
-		'DAY_SECOND',
-		'DEC',
-		'DECIMAL',
-		'DECLARE',
-		'DEFAULT',
-		'DELAYED',
-		'DELETE',
-		'DESC',
-		'DESCRIBE',
-		'DETERMINISTIC',
-		'DISTINCT',
-		'DISTINCTROW',
-		'DIV',
-		'DOUBLE',
-		'DROP',
-		'DUAL',
-		'EACH',
-		'ELSE',
-		'ELSEIF',
-		'ENCLOSED',
-		'ESCAPED',
-		'EXISTS',
-		'EXIT',
-		'EXPLAIN',
-		'FALSE',
-		'FETCH',
-		'FLOAT',
-		'FLOAT4',
-		'FLOAT8',
-		'FOR',
-		'FORCE',
-		'FOREIGN',
-		'FROM',
-		'FULLTEXT',
-		'GENERAL',
-		'GOTO',
-		'GRANT',
-		'GROUP',
-		'HAVING',
-		'HIGH_PRIORITY',
-		'HOUR_MICROSECOND',
-		'HOUR_MINUTE',
-		'HOUR_SECOND',
-		'IF',
-		'IGNORE',
-		'IGNORE_SERVER_IDS',
-		'IN',
-		'INDEX',
-		'INFILE',
-		'INNER',
-		'INOUT',
-		'INSENSITIVE',
-		'INSERT',
-		'INT',
-		'INT1',
-		'INT2',
-		'INT3',
-		'INT4',
-		'INT8',
-		'INTEGER',
-		'INTERVAL',
-		'INTO',
-		'IS',
-		'ITERATE',
-		'JOIN',
-		'KEY',
-		'KEYS',
-		'KILL',
-		'LABEL',
-		'LEADING',
-		'LEAVE',
-		'LEFT',
-		'LIKE',
-		'LIMIT',
-		'LINEAR',
-		'LINES',
-		'LOAD',
-		'LOCALTIME',
-		'LOCALTIMESTAMP',
-		'LOCK',
-		'LONG',
-		'LONGBLOB',
-		'LONGTEXT',
-		'LOOP',
-		'LOW_PRIORITY',
-		'MASTER_HEARTBEAT_PERIOD',
-		'MASTER_SSL_VERIFY_SERVER_CERT',
-		'MATCH',
-		'MAXVALUE',
-		'MEDIUMBLOB',
-		'MEDIUMINT',
-		'MEDIUMTEXT',
-		'MIDDLEINT',
-		'MINUTE_MICROSECOND',
-		'MINUTE_SECOND',
-		'MOD',
-		'MODIFIES',
-		'NATURAL',
-		'NOT',
-		'NO_WRITE_TO_BINLOG',
-		'NULL',
-		'NUMERIC',
-		'ON',
-		'OPTIMIZE',
-		'OPTION',
-		'OPTIONALLY',
-		'OR',
-		'ORDER',
-		'OUT',
-		'OUTER',
-		'OUTFILE',
-		'PRECISION',
-		'PRIMARY',
-		'PROCEDURE',
-		'PURGE',
-		'RANGE',
-		'READ',
-		'READS',
-		'READ_WRITE',
-		'READ_ONLY',
-		'REAL',
-		'REFERENCES',
-		'REGEXP',
-		'RELEASE',
-		'RENAME',
-		'REPEAT',
-		'REPLACE',
-		'REQUIRE',
-		'RESIGNAL',
-		'RESTRICT',
-		'RETURN',
-		'REVOKE',
-		'RIGHT',
-		'RLIKE',
-		'SCHEMA',
-		'SCHEMAS',
-		'SECOND_MICROSECOND',
-		'SELECT',
-		'SENSITIVE',
-		'SEPARATOR',
-		'SET',
-		'SHOW',
-		'SIGNAL',
-		'SLOW',
-		'SMALLINT',
-		'SPATIAL',
-		'SPECIFIC',
-		'SQL',
-		'SQLEXCEPTION',
-		'SQLSTATE',
-		'SQLWARNING',
-		'SQL_BIG_RESULT',
-		'SQL_CALC_FOUND_ROWS',
-		'SQL_SMALL_RESULT',
-		'SSL',
-		'STARTING',
-		'STRAIGHT_JOIN',
-		'TABLE',
-		'TERMINATED',
-		'THEN',
-		'TINYBLOB',
-		'TINYINT',
-		'TINYTEXT',
-		'TO',
-		'TRAILING',
-		'TRIGGER',
-		'TRUE',
-		'UNDO',
-		'UNION',
-		'UNIQUE',
-		'UNLOCK',
-		'UNSIGNED',
-		'UPDATE',
-		'USAGE',
-		'USE',
-		'USING',
-		'UTC_DATE',
-		'UTC_TIME',
-		'UTC_TIMESTAMP',
-		'VALUES',
-		'VARBINARY',
-		'VARCHAR',
-		'VARCHARACTER',
-		'VARYING',
-		'WHEN',
-		'WHERE',
-		'WHILE',
-		'WITH',
-		'WRITE',
-		'XOR',
-		'YEAR_MONTH',
-		'ZEROFILL'
-	);
-
-	/**
-	 *
-	 * column names used by TYPO3
-	 * @var array
-	 */
-	static protected $reservedTYPO3ColumnNames = array(
-		'uid',
-		'pid',
-		'endtime',
-		'starttime',
-		'sorting',
-		'fe_group',
-		'hidden',
-		'deleted',
-		'cruser_id',
-		'crdate',
-		'tstamp',
-		'sys_language',
-		't3ver_oid',
-		't3ver_id',
-		't3ver_wsid',
-		't3ver_label',
-		't3ver_state',
-		't3ver_stage',
-		't3ver_count',
-		't3ver_tstamp',
-		't3ver_move_id',
-		't3_origuid',
-		'sys_language_uid',
-		'l18n_parent',
-		'l18n_diffsource'
-	);
-
 	/**
 	 * keeping warnings (which will result in a confirmation)
-	 * @var array
+	 *
+	 * @var array[]
 	 */
 	protected $validationResult = array('errors' => array(), 'warnings' => array());
 
 	/**
 	 * Validate the given extension
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
-	 * @return boolean
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
+	 * @return array[]
 	 */
 	public function isValid($extension) {
 
+		$extensionSettings = $extension->getSettings();
+		GeneralUtility::devLog('isValid: settings', 'extension_builder', 0, $extension->getSettings());
+		if (isset($extensionSettings['ignoreWarnings'])) {
+			$this->warningsToIgnore = $extensionSettings['ignoreWarnings'];
+		}
+
 		$this->validationResult = array('errors' => array(), 'warnings' => array());
 
-		//$this->validateExtensionKey($extension->getExtensionKey());
-
+		$this->validateExtensionKey($extension->getExtensionKey());
 		$this->checkExistingExtensions($extension);
-
 		$this->validatePlugins($extension);
-
 		$this->validateBackendModules($extension);
-
 		$this->validateDomainObjects($extension);
+
+		if (!empty($this->warningsToIgnore)) {
+			$warningsToKeep = array();
+			foreach ($this->validationResult['warnings'] as $warning) {
+				/* @var ExtensionException $warning */
+				GeneralUtility::devLog('warning: ' . $warning->getCode(), 'extension_builder', 0, $this->warningsToIgnore);
+				if (!in_array($warning->getCode(), $this->warningsToIgnore)) {
+					$warningsToKeep[] = $warning;
+				}
+			}
+			$this->validationResult['warnings'] = $warningsToKeep;
+		}
 
 		return $this->validationResult;
 	}
 
 
 	/**
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @return void
 	 */
 	protected function checkExistingExtensions($extension) {
 		if (is_dir($extension->getExtensionDir())) {
 			$settingsFile = $extension->getExtensionDir() .
-							Tx_ExtensionBuilder_Configuration_ConfigurationManager::EXTENSION_BUILDER_SETTINGS_FILE;
+				\EBT\ExtensionBuilder\Configuration\ConfigurationManager::EXTENSION_BUILDER_SETTINGS_FILE;
 			if (!file_exists($settingsFile) || $extension->isRenamed()) {
-				$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
+				$this->validationResult['warnings'][] = new ExtensionException(
 					'Extension directory exists',
 					self::EXTENSION_DIR_EXISTS);
 			}
@@ -402,7 +237,7 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 	}
 
 	/**
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @return void
 	 */
 	private function validatePlugins($extension) {
@@ -410,12 +245,20 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 			return;
 		}
 		$pluginKeys = array();
+		/** @var $plugin \EBT\ExtensionBuilder\Domain\Model\Plugin */
 		foreach ($extension->getPlugins() as $plugin) {
 			if (self::validatePluginKey($plugin->getKey()) === 0) {
-				$this->validationResult['errors'][] = new Exception('Invalid plugin key in plugin ' . $plugin->getName() . ': "' . $plugin->getKey() . '". Only alphanumeric character without spaces are allowed', self::ERROR_PLUGIN_INVALID_KEY);
+				$this->validationResult['errors'][] = new \Exception(
+					'Invalid plugin key in plugin ' . $plugin->getName() . ': "' . $plugin->getKey() . '".' . LF .
+					'Only alphanumeric character without spaces are allowed',
+					self::ERROR_PLUGIN_INVALID_KEY
+				);
 			}
 			if (in_array($plugin->getKey(), $pluginKeys)) {
-				$this->validationResult['errors'][] = new Exception('Duplicate plugin key: "' . $plugin->getKey() . '". Plugin keys must be unique.', self::ERROR_PLUGIN_DUPLICATE_KEY);
+				$this->validationResult['errors'][] = new \Exception(
+					'Duplicate plugin key: "' . $plugin->getKey() . '". Plugin keys must be unique.',
+					self::ERROR_PLUGIN_DUPLICATE_KEY
+				);
 			}
 			$pluginKeys[] = $plugin->getKey();
 
@@ -424,8 +267,8 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 	}
 
 	/**
-	 * @param Tx_ExtensionBuilder_Domain_Model_Plugin $plugin
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Plugin $plugin
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @return void
 	 */
 	private function validatePluginConfiguration($plugin, $extension) {
@@ -444,15 +287,14 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 			}
 		}
 		$switchableActionConfiguration = $plugin->getSwitchableControllerActions();
-		// \TYPO3\CMS\Core\Utility\GeneralUtility::devlog('validate switchableActionConfiguration', 'extension_builder', 0, $switchableActionConfiguration);
 		if (is_array($switchableActionConfiguration)) {
 			foreach ($switchableActionConfiguration as $switchableAction) {
 				$configuredActions = array();
 				foreach ($switchableAction['actions'] as $actions) {
-					// Format should be: Controller->action
+						// Format should be: Controller->action
 					list($controllerName, $actionName) = explode('->', $actions);
 					$configuredActions[] = $actionName;
-					\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Controller' . $controllerName, 'extension_builder', 0, array($actionName));
+					GeneralUtility::devlog('Controller' . $controllerName, 'extension_builder', 0, array($actionName));
 					$this->validateActionConfiguration($controllerName, array($actionName), 'plugin ' . $plugin->getName(), $extension);
 				}
 				$this->validateDependentActions($configuredActions, 'plugin ' . $plugin->getName());
@@ -461,8 +303,8 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 	}
 
 	/**
-	 * @param Tx_ExtensionBuilder_Domain_Model_BackendModule $backendModule
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\BackendModule $backendModule
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @return void
 	 */
 	private function validateBackendModuleConfiguration($backendModule, $extension) {
@@ -480,16 +322,16 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 		if ((in_array('new', $actionNames) && !in_array('create', $actionNames)) ||
 			(in_array('create', $actionNames) && !in_array('new', $actionNames))
 		) {
-			$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-				'Potential misconfiguration in ' . $name . ':<br />Actions new and create usually depend on each other',
-				self::ERROR_MISCONFIGURATION);
+			$this->validationResult['warnings'][] = new ExtensionException(
+				'Potential misconfiguration in ' . $name . ':' . LF . 'Actions new and create usually depend on each other',
+				self::ERROR_ACTION_MISCONFIGURATION);
 		}
 		if ((in_array('edit', $actionNames) && !in_array('update', $actionNames)) ||
 			(in_array('update', $actionNames) && !in_array('edit', $actionNames))
 		) {
-			$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-				'Potential misconfiguration in ' . $name . ':<br />Actions edit and update usually depend on each other',
-				self::ERROR_MISCONFIGURATION);
+			$this->validationResult['warnings'][] = new ExtensionException(
+				'Potential misconfiguration in ' . $name . ':' . LF . 'Actions edit and update usually depend on each other',
+				self::ERROR_ACTION_MISCONFIGURATION);
 		}
 	}
 
@@ -497,29 +339,29 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 	 * @param string $controllerName
 	 * @param array $actionNames
 	 * @param string $label related plugin or module
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @param boolean $firstControllerAction
 	 * @return void
 	 */
 	private function validateActionConfiguration($controllerName, $actionNames, $label, $extension, $firstControllerAction = FALSE) {
 		if ($firstControllerAction) {
-			// the first Controller action config is the default Controller action
-			// we show a warning if that's an action that requires a domain object as parameter
+				// the first Controller action config is the default Controller action
+				// we show a warning if that's an action that requires a domain object as parameter
 			$defaultAction = reset($actionNames);
-			//\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Invalid action configuration:'.$defaultAction, 'extension_builder', 1, array($controllerName, $actionNames));
 			if (in_array($defaultAction, array('show', 'edit'))) {
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Invalid action configurations', 'extension_builder', 1, array($controllerName, $actionNames));
-				$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					'Potential misconfiguration in ' . $label . ':<br />Default action ' . $controllerName . '->' . $defaultAction . '  can not be called without a domain object parameter',
-					self::ERROR_MISCONFIGURATION);
+				GeneralUtility::devlog('Invalid action configurations', 'extension_builder', 1, array($controllerName, $actionNames));
+				$this->validationResult['warnings'][] = new ExtensionException(
+					'Potential misconfiguration in ' . $label . ':' . LF .
+					'Default action ' . $controllerName . '->' . $defaultAction . '  can not be called without a domain object parameter',
+					self::ERROR_ACTION_MISCONFIGURATION);
 			}
 		}
 
 		$relatedDomainObject = $extension->getDomainObjectByName($controllerName);
 		if (!$relatedDomainObject) {
-			$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-				'Potential misconfiguration in ' . $label . ':<br />Controller ' . $controllerName . ' has no related Domain Object',
-				self::ERROR_MISCONFIGURATION);
+			$this->validationResult['warnings'][] = new ExtensionException(
+				'Potential misconfiguration in ' . $label . ':' . LF . 'Controller ' . $controllerName . ' has no related Domain Object',
+				self::ERROR_ACTION_MISCONFIGURATION);
 		} else {
 			$existingActions = $relatedDomainObject->getActions();
 			$existingActionNames = array();
@@ -529,9 +371,9 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 
 			foreach ($actionNames as $actionName) {
 				if (!in_array($actionName, $existingActionNames)) {
-					$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-						'Potential misconfiguration in ' . $label . ':<br />Controller ' . $controllerName . ' has no action named ' . $actionName,
-						self::ERROR_MISCONFIGURATION);
+					$this->validationResult['warnings'][] = new ExtensionException(
+						'Potential misconfiguration in ' . $label . ':' . LF . 'Controller ' . $controllerName . ' has no action named ' . $actionName,
+						self::ERROR_ACTION_MISCONFIGURATION);
 				}
 			}
 		}
@@ -539,7 +381,7 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 
 	/**
 	 * @param array $configuration
-	 * @return void
+	 * @return array
 	 */
 	public function validateConfigurationFormat($configuration) {
 		foreach ($configuration['properties']['plugins'] as $pluginConfiguration) {
@@ -550,8 +392,12 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 					if (!empty($pluginConfiguration['actions'][$configType])) {
 						$isValid = $this->validateActionConfigFormat($pluginConfiguration['actions'][$configType], $configType);
 						if (!$isValid) {
-							\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('validateActionConfigFormat failed', 'extension_builder', 2, array($pluginConfiguration['actions'][$configType]));
-							$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
+							GeneralUtility::devlog('validateActionConfigFormat failed',
+								'extension_builder',
+								2,
+								array($pluginConfiguration['actions'][$configType])
+							);
+							$this->validationResult['warnings'][] = new ExtensionException(
 								'Wrong format in configuration for ' . $configType . ' in plugin ' . $pluginName,
 								self::ERROR_MISCONFIGURATION);
 						}
@@ -559,34 +405,34 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 				}
 				if (!empty($pluginConfiguration['actions']['switchableActions'])) {
 					$isValid = TRUE;
-					$lines = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode("\n", $pluginConfiguration['actions']['switchableActions'], TRUE);
+					$lines = GeneralUtility::trimExplode(LF, $pluginConfiguration['actions']['switchableActions'], TRUE);
 					$firstLine = TRUE;
 					foreach ($lines as $line) {
 						if ($firstLine) {
-							// label for flexform select
-							if (!preg_match("/^[a-zA-Z0-9_-\s]*$/", $line)) {
+								// label for flexform select
+							if (!preg_match('/^[a-zA-Z0-9_-\\s]*$/', $line)) {
 								$isValid = FALSE;
-								\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Label in switchable Actions contained disallowed character:' . $line, 'extension_builder', 2);
+								GeneralUtility::devlog('Label in switchable Actions contained disallowed character:' . $line, 'extension_builder', 2);
 							}
 							$firstLine = FALSE;
 						} else {
-							$parts = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(';', $line, TRUE);
-							\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('switchable Actions line even:' . $line, 'extension_builder', 0, $parts);
+							$parts = GeneralUtility::trimExplode(';', $line, TRUE);
+							GeneralUtility::devlog('switchable Actions line even:' . $line, 'extension_builder', 0, $parts);
 							if (count($parts) < 1) {
 								$isValid = FALSE;
-								\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Wrong count for explode(";") switchable Actions line:' . $line, 'extension_builder', 2, $parts);
+								GeneralUtility::devlog('Wrong count for explode(";") switchable Actions line:' . $line, 'extension_builder', 2, $parts);
 							}
 							foreach ($parts as $part) {
-								if (!empty($part) && count(\TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('->', $part, TRUE)) != 2) {
+								if (!empty($part) && count(GeneralUtility::trimExplode('->', $part, TRUE)) != 2) {
 									$isValid = FALSE;
-									\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Wrong count for explode("->") switchable Actions line:' . $part, 'extension_builder', 2);
+									GeneralUtility::devlog('Wrong count for explode("->") switchable Actions line:' . $part, 'extension_builder', 2);
 								}
 							}
 							$firstLine = TRUE;
 						}
 					}
 					if (!$isValid) {
-						$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
+						$this->validationResult['warnings'][] = new ExtensionException(
 							'Wrong format in configuration for switchable ControllerActions in plugin ' . $pluginName,
 							self::ERROR_MISCONFIGURATION);
 					}
@@ -601,8 +447,12 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 					if (!empty($moduleConfiguration['actions'][$configType])) {
 						$isValid = $this->validateActionConfigFormat($moduleConfiguration['actions'][$configType], $configType);
 						if (!$isValid) {
-							\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('validateActionConfigFormat failed', 'extension_builder', 2, array($moduleConfiguration['actions'][$configType]));
-							$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
+							GeneralUtility::devlog('validateActionConfigFormat failed',
+								'extension_builder',
+								2,
+								array($moduleConfiguration['actions'][$configType])
+							);
+							$this->validationResult['warnings'][] = new ExtensionException(
 								'Wrong format in configuration for ' . $configType . ' in module ' . $moduleName,
 								self::ERROR_MISCONFIGURATION);
 						}
@@ -610,7 +460,34 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 				}
 			}
 		}
-
+		foreach ($configuration['modules'] as $domainObjectConfiguration) {
+			$propertyNames = array();
+			if (isset($domainObjectConfiguration['value']['propertyGroup']['properties'])) {
+				foreach ($domainObjectConfiguration['value']['propertyGroup']['properties'] as $property) {
+					GeneralUtility::devlog('property', 'extension_builder', 0, $property);
+					if (in_array($property['propertyName'], $propertyNames)) {
+						$this->validationResult['errors'][] = new ExtensionException(
+							'Property "' . $property['propertyName'] . '" of Model "' . $domainObjectConfiguration['value']['name'] . '" exists twice.',
+							self::ERROR_PROPERTY_DUPLICATE
+						);
+					}
+					$propertyNames[] = $property['propertyName'];
+				}
+			}
+				// check relation names, since these will result in class properties too
+			if (isset($domainObjectConfiguration['value']['relationGroup']['relations'])) {
+				foreach ($domainObjectConfiguration['value']['relationGroup']['relations'] as $property) {
+					GeneralUtility::devlog('relation', 'extension_builder', 0, $property);
+					if (in_array($property['relationName'], $propertyNames)) {
+						$this->validationResult['errors'][] = new ExtensionException(
+							'Property "' . $property['relationName'] . '" of Model "' . $domainObjectConfiguration['value']['name'] . '" exists twice.',
+							self::ERROR_PROPERTY_DUPLICATE
+						);
+					}
+					$propertyNames[] = $property['relationName'];
+				}
+			}
+		}
 		return $this->validationResult;
 	}
 
@@ -620,22 +497,22 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 	 */
 	protected function validateActionConfigFormat($configuration) {
 		$isValid = TRUE;
-		$lines = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode("\n", $configuration, TRUE);
+		$lines = GeneralUtility::trimExplode(LF, $configuration, TRUE);
 		foreach ($lines as $line) {
-			$test = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('=>', $line, TRUE);
+			$test = GeneralUtility::trimExplode('=>', $line, TRUE);
 			if (count($test) != 2) {
 				$isValid = FALSE;
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Wrong count for explode("=>") switchable Actions line:' . $line, 'extension_builder', 2);
-			} else if (!preg_match("/^[a-zA-Z0-9_,\s]*$/", $test[1])) {
+				GeneralUtility::devlog('Wrong count for explode("=>") switchable Actions line:' . $line, 'extension_builder', 2);
+			} elseif (!preg_match('/^[a-zA-Z0-9_,\\s]*$/', $test[1])) {
 				$isValid = FALSE;
-				\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Regex failed:' . $test[1], 'extension_builder', 2);
+				GeneralUtility::devlog('Regex failed:' . $test[1], 'extension_builder', 2);
 			}
 		}
 		return $isValid;
 	}
 
 	/**
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @return void
 	 */
 	private function validateBackendModules($extension) {
@@ -643,12 +520,19 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 			return;
 		}
 		$backendModuleKeys = array();
+		/** @var $backendModule \EBT\ExtensionBuilder\Domain\Model\BackendModule */
 		foreach ($extension->getBackendModules() as $backendModule) {
 			if (self::validateModuleKey($backendModule->getKey()) === 0) {
-				$this->validationResult['errors'][] = new Exception('Invalid key in backend module ' . $backendModule->getName() . '. Only alphanumeric character without spaces are allowed', self::ERROR_BACKENDMODULE_INVALID_KEY);
+				$this->validationResult['errors'][] = new \Exception(
+					'Invalid key in backend module "' . $backendModule->getName() . LF . '". Only alphanumeric character without spaces are allowed',
+					self::ERROR_BACKENDMODULE_INVALID_KEY
+				);
 			}
 			if (in_array($backendModule->getKey(), $backendModuleKeys)) {
-				$this->validationResult['errors'][] = new Exception('Duplicate backend module key: "' . $backendModule->getKey() . '". Backend module keys must be unique.', self::ERROR_BACKENDMODULE_DUPLICATE_KEY);
+				$this->validationResult['errors'][] = new \Exception(
+					'Duplicate backend module key: "' . $backendModule->getKey() . LF . '". Backend module keys must be unique.',
+					self::ERROR_BACKENDMODULE_DUPLICATE_KEY
+				);
 			}
 			$backendModuleKeys[] = $backendModule->getKey();
 			$this->validateBackendModuleConfiguration($backendModule, $extension);
@@ -657,47 +541,62 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 
 	/**
 	 * @author Sebastian Michaelsen <sebastian.gebhard@gmail.com>
-	 * @param	Tx_ExtensionBuilder_Domain_Model_Extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 * @return	 void
-	 * @throws Tx_ExtensionBuilder_Domain_Exception_ExtensionException
+	 * @throws ExtensionException
 	 */
 	private function validateDomainObjects($extension) {
 
 		$actionCounter = 0;
 		foreach ($extension->getDomainObjects() as $domainObject) {
 			$actionCounter .= count($domainObject->getActions());
-			// Check if domainObject name is given
+				// Check if domainObject name is given
 			if (!$domainObject->getName()) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('A Domain Object has no name', self::ERROR_DOMAINOBJECT_NO_NAME);
+				$this->validationResult['errors'][] = new ExtensionException(
+					'A Domain Object has no name', self::ERROR_DOMAINOBJECT_NO_NAME
+				);
 			}
 
 			/**
 			 * Character test
 			 * Allowed characters are: a-z (lowercase), A-Z (uppercase) and 0-9
 			 */
-			if (!preg_match("/^[a-zA-Z0-9]*$/", $domainObject->getName())) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('Illegal domain object name "' . $domainObject->getName() . '". Please use UpperCamelCase, no spaces or underscores.', self::ERROR_DOMAINOBJECT_ILLEGAL_CHARACTER);
+			if (!preg_match('/^[a-zA-Z0-9]*$/', $domainObject->getName())) {
+				$this->validationResult['errors'][] = new ExtensionException(
+					'Illegal domain object name "' . $domainObject->getName() . '". Please use UpperCamelCase, no spaces or underscores.',
+					self::ERROR_DOMAINOBJECT_ILLEGAL_CHARACTER
+				);
 			}
 
 			$objectName = $domainObject->getName();
 			$firstChar = $objectName{0};
 			if (strtolower($firstChar) == $firstChar) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('Illegal first character of domain object name "' . $domainObject->getName() . '". Please use UpperCamelCase.', self::ERROR_DOMAINOBJECT_LOWER_FIRST_CHARACTER);
+				$this->validationResult['errors'][] = new ExtensionException(
+					'Illegal first character of domain object name "' . $domainObject->getName() . '". Please use UpperCamelCase.',
+					self::ERROR_DOMAINOBJECT_LOWER_FIRST_CHARACTER
+				);
 			}
+			if (\EBT\ExtensionBuilder\Service\ValidationService::isReservedExtbaseWord($objectName)) {
+				$this->validationResult['errors'][] = new ExtensionException(
+					'Domain object name "' . $domainObject->getName() . '" may not be used in extbase.',
+					self::ERROR_PROPERTY_RESERVED_WORD
+				);
+			}
+
 			$this->validateProperties($domainObject);
 			$this->validateDomainObjectActions($domainObject);
 			$this->validateMapping($domainObject);
 		}
-		if($actionCounter < 1) {
+		if ($actionCounter < 1) {
 			if (count($extension->getBackendModules()) > 0) {
-				$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					"Potential misconfiguration: No actions configured, this will result in a missing default action in your backend module",
+				$this->validationResult['warnings'][] = new ExtensionException(
+					'Potential misconfiguration: No actions configured!' . LF . 'This will result in a missing default action in your backend module',
 					self::ERROR_ACTION_MISCONFIGURATION
 				);
 			}
 			if (count($extension->getPlugins()) > 0) {
-				$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					"Potential misconfiguration: No actions configured, this will result in a missing default action in your plugin",
+				$this->validationResult['warnings'][] = new ExtensionException(
+					'Potential misconfiguration: No actions configured!' . LF . 'This will result in a missing default action in your plugin',
 					self::ERROR_ACTION_MISCONFIGURATION
 				);
 			}
@@ -708,59 +607,66 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 	 * cover all cases:
 	 * 1. extend TYPO3 class like fe_users (no mapping table needed)
 	 *
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject
 	 */
-	private function validateMapping(Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject) {
+	private function validateMapping(\EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject) {
 		$parentClass = $domainObject->getParentClass();
 		$tableName = $domainObject->getMapToTable();
-		$extensionPrefix = 'Tx_' . \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase($domainObject->getExtension()->getExtensionKey()) . '_Domain_Model_';
+		$extensionPrefix = 'Tx_' . GeneralUtility::underscoredToUpperCamelCase($domainObject->getExtension()->getExtensionKey()) . '_Domain_Model_';
 		if (!empty($parentClass)) {
 			$classConfiguration = $this->configurationManager->getExtbaseClassConfiguration($parentClass);
-			\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('class settings ' . $parentClass, 'extension_builder', 0, $classConfiguration);
+			GeneralUtility::devlog('class settings ' . $parentClass, 'extension_builder', 0, $classConfiguration);
 
 			if (!isset($classConfiguration['tableName'])) {
 				if (!$tableName) {
-					$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-						'Mapping configuration error in domain object ' . $domainObject->getName() . ': The mapping table could not be detected from Extbase Configuration. Please enter a table name',
+					$this->validationResult['errors'][] = new ExtensionException(
+						'Mapping configuration error in domain object ' . $domainObject->getName() . ': ' . LF .
+						'The mapping table could not be detected from Extbase Configuration. Please enter a table name',
 						self::ERROR_MAPPING_NO_TABLE
 					);
 				}
 			} else {
-				// get the table name from the parent class configuration
+					// get the table name from the parent class configuration
 				$tableName = $classConfiguration['tableName'];
 			}
 
 			if (!class_exists($parentClass, TRUE)) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					'Mapping configuration error in domain object ' . $domainObject->getName() . ': the parent class ' . $parentClass . 'seems not to exist ',
+				$this->validationResult['errors'][] = new ExtensionException(
+					'Mapping configuration error in domain object ' . $domainObject->getName() . ': the parent class ' . LF .
+					$parentClass . 'seems not to exist ',
 					self::ERROR_MAPPING_NO_PARENTCLASS
 				);
 			}
 		}
 		if ($tableName) {
 			if (strpos($extensionPrefix, $tableName) !== FALSE) {
-				// the domainObject extends a class of the same extension
+					// the domainObject extends a class of the same extension
 				if (!$parentClass) {
-					$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-						'Mapping configuration error in domain object ' . $domainObject->getName() . ': you have to define a parent class if you map to a table of another domain object of the same extension ',
+					$this->validationResult['errors'][] = new ExtensionException(
+						'Mapping configuration error in domain object ' . $domainObject->getName() . ': you have to define' . LF .
+						'a parent class if you map to a table of another domain object of the same extension ',
 						self::ERROR_MAPPING_NO_PARENTCLASS
 					);
 				}
 			}
 			if (!isset($GLOBALS['TCA'][$tableName])) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					'There is no entry for table "' . $tableName . '" of ' . $domainObject->getName() . ' in TCA. For technical reasons you can only extend tables with TCA configuration.',
+				$this->validationResult['errors'][] = new ExtensionException(
+					'There is no entry for table "' . $tableName . '" of ' . $domainObject->getName() . ' in TCA. ' . LF .
+					'For technical reasons you can only extend tables with TCA configuration.',
 					self::ERROR_MAPPING_NO_TCA
 				);
 			}
 		}
 		if (isset($GLOBALS['TCA'][$tableName]['ctrl']['type'])) {
-			$dataTypeRes = $GLOBALS['TYPO3_DB']->sql_query('DESCRIBE ' . $tableName);
-			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dataTypeRes)) {
-				if($row['Field'] == $GLOBALS['TCA'][$tableName]['ctrl']['type']) {
-					if(strpos($row['Type'],'int') !== FALSE) {
-						$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-							'The configured type field for table "' . $tableName . '" is of type ' .$row['Type'] . '<br />This means the type field can not be used for defining the record type. <br />You have to configure the mappings yourself if you want to map to this<br /> table or extend the correlated class',
+			$dataTypeRes = $this->getDatabaseConnection()->sql_query('DESCRIBE ' . $tableName);
+			while ($row = $this->getDatabaseConnection()->sql_fetch_assoc($dataTypeRes)) {
+				if ($row['Field'] == $GLOBALS['TCA'][$tableName]['ctrl']['type']) {
+					if (strpos($row['Type'], 'int') !== FALSE) {
+						$this->validationResult['warnings'][] = new ExtensionException(
+							'The configured type field for table "' . $tableName . '" is of type ' . $row['Type'] . '' . LF .
+							'This means the type field can not be used for defining the record type. ' . LF .
+							'You have to configure the mappings yourself if you want to map to this' . LF .
+							'table or extend the correlated class',
 							self::ERROR_MAPPING_WRONG_TYPEFIELD_CONFIGURATION
 						);
 					}
@@ -769,17 +675,19 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 		}
 	}
 
-	/**$actions = $domainObject->getActions();
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject
+	/**
+	 * $actions = $domainObject->getActions();
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject
 	 * @return void
 	 */
-	private function validateDomainObjectActions(Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject) {
+	private function validateDomainObjectActions(\EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject) {
 		$actionNames = array();
 		$actions = $domainObject->getActions();
 		foreach ($actions as $action) {
 			if (in_array($action->getName(), $actionNames)) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					'Duplicate action name "' . $action->getName() . '" of ' . $domainObject->getName() . '. Action names have to be unique for each model',
+				$this->validationResult['errors'][] = new ExtensionException(
+					'Duplicate action name "' . $action->getName() . '" of ' . $domainObject->getName() . LF .
+					'; action names have to be unique for each model',
 					self::ERROR_ACTIONNAME_DUPLICATE
 				);
 			}
@@ -787,9 +695,10 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 			 * Character test
 			 * Allowed characters are: a-z (lowercase), A-Z (uppercase) and 0-9
 			 */
-			if (!preg_match("/^[a-zA-Z0-9]*$/", $action->getName())) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					'Illegal action name "' . $action->getName() . '" of ' . $domainObject->getName() . '. Please use lowerCamelCase, no spaces or underscores.',
+			if (!preg_match('/^[a-zA-Z0-9]*$/', $action->getName())) {
+				$this->validationResult['errors'][] = new ExtensionException(
+					'Illegal action name "' . $action->getName() . '" of ' . $domainObject->getName() . '.' . LF .
+					'Please use lowerCamelCase, no spaces or underscores.',
 					self::ERROR_ACTIONNAME_ILLEGAL_CHARACTER
 				);
 			}
@@ -799,35 +708,38 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 
 		$firstAction = reset($actionNames);
 		if ($firstAction == 'show' || $firstAction == 'edit' || $firstAction == 'delete') {
-			$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-				'Potential misconfiguration in Domain object ' . $domainObject->getName() . ':<br />First action could not be default action since "' . $firstAction . '" action needs a parameter',
-				self::ERROR_MISCONFIGURATION
+			$this->validationResult['warnings'][] = new ExtensionException(
+				'Potential misconfiguration in Domain object ' . $domainObject->getName() . ':' . LF .
+				'First action could not be default action since "' . $firstAction . '" action needs a parameter',
+				self::ERROR_ACTION_MISCONFIGURATION
 			);
 		}
 	}
 
 
 	/**
-	 * @author Sebastian Michaelsen <sebastian.gebhard@gmail.com>
-	 * @param	Tx_ExtensionBuilder_Domain_Model_DomainObject
-	 * @return	 void
-	 * @throws Tx_ExtensionBuilder_Domain_Exception_ExtensionException
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject
+	 * @return void
+	 * @throws ExtensionException
 	 */
 	private function validateProperties($domainObject) {
 		$propertyNames = array();
 		foreach ($domainObject->getProperties() as $property) {
-			// Check if property name is given
+				// Check if property name is given
 			if (!$property->getName()) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('A property of ' . $domainObject->getName() . ' has no name', self::ERROR_PROPERTY_NO_NAME);
+				$this->validationResult['errors'][] = new ExtensionException(
+					'A property of ' . $domainObject->getName() . ' has no name', self::ERROR_PROPERTY_NO_NAME
+				);
 			}
 			$propertyName = $property->getName();
 			/**
 			 * Character test
 			 * Allowed characters are: a-z (lowercase), A-Z (uppercase) and 0-9
 			 */
-			if (!preg_match("/^[a-zA-Z0-9]*$/", $propertyName)) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					'Illegal property name "' . $propertyName . '" of ' . $domainObject->getName() . '. Please use lowerCamelCase, no spaces or underscores.',
+			if (!preg_match('/^[a-zA-Z0-9]*$/', $propertyName)) {
+				$this->validationResult['errors'][] = new ExtensionException(
+					'Illegal property name "' . $propertyName . '" of ' . $domainObject->getName() . '.' . LF .
+					'Please use lowerCamelCase, no spaces or underscores.',
 					self::ERROR_PROPERTY_ILLEGAL_CHARACTER
 				);
 			}
@@ -835,44 +747,52 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 
 			$firstChar = $propertyName{0};
 			if (strtoupper($firstChar) == $firstChar) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					'Illegal first character of property name "' . $property->getName() . '" of domain object "' . $domainObject->getName() . '". Please use lowerCamelCase.',
+				$this->validationResult['errors'][] = new ExtensionException(
+					'Illegal first character of property name "' . $property->getName() . '" of domain object "' .
+					$domainObject->getName() . '".' . LF .
+					'Please use lowerCamelCase.',
 					self::ERROR_PROPERTY_UPPER_FIRST_CHARACTER
 				);
 			}
 
-			if (self::isReservedTYPO3Word($propertyName)) {
-				$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-					'The name of property "' . $propertyName . '" in Model "' . $domainObject->getName() . '" will result in a TYPO3 specific column name.<br /> This might result in unexpected behaviour. If you didn\'t choose that name by purpose<br /> it is recommended to use another name',
+			if (\EBT\ExtensionBuilder\Service\ValidationService::isReservedTYPO3Word($propertyName)) {
+				$this->validationResult['warnings'][] = new ExtensionException(
+					'The name of property "' . $propertyName . '" in Model "' . $domainObject->getName() .
+					'" will result in a TYPO3 specific column name.' . LF .
+					' This might result in unexpected behaviour. If you didn\'t choose that name by purpose' . LF .
+					' it is recommended to use another name',
 					self::ERROR_PROPERTY_RESERVED_WORD
 				);
 			}
 
-			if (self::isReservedMYSQLWord($propertyName)) {
-				$this->validationResult['warnings'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
+			if (\EBT\ExtensionBuilder\Service\ValidationService::isReservedMYSQLWord($propertyName)) {
+				$this->validationResult['warnings'][] = new ExtensionException(
 					'Property "' . $propertyName . '" in Model "' . $domainObject->getName() . '".',
 					self::ERROR_PROPERTY_RESERVED_SQL_WORD
 				);
 			}
 
-			// Check for duplicate property names
+				// Check for duplicate property names
 			if (in_array($propertyName, $propertyNames)) {
-				$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('Property "' . $property->getName() . '" of ' . $domainObject->getName() . ' exists twice.', self::ERROR_PROPERTY_DUPLICATE);
+				$this->validationResult['errors'][] = new ExtensionException(
+					'Property "' . $property->getName() . '" of ' . $domainObject->getName() . ' exists twice.', self::ERROR_PROPERTY_DUPLICATE
+				);
 			}
 			$propertyNames[] = $propertyName;
 
-			if( is_subclass_of($property, Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRelation)) {
-				if(!$property->getForeignModel() && $property->getForeignClassName()){
-					if(!class_exists($property->getForeignClassName())) {
-						$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-							'Related class not loadable: "' . $property->getForeignClassName() . '" configured in relation "' .$property->getName() . '".',
+			if ($property instanceof \EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation\AbstractRelation) {
+				if (!$property->getForeignModel() && $property->getForeignClassName()) {
+					if (!class_exists($property->getForeignClassName())) {
+						$this->validationResult['errors'][] = new ExtensionException(
+							'Related class not loadable: "' . $property->getForeignClassName() . '" configured in relation "' . $property->getName() . '".',
 							self::ERROR_MAPPING_NO_FOREIGNCLASS
 						);
 					}
 				}
-				if($property->getForeignModel() && ($property->getForeignModel()->getFullQualifiedClassName() != $property->getForeignClassName())){
-					$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException(
-						'Relation "' .$property->getName() . '" in model "' . $domainObject->getName() . '" has a external class relation and a wire to '.$property->getForeignModel()->getName() ,
+				if ($property->getForeignModel() && ($property->getForeignModel()->getFullQualifiedClassName() != $property->getForeignClassName())) {
+					$this->validationResult['errors'][] = new ExtensionException(
+						'Relation "' . $property->getName() . '" in model "' . $domainObject->getName() .
+						'" has a external class relation and a wire to ' . $property->getForeignModel()->getName(),
 						self::ERROR_MAPPING_WIRE_AND_FOREIGNCLASS
 					);
 				}
@@ -903,23 +823,26 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 	 * @author Rens Admiraal
 	 * @param string $key
 	 * @return void
-	 * @throws Tx_ExtensionBuilder_Domain_Exception_ExtensionException
+	 * @throws ExtensionException
 	 */
 	private function validateExtensionKey($key) {
 		/**
 		 * Character test
 		 * Allowed characters are: a-z (lowercase), 0-9 and '_' (underscore)
 		 */
-		if (!preg_match("/^[a-z0-9_]*$/", $key)) {
-			$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('Illegal characters in extension key', self::ERROR_EXTKEY_ILLEGAL_CHARACTERS);
+		if (!preg_match('/^[a-z0-9_]*$/', $key)) {
+			$this->validationResult['errors'][] = new ExtensionException(
+				'Illegal characters in extension key', self::ERROR_EXTKEY_ILLEGAL_CHARACTERS);
 		}
 
 		/**
 		 * Start character
 		 * Extension keys cannot start or end with 0-9 and '_' (underscore)
 		 */
-		if (preg_match("/^[0-9_]/", $key)) {
-			$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('Illegal first character of extension key', self::ERROR_EXTKEY_ILLEGAL_FIRST_CHARACTER);
+		if (preg_match('/^[0-9_]/', $key)) {
+			$this->validationResult['errors'][] = new ExtensionException(
+				'Illegal first character of extension key', self::ERROR_EXTKEY_ILLEGAL_FIRST_CHARACTER
+			);
 		}
 
 		/**
@@ -928,7 +851,9 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 		 */
 		$keyLengthTest = str_replace('_', '', $key);
 		if (strlen($keyLengthTest) < 3 || strlen($keyLengthTest) > 30) {
-			$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('Invalid extension key length', self::ERROR_EXTKEY_LENGTH);
+			$this->validationResult['errors'][] = new ExtensionException(
+				'Invalid extension key length', self::ERROR_EXTKEY_LENGTH
+			);
 		}
 
 		/**
@@ -936,37 +861,8 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 		 * The key must not being with one of the following prefixes: tx,u,user_,pages,tt_,sys_,ts_language_,csh_
 		 */
 		if (preg_match("/^(tx_|u_|user_|pages_|tt_|sys_|ts_language_|csh_)/", $key)) {
-			$this->validationResult['errors'][] = new Tx_ExtensionBuilder_Domain_Exception_ExtensionException('Illegal extension key prefix', self::ERROR_EXTKEY_ILLEGAL_PREFIX);
-		}
-	}
-
-	/**
-	 *
-	 * @param string $word
-	 *
-	 * @return boolean
-	 */
-	static public function isReservedTYPO3Word($word) {
-		if (in_array(\TYPO3\CMS\Core\Utility\GeneralUtility::camelCaseToLowerCaseUnderscored($word), self::$reservedTYPO3ColumnNames)) {
-			return TRUE;
-		}
-		else {
-			return FALSE;
-		}
-	}
-
-	/**
-	 *
-	 * @param string $word
-	 *
-	 * @return boolean
-	 */
-	static public function isReservedMYSQLWord($word) {
-		if (in_array(strtoupper($word), self::$reservedMYSQLWords)) {
-			return TRUE;
-		}
-		else {
-			return FALSE;
+			$this->validationResult['errors'][] = new ExtensionException(
+				'Illegal extension key prefix', self::ERROR_EXTKEY_ILLEGAL_PREFIX);
 		}
 	}
 
@@ -977,13 +873,18 @@ class Tx_ExtensionBuilder_Domain_Validator_ExtensionValidator extends TYPO3\CMS\
 	 * @return boolean
 	 */
 	static public function isReservedWord($word) {
-		if (self::isReservedMYSQLWord($word) || self::isReservedTYPO3Word($word)) {
+		if (\EBT\ExtensionBuilder\Service\ValidationService::isReservedMYSQLWord($word) ||
+			\EBT\ExtensionBuilder\Service\ValidationService::isReservedTYPO3Word($word)) {
 			return TRUE;
-		}
-		else {
+		} else {
 			return FALSE;
 		}
 	}
-}
 
-?>
+	/**
+	 * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected function getDatabaseConnection() {
+		return $GLOBALS['TYPO3_DB'];
+	}
+}

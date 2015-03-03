@@ -1,8 +1,10 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
  *  (c) 2009 Sebastian Gebhard <sebastian.gebhard@gmail.com>
+ *  (c) 2013 Nico de Haen
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,44 +29,46 @@
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_Action {
-
+class Action {
 	/**
-	 * The action's name
+	 * the action's name
+	 *
 	 * @var string
 	 */
-	protected $name;
+	protected $name = '';
 
 	/**
-	 * The domain object this action belongs to.
-	 * @var Tx_ExtensionBuilder_Domain_Model_DomainObject
+	 * the domain object this action belongs to
+	 *
+	 * @var \EBT\ExtensionBuilder\Domain\Model\DomainObject
 	 */
-	protected $domainObject;
+	protected $domainObject = NULL;
 
 	/**
 	 * Is a template required for this action?
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $needsTemplate = FALSE;
 
 	/**
 	 * Is a form required in the template for this action?
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $needsForm = FALSE;
 
 	/**
 	 * Is a property partial required in the template for this action?
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $needsPropertyPartial = FALSE;
 
 	/**
 	 * these actions do not need a template since they are never rendered
-	 * @var array
+	 *
+	 * @var string[]
 	 */
 	protected $actionNamesWithNoRendering = array(
 		'create',
@@ -74,7 +78,8 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_Action {
 
 	/**
 	 * these actions need a form
-	 * @var array
+	 *
+	 * @var string[]
 	 */
 	protected $actionNamesWithForm = array(
 		'new',
@@ -83,7 +88,8 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_Action {
 
 	/**
 	 * these actions should not be cached
-	 * @var array
+	 *
+	 * @var string[]
 	 */
 	protected $actionNamesThatShouldNotBeCached = array(
 		'create',
@@ -93,9 +99,10 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_Action {
 
 	/**
 	 * flag: TRUE if the action is cacheable
-	 * @var boolean
+	 *
+	 * @var bool|NULL
 	 */
-	protected $cacheable;
+	protected $cacheable = NULL;
 
 	/**
 	 *
@@ -115,15 +122,15 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_Action {
 
 	/**
 	 * DO NOT CALL DIRECTLY! This is being called by addAction() automatically.
-	 * @param Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject the domain object this actions belongs to
+	 * @param \EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject the domain object this actions belongs to
 	 */
-	public function setDomainObject(Tx_ExtensionBuilder_Domain_Model_DomainObject $domainObject) {
+	public function setDomainObject(\EBT\ExtensionBuilder\Domain\Model\DomainObject $domainObject) {
 		$this->domainObject = $domainObject;
 	}
 
 	/**
 	 *
-	 * @return Tx_ExtensionBuilder_Domain_Model_DomainObject
+	 * @return \EBT\ExtensionBuilder\Domain\Model\DomainObject
 	 */
 	public function getDomainObject() {
 		return $this->domainObject;
@@ -186,7 +193,7 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_Action {
 	/**
 	 * Getter for cacheable
 	 *
-	 * @return boolean $cacheable
+	 * @return boolean|NULL $cacheable
 	 */
 	public function getCacheable() {
 		return $this->isCacheable();
@@ -204,5 +211,3 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_Action {
 		return $this->cacheable;
 	}
 }
-
-?>

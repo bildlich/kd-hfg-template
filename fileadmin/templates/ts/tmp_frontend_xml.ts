@@ -8,6 +8,16 @@ page{
  
    10 = TEXT
    10.value = <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-   20=cObject
-   20 < plugin.tx_sdjxmlmap_pi1
+}
+
+page.20 = USER
+page.20 {
+   userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+   vendorName = SOUPDUJOUR
+   pluginName = Pi1
+   extensionName = Sdjxmlsitemap2
+ 
+   settings =< plugin.tx_sdjseoog.settings
+   persistence =< plugin.tx_sdjseoog.persistence
+   view =< plugin.tx_sdjseoog.view
 }

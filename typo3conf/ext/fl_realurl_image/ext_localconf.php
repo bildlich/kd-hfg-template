@@ -35,9 +35,6 @@ if (TYPO3_MODE == 'BE') {
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Tx_FlRealurlImage_CleanTask'] = array(
 		'extension' => $_EXTKEY,
 		'title'     => 'Cleanup RealURL Images',
-		//'title' => 'LLL:EXT:'.$_EXTKEY.'/locallang.xml:TaskName.name', // Der Titel der Aufgabe
-		//'description' => 'LLL:EXT:'.$_EXTKEY.'/locallang.xml:TaskName.description', // Die Beschreibung der Aufgabe
-		// 'additionalFields' => 'tx_extkey_TaskName_AdditionalFieldProvider' // Zus�tzliche Felder
 	);
 }
 ?>

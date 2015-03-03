@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Utility;
 /***************************************************************
  *  Copyright notice
  *
@@ -30,10 +31,8 @@
  *
  * Needed to avoid errors when loading classes that have references or parent classes
  * to other classes in a not installed extension
- *
- * @version $Id: ClassLoader.php 1729 2009-11-25 21:37:20Z stucki $
  */
-class Tx_ExtensionBuilder_Utility_ClassLoader {
+class ClassLoader {
 
 	/**
 	 * Loads php files containing classes or interfaces found in the classes directory of
@@ -46,7 +45,7 @@ class Tx_ExtensionBuilder_Utility_ClassLoader {
 	public static function loadClass($className) {
 		$delimiter = '\\';
 		$index = 1;
-		if(strpos($delimiter, $className) === FALSE) {
+		if (strpos($delimiter, $className) === FALSE) {
 			$delimiter = '_';
 			$index = 2;
 		}
@@ -59,5 +58,3 @@ class Tx_ExtensionBuilder_Utility_ClassLoader {
 	}
 
 }
-
-?>

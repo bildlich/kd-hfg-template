@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -24,55 +26,43 @@
 
 /**
  * A person participating in the project somehow (i.e. as a developer).
- *
- * @version $ID:$
  */
-
-class Tx_ExtensionBuilder_Domain_Model_Person {
+class Person {
 
 	/**
 	 * TODO make that work
 	 * This Array contains all valid values for the role of a person.
 	 * Extend here and in the locallang (mlang_Tx_ExtensionBuilder_domain_model_person_[rolekey from array]) to add new Roles.
 	 *
-	 * @var array
+	 * @var string[]
 	 * @transient
 	 */
 	protected static $ROLES = array('developer', 'product_manager');
 
 	/**
-	 * The Persons name.
-	 *
 	 * @var string
 	 */
 	protected $name = '';
 
 	/**
 	 * TODO validation?
-	 * The Persons role.
 	 *
 	 * @var string
-	 * @see Tx_ExtensionBuilder_Domain_Model_Person::ROLES
+	 * @see \EBT\ExtensionBuilder\Domain\Model\Person::ROLES
 	 */
 	protected $role = '';
 
 	/**
-	 * The Emailadress.
-	 *
 	 * @var string
 	 */
 	protected $email = '';
 
 	/**
-	 * The Persons company.
-	 *
 	 * @var string
 	 */
 	protected $company = '';
 
 	/**
-	 * Gets the Name
-	 *
 	 * @return string
 	 */
 	public function getName() {
@@ -80,8 +70,6 @@ class Tx_ExtensionBuilder_Domain_Model_Person {
 	}
 
 	/**
-	 * Sets the Name
-	 *
 	 * @param string $name
 	 * @return void
 	 */
@@ -90,8 +78,6 @@ class Tx_ExtensionBuilder_Domain_Model_Person {
 	}
 
 	/**
-	 * Gets the role.
-	 *
 	 * @return string
 	 */
 	public function getRole() {
@@ -99,8 +85,6 @@ class Tx_ExtensionBuilder_Domain_Model_Person {
 	}
 
 	/**
-	 * Sets the role.
-	 *
 	 * @param string $role
 	 * @return void
 	 */
@@ -109,8 +93,6 @@ class Tx_ExtensionBuilder_Domain_Model_Person {
 	}
 
 	/**
-	 * Gets the email
-	 *
 	 * @return string
 	 */
 	public function getEmail() {
@@ -118,8 +100,6 @@ class Tx_ExtensionBuilder_Domain_Model_Person {
 	}
 
 	/**
-	 * Sets the email
-	 *
 	 * @param string $email
 	 * @return void
 	 */
@@ -128,8 +108,6 @@ class Tx_ExtensionBuilder_Domain_Model_Person {
 	}
 
 	/**
-	 * Gets the company
-	 *
 	 * @return string
 	 */
 	public function getCompany() {
@@ -137,14 +115,11 @@ class Tx_ExtensionBuilder_Domain_Model_Person {
 	}
 
 	/**
-	 * Sets the company
-	 *
 	 * @param string $company
 	 * @return void
 	 */
 	public function setCompany($company) {
 		$this->company = $company;
 	}
-}
 
-?>
+}

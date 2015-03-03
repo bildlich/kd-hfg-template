@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder;
 /***************************************************************
  *  Copyright notice
  *
@@ -25,34 +26,32 @@
 /**
  * Schema for a whole extension
  *
- * @version $ID:$
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_Exception extends TYPO3\CMS\Extbase\Exception {
-
+class Exception extends \TYPO3\CMS\Extbase\Exception {
 	/**
-	 * @var string
+	 * @var string|NULL
 	 */
-	protected $subKey = null;
+	protected $subKey = NULL;
 
 	/**
 	 * @param string $message
 	 * @param integer $code
-	 * @param Exception $previous
+	 * @param \Exception $previous
 	 */
-	public function __construct($message, $code, Exception $previous = null) {
+	public function __construct($message, $code, \Exception $previous = null) {
 
 		$this->findTranslationSubKeyByExceptionClassName();
 
 		// Build the locallang label index
 		$translationKey = 'error.';
-		if ($this->subKey !== null) {
+		if ($this->subKey !== NULL) {
 			$translationKey .= $this->subKey . '.';
 		}
 		$translationKey .= $code;
 
 		// Get the translated message
-		$translated = TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($translationKey, 'ExtbaseBuilder');
+		$translated = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($translationKey, 'ExtbaseBuilder');
 		if (!empty($translated)) {
 			$message = $translated;
 		}
@@ -71,5 +70,3 @@ class Tx_ExtensionBuilder_Exception extends TYPO3\CMS\Extbase\Exception {
 		}
 	}
 }
-
-?>

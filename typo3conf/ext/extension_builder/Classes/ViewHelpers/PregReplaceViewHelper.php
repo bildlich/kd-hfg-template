@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\ViewHelpers;
+
 /*                                                                        *
  * This script belongs to the TYPO3 package "Extension Builder".         *
  *                                                                        *
@@ -26,10 +28,9 @@
  * <k:pregReplace match="/this/" replace="that" subject="this" />
  * {k:pregReplace(match:'/this/', replace:'that', subject:'this')}
  *
- * @version $Id:$
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_ViewHelpers_PregReplaceViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class PregReplaceViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Execute the preg_replace
@@ -44,5 +45,3 @@ class Tx_ExtensionBuilder_ViewHelpers_PregReplaceViewHelper extends \TYPO3\CMS\F
 		return preg_replace($match, $replace, $subject);
 	}
 }
-
-?>

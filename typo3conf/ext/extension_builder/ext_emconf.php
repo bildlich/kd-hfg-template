@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "extension_builder".
  *
- * Auto generated 12-12-2013 14:25
+ * Auto generated 16-12-2014 13:39
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -14,39 +14,27 @@ $EM_CONF[$_EXTKEY] = array (
 	'title' => 'Extension Builder',
 	'description' => 'The Extension Builder helps you build and manage your Extbase based TYPO3 extensions.',
 	'category' => 'module',
-	'shy' => 0,
-	'version' => '2.5.2',
-	'dependencies' => '',
-	'conflicts' => '',
-	'priority' => '',
-	'loadOrder' => '',
-	'module' => '',
+	'version' => '6.2.0',
 	'state' => 'beta',
-	'uploadfolder' => 1,
+	'uploadfolder' => true,
 	'createDirs' => 'uploads/tx_extensionbuilder/backups',
-	'modify_tables' => '',
-	'clearcacheonload' => 0,
-	'lockType' => '',
-	'author' => 'Ingmar Schlecht, Nico de Haen',
-	'author_email' => 'ingmar@typo3.org,mail@ndh-websolutions.de',
+	'clearcacheonload' => false,
+	'author' => 'Nico de Haen',
+	'author_email' => 'mail@ndh-websolutions.de',
 	'author_company' => '',
-	'CGLcompliance' => NULL,
-	'CGLcompliance_note' => NULL,
 	'constraints' => 
 	array (
 		'depends' => 
 		array (
-			'typo3' => '6.0-0.0.0',
-			'extbase' => '6.0',
-			'fluid' => '6.0',
-		),
-		'conflicts' => 
-		array (
+			'typo3' => '6.1.0-6.2.99',
 		),
 		'suggests' => 
+		array (
+			'phpunit' => '',
+		),
+		'conflicts' => 
 		array (
 		),
 	),
 );
 
-?>

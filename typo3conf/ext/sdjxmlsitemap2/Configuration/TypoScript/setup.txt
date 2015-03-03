@@ -1,0 +1,7 @@
+plugin.tx_sdjxmlsitemap2 {
+	view {
+		templateRootPath = {$plugin.tx_sdjxmlsitemap2.view.templateRootPath}
+		partialRootPath = {$plugin.tx_sdjxmlsitemap2.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_sdjxmlsitemap2.view.layoutRootPath}
+	}
+}

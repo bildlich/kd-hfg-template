@@ -16,6 +16,9 @@
 			<trans-unit id="tx_sdjnews_domain_model_news.metatitle">
 				<source>metatitle</source>
 			</trans-unit>
+			<trans-unit id="tx_sdjnews_domain_model_news.ogimage">
+				<source>Social Media Bild</source>
+			</trans-unit>
 			<trans-unit id="tx_sdjnews_domain_model_news.metaabstract">
 				<source>metaabstract</source>
 			</trans-unit>

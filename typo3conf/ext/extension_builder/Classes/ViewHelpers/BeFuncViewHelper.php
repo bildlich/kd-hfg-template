@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\ViewHelpers;
+
 /*                                                                        *
  * This script belongs to the FLOW3 package "Fluid".                      *
  *                                                                        *
@@ -29,11 +31,11 @@
  *
  * @author Steffen Kamper <info@sk-typo3.de>
  * @license	 http://www.gnu.org/copyleft/gpl.html
- * @version	 SVN: $Id:
- *
  */
-class Tx_ExtensionBuilder_ViewHelpers_BeFuncViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
-
+class BeFuncViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+	/**
+	 * @var bool
+	 */
 	protected $objectAccessorPostProcessorEnabled = FALSE;
 
 	/**
@@ -46,5 +48,3 @@ class Tx_ExtensionBuilder_ViewHelpers_BeFuncViewHelper extends \TYPO3\CMS\Fluid\
 		return $this->renderChildren();
 	}
 }
-
-?>

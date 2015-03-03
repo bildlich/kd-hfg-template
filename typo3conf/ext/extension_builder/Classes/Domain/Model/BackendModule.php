@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -22,32 +24,19 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-/**
- * A plugin in the extension
- *
- * @version $ID:$
- */
-
-class Tx_ExtensionBuilder_Domain_Model_BackendModule {
-
+class BackendModule {
 
 	/**
-	 * The name of the module
-	 *
 	 * @var string
 	 */
 	protected $name = '';
 
 	/**
-	 * The description of the module
-	 *
 	 * @var string
 	 */
 	protected $description = '';
 
 	/**
-	 * The tab label
-	 *
 	 * @var string
 	 */
 	protected $tabLabel = '';
@@ -60,23 +49,20 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 	protected $mainModule = 'web';
 
 	/**
-	 * The module key
-	 *
 	 * @var string
 	 */
 	protected $key = '';
 
 	/**
 	 * array with configuration arrays
+	 *
 	 * array('controller' => 'MyController', 'actions' => 'action1,action2')
 	 *
-	 * @var array
+	 * @var string[]
 	 */
-	protected $controllerActionCombinations;
+	protected $controllerActionCombinations = array();
 
 	/**
-	 * Gets the Name
-	 *
 	 * @return string
 	 */
 	public function getName() {
@@ -84,8 +70,6 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 	}
 
 	/**
-	 * Sets the Name
-	 *
 	 * @param string $name
 	 * @return void
 	 */
@@ -93,10 +77,7 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 		$this->name = $name;
 	}
 
-
 	/**
-	 * Gets the Description
-	 *
 	 * @return string
 	 */
 	public function getDescription() {
@@ -104,8 +85,6 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 	}
 
 	/**
-	 * Sets the Description
-	 *
 	 * @param string $description
 	 * @return void
 	 */
@@ -114,8 +93,6 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 	}
 
 	/**
-	 * Gets the tab label
-	 *
 	 * @return string
 	 */
 	public function getTabLabel() {
@@ -123,9 +100,7 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 	}
 
 	/**
-	 * Sets the tab label
-	 *
-	 * @param string $tablLabel
+	 * @param string $tabLabel
 	 * @return void
 	 */
 	public function setTabLabel($tabLabel) {
@@ -133,10 +108,6 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 	}
 
 	/**
-	 * Setter for mainModule
-	 *	 /**
-	 * Setter for key
-	 *
 	 * @param string $key
 	 * @return void
 	 */
@@ -145,8 +116,6 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 	}
 
 	/**
-	 * Getter for key
-	 *
 	 * @return string key
 	 */
 	public function getKey() {
@@ -162,8 +131,7 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 	}
 
 	/**
-	 * Getter for mainModule
-	 *
+	 * @return string
 	 */
 	public function getMainModule() {
 		return $this->mainModule;
@@ -171,6 +139,7 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 
 	/**
 	 * @param array $controllerActionCombinations
+	 * @return void
 	 */
 	public function setControllerActionCombinations(array $controllerActionCombinations) {
 		$this->controllerActionCombinations = $controllerActionCombinations;
@@ -182,6 +151,5 @@ class Tx_ExtensionBuilder_Domain_Model_BackendModule {
 	public function getControllerActionCombinations() {
 		return $this->controllerActionCombinations;
 	}
-}
 
-?>
+}

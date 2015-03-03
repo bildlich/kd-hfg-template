@@ -1,0 +1,30 @@
+<f:layout name="Default" />
+<f:section name="main">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<f:for each="{all}" as="one">
+	<url>
+		<loc>
+			<f:if condition="{one.projekt}">
+				<f:then>{base}<f:uri.page pageUid="{one.uid}" additionalParams="{tx_sdjhfgkd20_detail: one.projekt}" /></f:then>
+				<f:else>
+					<f:if condition="{one.jahr}">
+						<f:then>{base}<f:uri.page pageUid="{one.uid}" additionalParams="{tx_sdjnews_year: one.jahr}" /></f:then>
+						<f:else>
+							<f:if condition="{one.news}">
+								<f:then>{base}<f:uri.page pageUid="{one.uid}" additionalParams="{tx_sdjnews_article: one.news}" /></f:then>
+								<f:else>
+									{base}<f:uri.page pageUid="{one.uid}" />
+								</f:else>
+							</f:if>
+						</f:else>
+					</f:if>
+				</f:else>
+			</f:if>
+		</loc>
+		<lastmod>{one.date}</lastmod>
+		<priority>{one.rel}</priority>
+		<changefreq>{one.act}</changefreq>
+	</url>
+</f:for>		
+</urlset>
+</f:section>

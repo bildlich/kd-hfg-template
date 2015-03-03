@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\ViewHelpers\Format;
+
 /*                                                                        *
  * This script belongs to the TYPO3 package "Extension Builder".         *
  *                                                                        *
@@ -27,17 +29,16 @@
  * <f:quoteString>{anyString}</f:quoteString>
  *
  *
- * @author	 Rens Admiraal
- * @version $ID:$
+ * @author Rens Admiraal
+ *
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_ViewHelpers_Format_QuoteStringViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
-
+class QuoteStringViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 	/**
 	 * @param string $value
 	 */
-	public function render($value = null) {
-		if ($value == null) {
+	public function render($value = NULL) {
+		if ($value == NULL) {
 			$value = $this->renderChildren();
 		}
 
@@ -45,5 +46,3 @@ class Tx_ExtensionBuilder_ViewHelpers_Format_QuoteStringViewHelper extends \TYPO
 	}
 
 }
-
-?>

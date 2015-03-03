@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
@@ -26,9 +27,16 @@
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_IntegerProperty extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
+class IntegerProperty extends AbstractProperty {
+	/**
+	 * the property's default value
+	 *
+	 * @var int
+	 */
+	protected $defaultValue = 0;
+
 	public function getTypeForComment() {
-		return '\\integer';
+		return 'integer';
 	}
 
 	public function getTypeHint() {
@@ -39,5 +47,3 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_IntegerProperty extends Tx_E
 		return $this->getFieldName() . " int(11) DEFAULT '0' NOT NULL,";
 	}
 }
-
-?>

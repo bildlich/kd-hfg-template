@@ -82,26 +82,6 @@ $TYPO3_CONF_VARS['EXTCONF']['realurl']['_DEFAULT'] = array(
       'fileName' => array(
             'defaultToHTMLsuffixOnPrev'=>0,
             'index' => array(
-                'rss.xml' => array(
-                    'keyValues' => array(
-                        'type' => 100,
-                    ),
-                ),
-                'rss091.xml' => array(
-                    'keyValues' => array(
-                        'type' => 101,
-                    ),
-                ),
-                'rdf.xml' => array(
-                    'keyValues' => array(
-                        'type' => 102,
-                    ),
-                ),
-                'atom.xml' => array(
-                    'keyValues' => array(
-                        'type' => 103,
-                    ),
-                ),
             ),
         ),
  );

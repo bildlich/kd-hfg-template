@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Repository;
 /***************************************************************
 *  Copyright notice
 *
@@ -26,19 +27,17 @@
 /**
  * Repository for existing Extbase Extensions
  */
-class Tx_ExtensionBuilder_Domain_Repository_ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface {
-
-
+class ExtensionRepository implements \TYPO3\CMS\Core\SingletonInterface {
 	/**
-	 * @var Tx_ExtensionBuilder_Configuration_ConfigurationManager
+	 * @var \EBT\ExtensionBuilder\Configuration\ConfigurationManager
 	 */
-	protected $configurationManager;
+	protected $configurationManager = NULL;
 
 	/**
-	 * @param Tx_ExtensionBuilder_Configuration_ConfigurationManager $configurationManager
+	 * @param \EBT\ExtensionBuilder\Configuration\ConfigurationManager $configurationManager
 	 * @return void
 	 */
-	public function injectConfigurationManager(Tx_ExtensionBuilder_Configuration_ConfigurationManager $configurationManager) {
+	public function injectConfigurationManager(\EBT\ExtensionBuilder\Configuration\ConfigurationManager $configurationManager) {
 		$this->configurationManager = $configurationManager;
 	}
 
@@ -51,11 +50,10 @@ class Tx_ExtensionBuilder_Domain_Repository_ExtensionRepository implements \TYPO
 		$result = array();
 		$extensionDirectoryHandle = opendir(PATH_typo3conf . 'ext/');
 		while (FALSE !== ($singleExtensionDirectory = readdir($extensionDirectoryHandle))) {
-			if ($singleExtensionDirectory[0] == '.') {
+			if ($singleExtensionDirectory[0] == '.' || $singleExtensionDirectory[0] == '..' || !is_dir(PATH_typo3conf . 'ext/'.$singleExtensionDirectory)) {
 				continue;
 			}
 			$extensionBuilderConfiguration = $this->configurationManager->getExtensionBuilderConfiguration($singleExtensionDirectory);
-			//\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('Modeler Configuration: '.$singleExtensionDirectory,'extension_builder',0,$extensionBuilderConfiguration);
 			if ($extensionBuilderConfiguration !== NULL) {
 				$result[] = array(
 					'name' => $singleExtensionDirectory,
@@ -69,17 +67,21 @@ class Tx_ExtensionBuilder_Domain_Repository_ExtensionRepository implements \TYPO
 	}
 
 	/**
-	 * @param Tx_ExtensionBuilder_Domain_Model_Extension $extension
+	 * @param \EBT\ExtensionBuilder\Domain\Model\Extension $extension
 	 */
-	public function saveExtensionConfiguration(Tx_ExtensionBuilder_Domain_Model_Extension $extension) {
+	public function saveExtensionConfiguration(\EBT\ExtensionBuilder\Domain\Model\Extension $extension) {
 		$extensionBuildConfiguration = $this->configurationManager->getConfigurationFromModeler();
 		$extensionBuildConfiguration['log'] = array(
 			'last_modified' => date('Y-m-d h:i'),
 			'extension_builder_version' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('extension_builder'),
 			'be_user' => $GLOBALS['BE_USER']->user['realName'] . ' (' . $GLOBALS['BE_USER']->user['uid'] . ')'
 		);
-		\TYPO3\CMS\Core\Utility\GeneralUtility::writeFile($extension->getExtensionDir() . Tx_ExtensionBuilder_Configuration_ConfigurationManager::EXTENSION_BUILDER_SETTINGS_FILE, json_encode($extensionBuildConfiguration));
+		$encodeOptions = 0;
+		// option JSON_PRETTY_PRINT is available since PHP 5.4.0
+		if (defined('JSON_PRETTY_PRINT')) {
+			$encodeOptions |= JSON_PRETTY_PRINT;
+		}
+		\TYPO3\CMS\Core\Utility\GeneralUtility::writeFile($extension->getExtensionDir() . \EBT\ExtensionBuilder\Configuration\ConfigurationManager::EXTENSION_BUILDER_SETTINGS_FILE, json_encode($extensionBuildConfiguration, $encodeOptions));
 	}
-}
 
-?>
+}

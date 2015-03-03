@@ -6,10 +6,10 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_sdjnews_domain_model_news'] = array(
 	'ctrl' => $TCA['tx_sdjnews_domain_model_news']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'hidden, date, header, metatitle, metadescription, text',
+		'showRecordFieldList' => 'hidden, date, header, metatitle, metadescription, text, ogimage',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'hidden;;1, date, header, text,--div--;Meta,metatitle, metadescription'),
+		'1' => array('showitem' => 'hidden;;1, date, header, text,--div--;Meta,metatitle, metadescription, ogimage'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
@@ -150,6 +150,21 @@ $TCA['tx_sdjnews_domain_model_news'] = array(
 				'cols' => 40,
 				'rows' => 15,
 				'eval' => 'trim'
+			),
+		),
+		'ogimage' => array(
+		'exclude' => 1,
+		'label' => 'LLL:EXT:sdjnews/Resources/Private/Language/locallang_db.xlf:tx_sdjnews_domain_model_news.ogimage',
+		'config' => array(
+				'type' => 'group',
+				'internal_type' => 'file',
+				'uploadfolder' => 'uploads/tx_sdjnews',
+				'show_thumbs' => 1,
+				'size' => 1,
+				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+				'disallowed' => '',
+				'minitems' => 0,
+				'maxitems' => 1, 
 			),
 		),
 		'text' => array(

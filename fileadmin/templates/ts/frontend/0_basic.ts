@@ -14,8 +14,8 @@ config.prefixLocalAnchors = all
 config.simulateStaticDocuments  = 0
 
 #Title standard ending
-plugin.tx_sdjmetadata_pi1.titleend=Studiengang Kommunikationsdesign an der HfG Karlsruhe
-plugin.tx_sdjmetadata_pi1.short-titleend=Kommunikationsdesign HfG Karlsruhe
+plugin.tx_sdjseoog.settings.titleend=Studiengang Kommunikationsdesign an der HfG Karlsruhe
+plugin.tx_sdjseoog.settings.short-titleend=Kommunikationsdesign HfG Karlsruhe
 
 #Image maximal width -> News
 #plugin.tx_sdjsnews.settings.maxW=650
@@ -25,7 +25,7 @@ plugin.tx_sdjhfgkd20.settings.projects_maxH=210
 plugin.tx_sdjhfgkd20.settings.projectsdetail_maxW=1200
 
 #Image maximal width -> Home Slideshow
-plugin.tx_sdjslideshow_pi1.maxW=1200
+config.homeMaxW=1200
 
 #Languages
 config.tx_realurl_enable = 1

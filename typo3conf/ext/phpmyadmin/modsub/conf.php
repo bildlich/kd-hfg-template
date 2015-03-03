@@ -6,14 +6,14 @@
  * @package		TYPO3
  * @subpackage	tx_phpmyadmin
  * @license		GPL
- * @version		$Id: conf.php 78678 2013-07-30 09:53:16Z mehrwert $
+ * @version		$Id: conf.php 87100 2014-12-05 15:06:49Z mehrwert $
  */
 
 	// Configuration
 $MCONF['name'] = 'tools_txphpmyadmin';
 $MCONF['script'] = '_DISPATCH';
 $MCONF['access'] = 'admin';
-$MCONF['PMA_subdir'] = 'res/phpMyAdmin-3.5.8.2-all-languages/';
+$MCONF['PMA_subdir'] = 'res/phpMyAdmin-4.0.10.7-all-languages/';
 $MCONF['PMA_script'] = 'index.php';
 $MLANG['default']['tabs_images']['tab'] = 'thirdparty_db.gif';
 $MLANG['default']['ll_ref'] = 'LLL:EXT:phpmyadmin/modsub/locallang_mod.php';

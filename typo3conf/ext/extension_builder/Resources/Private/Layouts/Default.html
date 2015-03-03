@@ -1,10 +1,10 @@
-{namespace k=Tx_ExtensionBuilder_ViewHelpers}
-<k:comment>
+{namespace k=EBT\ExtensionBuilder\ViewHelpers}
+<f:comment>
 	Use the section "header" to call ViewHelpers which modify the configuration
 	of the PageRenderer, f.e. to include custom CSS or JavaScript.
-</k:comment>
+</f:comment>
 <f:render section="header" />
-<f:be.container>
+<k:be.container includeCsh="false">
 	<style type="text/css">
 	span.logo {
 		font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -17,24 +17,31 @@
 	</style>
 	<div class="typo3-fullDoc">
 		<div id="typo3-docheader">
-			<div id="typo3-docheader-row1">
-				<div class="buttonsleft">
-					<f:render section="iconButtons" />
-				</div>
-				<div class="buttonsright">
-					<f:be.buttons.shortcut />
-				</div>
-			</div>
-			<div id="typo3-docheader-row2">
-				<div class="docheader-row2-left">
+			<div class="typo3-docheader-functions">
+				<div class="left">
 					<f:be.buttons.csh />
 					<f:be.menus.actionMenu>
 						<f:be.menus.actionMenuItem label="Introduction" controller="BuilderModule" action="index" />
 						<f:be.menus.actionMenuItem label="Domain Modelling" controller="BuilderModule" action="domainmodelling"/>
 					</f:be.menus.actionMenu>
 				</div>
-				<div class="docheader-row2-right">
+				<div class="right">
 					<span class="logo">Extension Builder</span>
+				</div>
+			</div>
+			<div class="typo3-docheader-buttons">
+				<div class="left">
+					<f:render section="iconButtons" />
+				</div>
+				<div class="right">
+					<a id="toggleAdvancedOptions" href="#"  accesskey="a">
+											<img src="sysext/t3skin/icons/module_web_list.gif" width="16" height="16" title="Advanced options" class="absmiddle" alt="Advanced options">
+												<span class="simpleMode">Show</span><span class="advancedMode">Hide</span> <span class="access-key">a</span>dvanced options.</a>
+					<a id="opennewwindow" href="#" target="_blank" accesskey="n">
+							<img src="sysext/t3skin/icons/gfx/open_in_new_window.gif" width="16" height="16" title="Open in new window" class="absmiddle" alt="Open in new window">
+								Open in <span class="access-key">n</span>ew window.</a>
+					<script type="text/javascript">/*<![CDATA[*/if (window.top.location.href === window.location.href) { document.getElementById("opennewwindow").style.display = "none"; }/*]]>*/</script>
+					<f:be.buttons.shortcut />
 				</div>
 			</div>
 		</div>
@@ -44,4 +51,4 @@
 			</div>
 		</div>
 	</div>
-</f:be.container>
+</k:be.container>

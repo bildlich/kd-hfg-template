@@ -39,9 +39,7 @@ class hook_tslib_fe {
 	 * @return    void
 	 */
 	function checkImageDecode(&$params, &$ref) {
-		// call fl_realurl_image
 		$tx_flrealurlimage = new tx_flrealurlimage();
-		//$tx_flrealurlimage->init($conf,$info);
 		$tx_flrealurlimage->showImage();
 	}
 

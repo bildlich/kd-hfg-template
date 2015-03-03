@@ -1,9 +1,21 @@
 [globalVar = TSFE:id = 6]
 #Navi
-includeLibs.stripanchorpath = typo3conf/user_sectionnavi.php
-temp.infonav = USER_INT
-temp.infonav{
-  	userFunc=user_sectionnavi->go
+# includeLibs.stripanchorpath = typo3conf/user_sectionnavi.php
+# temp.infonav = USER_INT
+# temp.infonav{
+#   	userFunc=user_sectionnavi->go
+# }
+
+temp.infonav = USER
+temp.infonav {
+   userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+   vendorName = SOUPDUJOUR
+   pluginName = Pi1
+   extensionName = Sdjsectionnav
+ 
+   settings =< plugin.tx_sdjsectionnav.settings
+   persistence =< plugin.tx_sdjsectionnav.persistence
+   view =< plugin.tx_sdjsectionnav.view
 }
 
 
@@ -46,7 +58,7 @@ temp.infocon {
 }
 [global]
 
-#Englisch Content
+#English Content
 [globalVar = TSFE:id = 6] && [globalVar = GP:L = 2]
 temp.infocon.20.renderObj.10.select.andWhere = sys_language_uid=2
 [global]
@@ -64,3 +76,17 @@ page.20.subparts{
 }
 page.bodyTag = <body data-pageslug="info">
 [global]
+
+//Metadata
+page.777 = USER
+page.777 {
+   userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+   vendorName = SOUPDUJOUR
+   pluginName = Pi1
+   extensionName = Sdjseoog
+ 
+   settings =< plugin.tx_sdjseoog.settings
+   persistence =< plugin.tx_sdjseoog.persistence
+   view =< plugin.tx_sdjseoog.view
+}
+

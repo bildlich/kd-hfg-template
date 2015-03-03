@@ -64,5 +64,13 @@ class ProjekteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
         
 		return $posts;
 	}	
+	
+	public function findOne($uid){
+		$query=$this->createQuery();
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+		$query->matching($query->equals('uid', $uid));
+        $all=$query->execute();
+        return $all[0];
+	}
 }
 ?>

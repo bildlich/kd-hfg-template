@@ -1,0 +1,7 @@
+plugin.tx_sdjsectionnav {
+	view {
+		templateRootPath = {$plugin.tx_sdjsectionnav.view.templateRootPath}
+		partialRootPath = {$plugin.tx_sdjsectionnav.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_sdjsectionnav.view.layoutRootPath}
+	}
+}

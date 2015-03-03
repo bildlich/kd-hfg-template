@@ -1,20 +1,18 @@
 <?php
+namespace EBT\ExtensionBuilder\ViewHelpers\Be;
 
-class Tx_ExtensionBuilder_ViewHelpers_Be_ConfigurationViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Be\AbstractBackendViewHelper {
-
+class ConfigurationViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Be\AbstractBackendViewHelper {
 	/**
-	 * @var t3lib_PageRenderer
+	 * @var \TYPO3\CMS\Core\Page\PageRenderer
 	 */
-	private $pageRenderer;
+	private $pageRenderer = NULL;
 
 	public function render() {
 
 		$this->pageRenderer = $this->getDocInstance()->getPageRenderer();
 
 		$baseUrl = '../' . \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('extension_builder');
-
 		$this->pageRenderer->disableCompressJavascript();
-		$this->pageRenderer->loadExtJS(FALSE, FALSE);
 
 		// SECTION: JAVASCRIPT FILES
 		// YUI Basis Files
@@ -48,7 +46,6 @@ class Tx_ExtensionBuilder_ViewHelpers_Be_ConfigurationViewHelper extends \TYPO3\
 		$this->pageRenderer->addJsFile($baseUrl . 'Resources/Public/jsDomainModeling/wireit/lib/inputex/js/fields/MenuField.js');
 		$this->pageRenderer->addJsFile($baseUrl . 'Resources/Public/jsDomainModeling/wireit/lib/inputex/js/fields/TypeField.js');
 
-
 		// WireIt
 		$this->pageRenderer->addJsFile($baseUrl . 'Resources/Public/jsDomainModeling/wireit/lib/excanvas.js', 'text/javascript', TRUE, FALSE, '<!--[if IE]>|<![endif]-->');
 		$this->pageRenderer->addJsFile($baseUrl . 'Resources/Public/jsDomainModeling/wireit/js/WireIt.js');
@@ -63,14 +60,19 @@ class Tx_ExtensionBuilder_ViewHelpers_Be_ConfigurationViewHelper extends \TYPO3\
 		$this->pageRenderer->addJsFile($baseUrl . 'Resources/Public/jsDomainModeling/wireit/js/util/inputex/FormContainer-beta.js');
 		$this->pageRenderer->addJsFile($baseUrl . 'Resources/Public/jsDomainModeling/wireit/js/LayerMap.js');
 
-		$this->pageRenderer->addInlineSettingArray('extensionBuilder', array(
-																			'baseUrl' => $baseUrl
-																	   ));
+		$this->pageRenderer->addInlineSettingArray(
+			'extensionBuilder',
+			array('baseUrl' => $baseUrl)
+		);
+		// This call is only done for backwards compatibility for TYPO3 versions below 6.2
+		// It can be removed once compatibility for these versions is dropped as since 6.2 this is populated automatically
+		$this->pageRenderer->addInlineSettingArray(
+			'ajaxUrls',
+			array('ExtensionBuilder::wiringEditorSmdEndpoint' => 'ajax.php?ajaxID=ExtensionBuilder%3A%3AwiringEditorSmdEndpoint')
+		);
 		$this->setLocallangSettings();
 
 		$this->pageRenderer->addJsFile($baseUrl . 'Resources/Public/jsDomainModeling/wireit/js/WiringEditor.js');
-
-		$this->pageRenderer->addJsFile($baseUrl . 'Resources/Public/jsDomainModeling/roundtrip.js');
 
 		// Extbase Modelling definition
 		$this->pageRenderer->addJsFile($baseUrl . 'Resources/Public/jsDomainModeling/extbaseModeling.js');
@@ -123,5 +125,3 @@ class Tx_ExtensionBuilder_ViewHelpers_Be_ConfigurationViewHelper extends \TYPO3\
 		}
 	}
 }
-
-?>

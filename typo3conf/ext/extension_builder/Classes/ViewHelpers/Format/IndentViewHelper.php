@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\ViewHelpers\Format;
+
 /*                                                                        *
  * This script belongs to the TYPO3 package "Extension Builder".                  *
  *                                                                        *
@@ -22,11 +24,10 @@
 /**
  * Indentation ViewHelper
  *
- * @version $Id: $
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  * @scope prototype
  */
-class Tx_ExtensionBuilder_ViewHelpers_Format_IndentViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class IndentViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 *
@@ -45,5 +46,3 @@ class Tx_ExtensionBuilder_ViewHelpers_Format_IndentViewHelper extends \TYPO3\CMS
 	}
 
 }
-
-?>

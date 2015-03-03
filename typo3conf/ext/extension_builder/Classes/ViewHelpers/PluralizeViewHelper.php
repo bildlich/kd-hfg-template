@@ -1,4 +1,6 @@
 <?php
+namespace EBT\ExtensionBuilder\ViewHelpers;
+
 /*                                                                        *
  * This script belongs to the TYPO3 package "Extension Builder".                  *
  *                                                                        *
@@ -31,19 +33,17 @@
  * Output:
  * foos
  *
- * @version $Id: $
  * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License, version 3 or later
  * @scope prototype
  */
-class Tx_ExtensionBuilder_ViewHelpers_PluralizeViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
-
+class PluralizeViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
 	/**
-	 * @var Tx_ExtensionBuilder_Utility_Inflector
+	 * @var \EBT\ExtensionBuilder\Utility\Inflector
 	 */
-	protected $inflector;
+	protected $inflector = NULL;
 
 	public function __construct() {
-		$this->inflector = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Tx_ExtensionBuilder_Utility_Inflector');
+		$this->inflector = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('EBT\\ExtensionBuilder\\Utility\\Inflector');
 	}
 
 	/**
@@ -55,11 +55,9 @@ class Tx_ExtensionBuilder_ViewHelpers_PluralizeViewHelper extends \TYPO3\CMS\Flu
 	public function render() {
 		$content = $this->renderChildren();
 		$pluralizedContent = $this->inflector->pluralize($content);
-		if($pluralizedContent == $content) {
+		if ($pluralizedContent == $content) {
 			$pluralizedContent .= 's';
 		}
 		return $pluralizedContent;
 	}
 }
-
-?>

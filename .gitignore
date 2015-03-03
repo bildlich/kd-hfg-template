@@ -1,3 +1,4 @@
+
 ### SublimeText ###
 *.sublime-workspace
 
@@ -23,6 +24,9 @@
 
 # Ignore temp directory.
 /typo3temp/
+
+# Ignore typo3 core
+/typo3
 
 # Ignore log files
 *.log

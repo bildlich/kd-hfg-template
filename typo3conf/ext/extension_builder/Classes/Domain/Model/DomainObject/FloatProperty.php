@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
@@ -26,9 +27,16 @@
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_FloatProperty extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
+class FloatProperty extends AbstractProperty {
+	/**
+	 * the property's default value
+	 *
+	 * @var float
+	 */
+	protected $defaultValue = 0.0;
+
 	public function getTypeForComment() {
-		return '\\float';
+		return 'float';
 	}
 
 	public function getTypeHint() {
@@ -39,5 +47,3 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_FloatProperty extends Tx_Ext
 		return $this->getFieldName() . " double(11,2) DEFAULT '0.00' NOT NULL,";
 	}
 }
-
-?>

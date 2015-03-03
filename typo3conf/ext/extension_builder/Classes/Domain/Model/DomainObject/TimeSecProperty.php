@@ -1,4 +1,5 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject;
 /***************************************************************
  *  Copyright notice
  *
@@ -26,14 +27,20 @@
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Tx_ExtensionBuilder_Domain_Model_DomainObject_TimeSecProperty extends Tx_ExtensionBuilder_Domain_Model_DomainObject_AbstractProperty {
+class TimeSecProperty extends AbstractProperty {
+	/**
+	 * the property's default value
+	 *
+	 * @var int
+	 */
+	protected $defaultValue = 0;
 
 	public function getTypeForComment() {
-		return '\\int';
+		return 'integer';
 	}
 
 	public function getTypeHint() {
-		return '\\int';
+		return 'integer';
 	}
 
 	public function getSqlDefinition() {
@@ -41,5 +48,3 @@ class Tx_ExtensionBuilder_Domain_Model_DomainObject_TimeSecProperty extends Tx_E
 	}
 
 }
-
-?>

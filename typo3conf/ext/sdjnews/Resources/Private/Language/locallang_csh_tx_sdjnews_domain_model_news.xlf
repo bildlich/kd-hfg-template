@@ -25,6 +25,9 @@
 			<trans-unit id="media.description">
 				<source>media</source>
 			</trans-unit>
+			<trans-unit id="ogimage.description">
+				<source>Social Media Bild</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

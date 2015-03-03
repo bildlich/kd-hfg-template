@@ -1,8 +1,11 @@
 <?php
+namespace EBT\ExtensionBuilder\Domain\Model\DomainObject\Relation;
+use EBT\ExtensionBuilder\Domain\Model\DomainObject;
+
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2010 Jochen Rau
+ *  (c) 2010 Jochen Rau, 2013 Nico de Haen
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -22,32 +25,37 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-/**
- *
- * @version $ID:$
- */
-abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AnyToManyRelation extends Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AbstractRelation {
-
+abstract class AnyToManyRelation extends AbstractRelation {
 	/**
 	 * The mm relation table name
 	 *
 	 * @var string
 	 */
-	protected $relationTableName;
+	protected $relationTableName = '';
 
 	/**
 	 * Use tbl1_field1_tbl2_mm as table name to enable multiple relations
 	 * to the same foreign class
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $useExtendedRelationTableName = FALSE;
+
+	/**
+	 * @var int
+	 */
+	protected $maxItems = 1;
+
+	/**
+	 * @var \EBT\ExtensionBuilder\Domain\Model\DomainObject
+	 */
+	protected $domainObject = NULL;
 
 	/**
 	 * Returns the relation table name. It is build by having 'tx_myextension_' followed by the
 	 * first domain object name followed by the second domain object name followed by '_mm'.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function getRelationTableName() {
 		if (!empty($this->relationTableName)) {
@@ -86,7 +94,7 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AnyToManyR
 	/**
 	 * Is a MM table needed for this relation?
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function getUseMMTable() {
 		if ($this->getInlineEditing()) {
@@ -97,6 +105,19 @@ abstract class Tx_ExtensionBuilder_Domain_Model_DomainObject_Relation_AnyToManyR
 		}
 	}
 
-}
+	/**
+	 * @return int
+	 */
+	public function getMaxItems() {
+		return $this->maxItems;
+	}
 
-?>
+	/**
+	 * @param int $maxItems
+	 */
+	public function setMaxItems($maxItems) {
+		$this->maxItems = $maxItems;
+	}
+
+
+}

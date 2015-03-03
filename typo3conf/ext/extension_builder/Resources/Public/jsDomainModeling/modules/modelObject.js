@@ -27,6 +27,7 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 						collapsible: true,
 						collapsed: true,
 						legend: TYPO3.settings.extensionBuilder._LOCAL_LANG.domainObjectSettings,
+						className:'objectSettings',
 						name: "objectsettings",
 						fields: [
 							{
@@ -39,6 +40,7 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 								type: "select",
 								inputParams: {
 									name: "type",
+									advancedMode: true,
 									label: TYPO3.settings.extensionBuilder._LOCAL_LANG.objectType,
 									description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_objectType,
 									selectValues: ["Entity", "ValueObject"],
@@ -61,24 +63,68 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 								type: "boolean",
 								inputParams: {
 									name: "sorting",
+									advancedMode: true,
 									label: TYPO3.settings.extensionBuilder._LOCAL_LANG.enableSorting,
 									description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_enableSorting,
 									value: false
 								}
 							},
 							{
-								type: "string",
+								type: "boolean",
+								inputParams: {
+									name: "addDeletedField",
+									advancedMode: true,
+									label: TYPO3.settings.extensionBuilder._LOCAL_LANG.addDeletedField,
+									description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_addDeletedField,
+									value: true
+								}
+							},
+							{
+								type: "boolean",
+								inputParams: {
+									name: "addHiddenField",
+									advancedMode: true,
+									label: TYPO3.settings.extensionBuilder._LOCAL_LANG.addHiddenField,
+									description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_addHiddenField,
+									value: true
+								}
+							},
+							{
+								type: "boolean",
+								inputParams: {
+									name: "addStarttimeEndtimeFields",
+									advancedMode: true,
+									label: TYPO3.settings.extensionBuilder._LOCAL_LANG.addStarttimeEndtimeFields,
+									description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_addStarttimeEndtimeFields,
+									value: true
+								}
+							},
+							{
+								type: "boolean",
+								inputParams: {
+									name: "categorizable",
+									advancedMode: true,
+									label: TYPO3.settings.extensionBuilder._LOCAL_LANG.enableCategorizable,
+									description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_enableCategorizable,
+									value: false
+								}
+							},
+							{
+								type: "text",
 								inputParams: {
 									name: "description",
 									className: 'bottomBorder',
-									label: TYPO3.settings.extensionBuilder._LOCAL_LANG.description,
-									required: false
+									placeholder: TYPO3.settings.extensionBuilder._LOCAL_LANG.description,
+									required: false,
+									cols:20,
+									rows:2
 								}
 							},
 							{
 								type: "string",
 								inputParams: {
 									name: "mapToTable",
+									advancedMode: true,
 									label: TYPO3.settings.extensionBuilder._LOCAL_LANG.mapToTable,
 									description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_mapToTable,
 									required: false
@@ -88,7 +134,9 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 								type: "string",
 								inputParams: {
 									name: "parentClass",
+									advancedMode: true,
 									label: TYPO3.settings.extensionBuilder._LOCAL_LANG.parentClass,
+									placeholder: '\\Fully\\Qualified\\Classname',
 									description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_parentClass,
 									required: false
 								}
@@ -103,6 +151,7 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 						collapsed: true,
 						legend: TYPO3.settings.extensionBuilder._LOCAL_LANG.defaultActions,
 						name: "actionGroup",
+						className: 'actionGroup',
 						fields: [
 							{
 								type: "boolean",
@@ -169,6 +218,7 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 					inputParams: {
 						collapsible: true,
 						collapsed: true,
+						className:'properties',
 						legend: TYPO3.settings.extensionBuilder._LOCAL_LANG.properties,
 						name: "propertyGroup",
 						fields: [
@@ -197,8 +247,9 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 													inputParams: {
 														name: "propertyName",
 														forceAlphaNumeric: true,
+														placeholder: TYPO3.settings.extensionBuilder._LOCAL_LANG.propertyName,
 														lcFirst: true,
-														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.propertyName,
+														placeholder : TYPO3.settings.extensionBuilder._LOCAL_LANG.propertyName,
 														description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_propertyName,
 														required: true
 													}
@@ -207,59 +258,81 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 													type: "select",
 													inputParams: {
 														name: "propertyType",
-														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.propertyType,
+														//label: TYPO3.settings.extensionBuilder._LOCAL_LANG.propertyType,
                                                         description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_propertyType,
                                                         selectValues: [
 															"String",
 															"Text",
 															"RichText",
+															"Password",
 															"Integer",
 															"Float",
 															"Boolean",
-															"DateTime",
+															"NativeDate",
+															"NativeDateTime",
 															"Date",
+															"DateTime",
 															"Time",
 															"TimeSec",
 															"Select",
 															"File",
-															"Image",
-															"FileReference",
-															"Folder",
-															"Password"
+															"Image"
 														],
 														selectOptions: [
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.string,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.text,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.richText,
+															TYPO3.settings.extensionBuilder._LOCAL_LANG.password,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.integer,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.floatingPoint,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.boolean,
-															TYPO3.settings.extensionBuilder._LOCAL_LANG.dateTime,
+															TYPO3.settings.extensionBuilder._LOCAL_LANG.nativeDate,
+															TYPO3.settings.extensionBuilder._LOCAL_LANG.nativeDateTime,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.date,
+															TYPO3.settings.extensionBuilder._LOCAL_LANG.dateTime,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.time,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.timeSec,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.selectList,
 															TYPO3.settings.extensionBuilder._LOCAL_LANG.file,
-															TYPO3.settings.extensionBuilder._LOCAL_LANG.image,
-															TYPO3.settings.extensionBuilder._LOCAL_LANG.fileReference,
-															TYPO3.settings.extensionBuilder._LOCAL_LANG.folder,
-															TYPO3.settings.extensionBuilder._LOCAL_LANG.password
+															TYPO3.settings.extensionBuilder._LOCAL_LANG.image
 														]
 													}
 												},
 												{
 													type:'text',
 													inputParams: {
-														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.description,
+														advancedMode: true,
 														name: "propertyDescription",
-														cols:20,
-														rows:1
+														placeholder: TYPO3.settings.extensionBuilder._LOCAL_LANG.description,
+														cols:23,
+														rows:2
+													}
+												},
+												{
+													type:'string',
+													inputParams: {
+														classname: 'textfieldWrapper dependant fileOnly',
+														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.allowedFileTypes,
+														description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_allowedFileTypes,
+														advancedMode: true,
+														name: "allowedFileTypes"
+													}
+												},
+												{
+													type:'string',
+													inputParams: {
+														classname: 'textfieldWrapper dependant fileOnly imageOnly small',
+														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.maxItems,
+														advancedMode: true,
+														name: "maxItems",
+														value: 1
 													}
 												},
 												{
 													type: "boolean",
 													inputParams: {
 														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.isRequired,
+														advancedMode: true,
 														name: "propertyIsRequired",
 														value: false
 													}
@@ -268,9 +341,10 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 													type: "boolean",
 													inputParams: {
 														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.isExcludeField,
+														advancedMode: true,
 														name: "propertyIsExcludeField",
 														description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_isExcludeField,
-														value: false
+														value: true
 													}
 												}
 											]
@@ -293,7 +367,6 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 								type: "list",
 								inputParams: {
 									name: "relations",
-									label: "",
 									wirable: false,
 									elementType: {
 										type: "group",
@@ -311,7 +384,7 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 												{
 													type: "string",
 													inputParams: {
-														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.relationName,
+														placeholder: TYPO3.settings.extensionBuilder._LOCAL_LANG.relationName,
 														name: "relationName",
 														forceAlphaNumeric: true,
 														lcFirst: true,
@@ -323,9 +396,10 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 													type: "boolean",
 													inputParams: {
 														name: "propertyIsExcludeField",
+														advancedMode: true,
 														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.isExcludeField,
 														description: TYPO3.settings.extensionBuilder._LOCAL_LANG.descr_isExcludeField,
-														value: false
+														value: true
 													}
 												},
 												{
@@ -333,9 +407,10 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 													inputParams: {
 														name: "relationDescription",
 														label: TYPO3.settings.extensionBuilder._LOCAL_LANG.description,
+														placeholder: TYPO3.settings.extensionBuilder._LOCAL_LANG.description,
 														required: false,
 														cols:20,
-														rows:1
+														rows:3
 													}
 												},
 												{
@@ -347,8 +422,8 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 														wirable: true,
 														className: 'terminalFieldWrap',
 														ddConfig: {
-													 		type: "input",
-													 		allowedTypes: ["output", "input"]
+															type: "input",
+															allowedTypes: ["output", "input"]
 														}
 													}
 												},
@@ -379,8 +454,8 @@ extbaseModeling_wiringEditorLanguage.modules.push(
 					name: "SOURCES",
 					direction: [0,-1],
 					offsetPosition: {
-						left: 20,
-						top: -15
+						left: 5,
+						top: -2
 					},
 					ddConfig: {
 						type: "output",
