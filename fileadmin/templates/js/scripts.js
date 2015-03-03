@@ -12,7 +12,7 @@ var K = {
 			cache: true,
 			timeout: 20000 // 20 seconds
 		});
-		
+
 		K.enableAjaxPageLoad();
 		K.bindEvents();
 
@@ -41,7 +41,7 @@ var K = {
 				},
 
 				// OPTIONAL
-				// If supplied, triggered when the media query transitions 
+				// If supplied, triggered when the media query transitions
 				// *from a matched state to an unmatched state*.
 				unmatch : function() {
 					console.log('left mobile js for desktop js');
@@ -58,18 +58,18 @@ var K = {
 				},
 
 				// OPTIONAL, defaults to false
-				// If set to true, defers execution of the setup function 
+				// If set to true, defers execution of the setup function
 				// until the first time the media query is matched
 				deferSetup : true,
 
 				// OPTIONAL
-				// If supplied, triggered when handler is unregistered. 
+				// If supplied, triggered when handler is unregistered.
 				// Place cleanup code here
 				destroy : function() {}
 			});
 	},
 
-	/* 
+	/*
 	Centers an object vertically inside their parent. Note:
 	Images must be loaded before this works.
 	*/
@@ -95,8 +95,8 @@ var K = {
 		*/
 	},
 
-	/* 
-	Switches projects page from stack mode to list mode 
+	/*
+	Switches projects page from stack mode to list mode
 	and back
 	*/
 	changeDisplayMode: function(value) {
@@ -120,7 +120,7 @@ var K = {
 		History.pushState({'what': 'page', 'newSlug': 'projects'}, "Projekte", $a.attr('href')); // Will have to change URI once we know the path to the projects page
 	},
 
-	/* 
+	/*
 	Display project details that have previously been loaded
 	by .loadProjectAjax()
 	*/
@@ -227,7 +227,6 @@ var K = {
 		$('body').data('pageslug', newSlug);
 		var $newPage = $('.page#'+newSlug);
 		var $deleteThis;
-		var newPageTitle;
 		$.ajax({
 				url: State.url,
 				dataType: "html",
@@ -358,7 +357,7 @@ var K = {
 		Hyphenator.run();
 	},*/
 
-	/* 
+	/*
 	Moves a card to the top of a stack
 	*/
 	moveToFront: function($node) {
@@ -498,7 +497,7 @@ var K = {
 		},'slow');
 	},
 
-	/* 
+	/*
 	Runs when a page is loaded (no matter if normally or through ajax)
 	*/
 	setupPage: function(slug,noScroll) {
@@ -661,7 +660,7 @@ var K = {
 		}
 	},
 
-	/* 
+	/*
 	Runs before a new page is loaded via ajax
 	Useful for unbinding events etc
 	*/
@@ -686,7 +685,7 @@ var K = {
 	bind events to user interaction
 	*/
 	bindEvents: function() {
-		/* 
+		/*
 			1.	page-specific events
 		*/
 		// Intro Page
@@ -741,7 +740,7 @@ var K = {
 			// Analytics
 			ga('send', 'event', 'Projekt-DragNDrop', 'drag');
 		});
-		
+
 		// Info page
 		$(document).on('click', '#info .sub-nav li a', function(event) {
 				event.preventDefault();
@@ -768,7 +767,7 @@ var K = {
 				$('.alumni-list').toggleClass('open');
 			});
 
-		/* 
+		/*
 			2.	non-page-specific events
 				(events that are needed across the whole site)
 		*/
@@ -868,6 +867,10 @@ var K = {
 			3. Events that are specific to small devices
 		*/
 		$(document)
+			.on('click', '#btn-smallscreen-menu', function(e) {
+				e.preventDefault();
+				$('#smallscreen-menu nav').toggleClass('active');
+			})
 			.on('click', '#smallscreen-menu .bar', function(e) {
 				e.preventDefault();
 			})
