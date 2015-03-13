@@ -594,9 +594,8 @@ var K = {
 			// Social buttons are only rendered when they enter the viewport for performance.
 			$('.social-buttons').waypoint(function() {
 				var url = $(this).attr('data-url');
-				K.initFacebook(this, url);
-				K.initTwitter(this, url);
-				console.log('scroll', K.config.scrollSelector);
+				//K.initFacebook(this, url);
+				//K.initTwitter(this, url);
 			},{
 				context: K.config.scrollSelector,
 				offset: 'bottom-in-view',
