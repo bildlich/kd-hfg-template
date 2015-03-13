@@ -308,14 +308,6 @@ a.btn-top {
 /* End page specific LAYOUT styles */
 
 /* Begin overall content styles */
-// Hyphenation (if browser does not support hyphenation, Hyphenator.js takes care of it)
-// once browser support them we should make use of hyphenate-limit-lines et al. to avoid letter effect
-/*p {
-	@include hyphens(auto);
-}
-.donthyphenate, .donthyphenate * {
-	@include hyphens(none);
-}*/
 
 section, article {
 	@include legacy-pie-clearfix;
@@ -470,6 +462,17 @@ section, article {
 			counter-increment:li;
 			position:absolute;
 			left: -16px;
+		}
+	}
+	.social-buttons {
+		width: 67%;
+		margin-bottom: 25px;
+		float: left;
+		height: 20px;
+		// Vertically align Facebook button to Twitter button
+		.fb_iframe_widget span {
+  		vertical-align: baseline !important;
+			margin-right: 8px;
 		}
 	}
 }
