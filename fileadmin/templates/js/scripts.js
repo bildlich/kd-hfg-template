@@ -207,6 +207,7 @@ var K = {
 	Handles CSS transitions, spinner icon, user feedback etc.
 	*/
 	loadPageAjax: function(State, newSlug) {
+		console.log('loadPageAjax', newSlug);
 		// This variable will be filled with the loaded page content
 		var $pageContent;
 
@@ -246,18 +247,16 @@ var K = {
 					$pageContent = $response.find('.ajax-load-me');
 					document.title = $response.filter('title').text();
 				},
-				error: function() {
+				error: function(jqXHR, textStatus, errorThrown) {
 					//$pageContent = '<div class="scroll ajax-error ajax-load-me"><article class="ajax-error"><p>:-/<br>Beim Laden der Seite ist ein Fehler aufgetreten. Bitte überprüfe deine Internetverbindung. Wenn das Problem bestehen bleibt, schreibe eine kurze Mail an kd-archiv <em>AT</em> hfg-karlsruhe.de</p><p>Danke!</p></article></div>';
-					console.log('Ajax error function was called.');
+					console.log('Ajax error function was called.', jqXHR, textStatus, errorThrown);
 				},
 				complete: function() {
 					if (oldSlug === newSlug) {
-						$deleteThis.fadeOut(500, function() {
-							$deleteThis.remove();
-							K.tearDownPage(oldSlug);
-							$newPage.prepend($pageContent);
-							K.setupPage(newSlug);
-						});
+						$deleteThis.remove();
+						K.tearDownPage(oldSlug);
+						$newPage.prepend($pageContent);
+						K.setupPage(newSlug);
 					}
 					else {
 						window.setTimeout(function() {
@@ -269,6 +268,46 @@ var K = {
 					}
 				}
 		});
+	},
+
+	/*
+	Adds Twitter button to $element and loads the SDK if necessary.
+	*/
+	initTwitter: function($element, url) {
+		// Append button html if it's not already here.
+		if (!$($element).hasClass('added-twitter')) {
+			$($element).append("<a href=\"https://twitter.com/share\" class=\"twitter-share-button\" data-url=\""+url+"\">Tweet</a> ");
+			$($element).addClass('added-twitter');
+		}
+		// Load Twitter SDK if it's not already here.
+		if (typeof twttr === "undefined") {
+			$.getScript("https://platform.twitter.com/widgets.js");
+		}
+		else {
+			twttr.widgets.load($element);
+		}
+	},
+	/*
+	Adds Facebook button to $element and loads the SDK if necessary.
+	*/
+	initFacebook: function($element, url) {
+		// Append button html if it's not already here.
+		if (!$($element).hasClass('added-facebook')) {
+			$($element).append("<div class=\"fb-like\" data-href=\""+url+"\" data-layout=\"button_count\" data-action=\"like\" data-show-faces=\"false\" data-share=\"false\"></div> ");
+			$($element).addClass('added-facebook');
+		}
+		// Load Facebook SDK if it's not already here.
+		if (typeof FB === "undefined") {
+			$.getScript("http://connect.facebook.net/de_DE/all.js#xfbml=1", function() {
+				FB.init({
+					xfbml: false
+				});
+				FB.XFBML.parse($element);
+			});
+		}
+		else {
+			FB.XFBML.parse($element);
+		}
 	},
 
 	/*
