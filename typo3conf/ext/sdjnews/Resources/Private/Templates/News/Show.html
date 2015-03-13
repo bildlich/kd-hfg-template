@@ -1,4 +1,4 @@
-{namespace vh=Tx_sdjnews_ViewHelpers} 
+{namespace vh=Tx_sdjnews_ViewHelpers}
 
 <f:layout name="Default" />
 <f:section name="main">
@@ -21,7 +21,8 @@
 	<article>
     	<div class="news-meta"><f:format.date format="d.m.Y">{news.date}</f:format.date></div>
     	<h2><span>{news.header}</span></h2>
-    	<f:format.html>{news.text}</f:format.html>	
+    	<f:format.html>{news.text}</f:format.html>
+			<div class="social-buttons"></div>
 	</article>
 </div>
 </f:section>

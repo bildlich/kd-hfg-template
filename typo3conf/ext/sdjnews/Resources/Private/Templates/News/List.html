@@ -1,4 +1,4 @@
-{namespace vh=Tx_sdjnews_ViewHelpers} 
+{namespace vh=Tx_sdjnews_ViewHelpers}
 
 <f:layout name="Default" />
 <f:flashMessages />
@@ -6,7 +6,7 @@
 <nav class="sub-nav ajax-load-me">
 	<ul>
     	<f:for each="{vh:navigation(years:navi)}" as="year" iteration="i">
-	    	
+
 	    	<f:if condition="{year.stamp}">
 	    		<f:then>
 	    			<li><f:link.page pageUid="{vh:getData(index:'pid')}" additionalParams="{tx_sdjnews_year:year.stamp}" class="ajax{year.act}" additionalAttributes="{data-pageslug: 'news'}">{year.year}</f:link.page></li>
@@ -19,11 +19,12 @@
     </ul>
 </nav>
 <div class="scroll ajax-load-me">
-	<f:for each="{newss}" as="news">		
+	<f:for each="{newss}" as="news">
 		<article>
-			<div class="news-meta"><f:format.date format="d.m.Y">{news.date}</f:format.date> <f:link.page pageUid="{vh:getData(index:'pid')}" additionalParams="{tx_sdjnews_article:news.uid}" additionalAttributes="{data-pageslug: 'news'}">#Link</f:link.page></div>
+			<div class="news-meta"><f:format.date format="d.m.Y">{news.date}</f:format.date> <f:link.page pageUid="{vh:getData(index:'pid')}" additionalParams="{tx_sdjnews_article:news.uid}" additionalAttributes="{data-pageslug: 'news', class: 'ajax'}">#Link</f:link.page></div>
 			<h2><span>{news.header}</span></h2>
-			<f:format.html>{news.text}</f:format.html>	  
+			<f:format.html>{news.text}</f:format.html>
+			<div class="social-buttons"></div>
 		</article>
 	</f:for>
 </div>
