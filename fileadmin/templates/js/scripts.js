@@ -4,6 +4,8 @@
 /* global ga:true*/
 /* global enquire:true*/
 /* global console:true*/
+/* global twttr:true*/
+/* global FB:true*/
 var K = {
 
 	init: function(config) {
@@ -522,7 +524,7 @@ var K = {
 	Runs when a page is loaded (no matter if normally or through ajax)
 	*/
 	setupPage: function(slug,noScroll) {
-		console.log('setupPage');
+		console.log('setupPage', slug);
 		// Analytics
 		ga('send', 'pageview', window.location.pathname);
 		// scroll scrollable container to top
@@ -587,6 +589,19 @@ var K = {
 			K.ele.detailSlideshow = $('#detail-slideshow');
 			K.ele.projectDetails = $('.project-details');
 			K.displayDetails();
+		}
+		else if (slug === 'news') {
+			// Social buttons are only rendered when they enter the viewport for performance.
+			$('.social-buttons').waypoint(function() {
+				var url = $(this).attr('data-url');
+				K.initFacebook(this, url);
+				K.initTwitter(this, url);
+				console.log('scroll', K.config.scrollSelector);
+			},{
+				context: K.config.scrollSelector,
+				offset: 'bottom-in-view',
+				triggerOnce: true
+			});
 		}
 		else if (slug === 'info') {
 			$('section').waypoint(function(direction) {
@@ -812,6 +827,7 @@ var K = {
 					History.pushState({'what': 'page', 'newSlug': newSlug}, $a.text(), $a.attr('href'));
 				}
 				})
+			// All links with class .ajax are loaded asynchronously.
 			.on( 'click', 'a.ajax', function(e){
 				e.preventDefault();
 				if (!$('body').hasClass('loading')) {
