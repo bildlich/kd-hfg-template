@@ -379,24 +379,6 @@ var K = {
 	},
 
 	/*
-	Hyphenates words that match the selector
-	*/
-	// JS hyphenation only runs when CSS hyphenation fails
-	// When more browsers (i.e. Chrome) support CSS hyphenation
-	// we should get rid of JS hyphenation
-	/*hyphenate: function(selector) {
-		var hyphenatorSettings = {
-			selectorfunction: function () {
-					return $(selector).get();
-			},
-			minwordlength : 8,
-			orphancontrol: 3
-			};
-		Hyphenator.config(hyphenatorSettings);
-		Hyphenator.run();
-	},*/
-
-	/*
 	Moves a card to the top of a stack
 	*/
 	moveToFront: function($node) {
@@ -559,9 +541,6 @@ var K = {
 		},{
 			offset: -300
 		});
-
-		// Hyphenation
-		//K.hyphenate('.scroll p:not(.donthyphenate), #project-words p:not(.donthyphenate)');
 
 		// do page-specific things
 		if (slug ==='index') {
