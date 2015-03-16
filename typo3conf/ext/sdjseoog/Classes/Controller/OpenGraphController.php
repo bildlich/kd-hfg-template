@@ -74,6 +74,7 @@ class OpenGraphController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 			$title=$this->cObj->data['tx_sdjmetadata_title'];
 			if(strlen(trim($title))==0)
 				$title=$this->cObj->data['title'];
+			$ogt=$title;
 			$description=$this->cObj->data['tx_sdjmetadata_description'];
 			$type="website";
 			
@@ -81,14 +82,7 @@ class OpenGraphController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 			$rootline=array_reverse($GLOBALS["TSFE"]->rootLine);
 			$rootline[]=$this->cObj->data;
 			$rootline=array_reverse($rootline);
-			foreach($rootline as $page){
-				/* FAL
-				$img=$this->openGraphRepository->getImage($page["uid"]);
-				if(count($img)>0){
-					$image=$base_url."/fileadmin".$img[0]['identifier'];
-					break;
-				}*/
-				
+			foreach($rootline as $page){				
 				if(strlen(trim($page["tx_sdjseoog_image"]))>0){
 					$img="uploads/tx_sdjseoog/".$page["tx_sdjseoog_image"];
 					if(file_exists($img)){
@@ -127,6 +121,7 @@ class OpenGraphController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 					$i++;
 				}
 			}
+			$ogt=$title;
 			
 			//Description
 			$description=$data->metadescription;
@@ -136,11 +131,12 @@ class OpenGraphController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 			//Type
 			$type="article";
 			
-			//Image
-			$img="uploads/tx_sdjhfgkd20/".$data->mainimage;
-			if(file_exists($img)){
-				$image=$img;	
-			}
+			//Image			
+			$path="uploads/tx_sdjhfgkd20/";
+			$img=$data->ogimage;
+			if(file_exists($path.$img) && strlen($img)>0){
+				$image=$path.$img;	
+			}	
 		}
 		
 		//News
@@ -152,6 +148,7 @@ class OpenGraphController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 			}else{
 				$title=$data->header;
 			}
+			$ogt=$title;
 			$description=$data->metadescription;
 			if(strlen($description)<10)
 				$description=$this->shorten($data->text,140);
@@ -160,9 +157,10 @@ class OpenGraphController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 			$type="article";
 			
 			//Image
-			$img="uploads/tx_sdjnews/".$data->ogimage;
-			if(file_exists($img)){
-				$image=$img;	
+			$path="uploads/tx_sdjnews/";
+			$img=$data->ogimage;
+			if(file_exists($path.$img) && strlen($img)>0){
+				$image=$path.$img;	
 			}			
 		}
 		
@@ -189,12 +187,12 @@ class OpenGraphController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 		$meta='
 			<title>'.$title.'</title>
 			<meta name="description" content="'.$description.'" />
-			<meta property="og:title" content="'.$title.'" />
+			<meta property="og:title" content="'.$ogt.'" />
 			<meta property="og:description" content="'.$description.'" />
 			<meta property="og:type" content="'.$type.'" />
 			<meta property="og:url" content="'.$site_url.'" />
 			<meta name="twitter:card" content="summary" />
-			<meta name="twitter:title" content="'.$title.'" />
+			<meta name="twitter:title" content="'.$ogt.'" />
 			<meta name="twitter:description" content="'.$description.'" />
 			<meta name="twitter:url" content="'.$site_url.'" />
 		';
