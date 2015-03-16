@@ -300,9 +300,12 @@ var K = {
 		}
 		// Load Facebook SDK if it's not already here.
 		if (typeof FB === "undefined") {
-			$.getScript("http://connect.facebook.net/de_DE/all.js#xfbml=1", function() {
+			$('body').prepend('<div id="fb-root"></div>');
+			$.getScript("http://connect.facebook.net/de_DE/all.js", function() {
 				FB.init({
-					xfbml: false
+					xfbml: false, // don't render Like buttons immediately but only when we tell you to with .parse()
+					version: 'v2.2'
+					// Consider adding FB App id here.
 				});
 				FB.XFBML.parse($element);
 			});
