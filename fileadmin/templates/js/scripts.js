@@ -295,7 +295,7 @@ var K = {
 	initFacebook: function($element, url) {
 		// Append button html if it's not already here.
 		if (!$($element).hasClass('added-facebook')) {
-			$($element).append("<div class=\"fb-like\" data-href=\""+url+"\" data-layout=\"button_count\" data-action=\"like\" data-show-faces=\"false\" data-share=\"false\"></div> ");
+			$($element).append("<div class=\"fb-like\" data-href=\""+url+"\" data-layout=\"button_count\" data-action=\"like\" data-show-faces=\"false\" data-share=\"true\"></div> ");
 			$($element).addClass('added-facebook');
 		}
 		// Load Facebook SDK if it's not already here.
