@@ -208,6 +208,7 @@ class OpenGraphController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 				
 		//Return
 		$GLOBALS['TSFE']->additionalHeaderData[$this->extKey]=$meta;
+		return "";
 	}
 	
 	public function shorten($text,$chars){

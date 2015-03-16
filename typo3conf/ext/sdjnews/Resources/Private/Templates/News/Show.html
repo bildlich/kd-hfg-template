@@ -22,7 +22,7 @@
     	<div class="news-meta"><f:format.date format="d.m.Y">{news.date}</f:format.date></div>
     	<h2><span>{news.header}</span></h2>
     	<f:format.html>{news.text}</f:format.html>
-			<div class="social-buttons"></div>
+		<div class="social-buttons" data-url="{baseUrl}{f:uri.page(pageUid:'{vh:getData(index:"pid")}', additionalParams:'{tx_sdjnews_article:news.uid}')}"></div>
 	</article>
 </div>
 </f:section>

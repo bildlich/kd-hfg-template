@@ -60,6 +60,8 @@ class NewsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 				$this->view->assign('newss', $news);
 			}
 			$this->view->assign('navi', $years);
+			
+			$this->view->assign('baseUrl', $GLOBALS['TSFE']->tmpl->setup['config.']['baseURL']);
 		}
 	}
 
@@ -74,6 +76,8 @@ class NewsController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 		
 		$years=$this->newsRepository->listYears();
 		$this->view->assign('navi', $years);
+		
+		$this->view->assign('baseUrl', $GLOBALS['TSFE']->tmpl->setup['config.']['baseURL']);
 	}
 }
 ?>

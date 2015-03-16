@@ -84,7 +84,6 @@ page.777 {
    vendorName = SOUPDUJOUR
    pluginName = Pi1
    extensionName = Sdjseoog
- 
    settings =< plugin.tx_sdjseoog.settings
    persistence =< plugin.tx_sdjseoog.persistence
    view =< plugin.tx_sdjseoog.view
