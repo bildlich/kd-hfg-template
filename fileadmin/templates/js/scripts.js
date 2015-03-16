@@ -829,6 +829,10 @@ var K = {
 					History.pushState({'what': 'page', 'newSlug': newSlug}, $a.text(), $a.attr('href'));
 				}
 				})
+				// Ignore clicks on the blue link text. We handle these clicks with the above event.
+				.on( 'click', '.page:not(.open) .main-nav a', function(event){
+					event.preventDefault();
+				})
 			// All links with class .ajax are loaded asynchronously.
 			.on( 'click', 'a.ajax', function(e){
 				e.preventDefault();
