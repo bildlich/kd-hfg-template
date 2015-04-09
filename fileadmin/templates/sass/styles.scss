@@ -1,5 +1,6 @@
 @import "compass/reset";
 @import "compass/css3";
+@import "compass/css3/shared";
 @import "compass/typography/links";
 @import "compass/utilities/general/clearfix";
 $experimental-support-for-opera: true;
@@ -364,7 +365,7 @@ section, article {
 			margin-bottom: 1rem;
 		}
 	}
-	.teachers-list-small, .students-list-small, .alumni-list {
+	.teachers-list-small, .students-list-small, .alumni-list, &#section-49 ul {
 		overflow: hidden;
 		width: 67%;
 		max-width: 60rem;
@@ -380,6 +381,12 @@ section, article {
 			white-space: nowrap;
 		}
 	}
+	&#section-49 ul {
+		li{
+			width:190px;
+		}
+	}
+	
 	.teachers-list-small {
 		height: 4.5rem;
 	}
@@ -758,7 +765,7 @@ Begin specific style for Tablets and smaller PCs
 		}
 	}
 	section, article {
-		&>p, aside, ul.teachers-list-big, ul.teachers-list-small, ul.students-list-small, ul.alumni-list {
+		&>p, aside, ul.teachers-list-big, ul.teachers-list-small, ul.students-list-small, ul.alumni-list, &#section-49 ul {
 			width: 95%;
 			max-width: auto;
 			float: none;
@@ -888,7 +895,7 @@ This targets smartphones and small tablets in portrait mode
 						margin-bottom: 0;
 					}
 				}
-				.teachers-list-big, .teachers-list-small, .students-list-small, .alumni-list {
+				.teachers-list-big, .teachers-list-small, .students-list-small, .alumni-list, &#section-49 ul {
 					margin-left: 0; margin-right: 0;
 					width: 100%;
 					float: none;
