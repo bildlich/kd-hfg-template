@@ -37,7 +37,8 @@ class ProjekteRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	public function listMedia($id){
 		$query=$this->createQuery();
 		$query->statement('SELECT image FROM tx_sdjhfgkd20_domain_model_media WHERE hidden=0 AND deleted=0 AND projekte='.$id, array());
-		return $query->execute();		
+		$all=$query->execute();		
+		return $all;
 	}
 	
 	public function listBySorting($year){

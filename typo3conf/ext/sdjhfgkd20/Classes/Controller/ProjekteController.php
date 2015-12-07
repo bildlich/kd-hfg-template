@@ -62,7 +62,7 @@ class ProjekteController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
 	 * @return void
 	 */
 	public function showAction() {
-		$media=$this->projekteRepository->listMedia($_GET['tx_sdjhfgkd20_detail']);
+		//$media=$this->projekteRepository->listMedia($_GET['tx_sdjhfgkd20_detail']);
 		//$this->view->assign('mediadata', $media);
 
 		$projektes=$this->projekteRepository->findOneByUid($_GET['tx_sdjhfgkd20_detail']);

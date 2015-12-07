@@ -6,10 +6,7 @@ class Tx_sdjhfgkd20_ViewHelpers_MediaViewHelper extends Tx_Fluid_Core_ViewHelper
 	
 	public function render($mdata){
 		// echo "<pre>".htmlentities(print_r($mdata,true))."</pre>";
-		
-		
-		
-		
+
 		$i=0;
 		
 		$data=array();
@@ -30,7 +27,9 @@ class Tx_sdjhfgkd20_ViewHelpers_MediaViewHelper extends Tx_Fluid_Core_ViewHelper
 				$data[$i]["media2"]="uploads/tx_sdjhfgkd20/".$m->ogg;	
 				
 				//MP4-Info Class
-				include("typo3conf/ext/sdjhfgkd20/Resources/Private/Frameworks/MP4Info.php");
+				if(!class_exists("MP4Info")){
+					@include("typo3conf/ext/sdjhfgkd20/Resources/Private/Frameworks/MP4Info.php");
+				}
 				$info=MP4Info::getInfo($data[$i]["media"]);
 				$data[$i]["w"]=$info->video->width;
 				$data[$i]["h"]=$info->video->height;
