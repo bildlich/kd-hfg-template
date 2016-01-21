@@ -33,6 +33,9 @@ namespace SOUPDUJOUR\Sdjhfgkd20links\Domain\Repository;
 class LinkRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	public function listBySorting(){
 		$query=$this->createQuery();
+		$query->matching(
+			$query->equals('sys_language_uid', $GLOBALS['TSFE']->sys_language_uid)
+		);
 		$query->setOrderings(array("sorting" => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
         $posts=$query->execute();
 		return $posts;
