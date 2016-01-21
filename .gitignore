@@ -8,10 +8,13 @@
 ### CodeKit ###
 */codekit-config.json
 
+
 # Ignore serveral upload and file directories
+*/.DS_Store
 /fileadmin/user_upload/
 /fileadmin/_temp_/
 /fileadmin/_processed_/
+/fileadmin/_migrated/
 /fileadmin/*.t3d
 /uploads/
 /fileadmin/templates/config.codekit
@@ -20,8 +23,12 @@
 /typo3conf/temp_CACHED*
 /typo3conf/temp_fieldInfo.php
 
-# Ignore files with database credentials
+# Ignore files with database credentials & installation infos
 /typo3conf/LocalConfiguration.php
+/typo3conf/PackageStates.php
+/typo3conf/l10n/
+/typo3conf/ext/extension_builder/
+/typo3conf/ext/phpmyadmin/
 
 # Ignore temp directory.
 /typo3temp/

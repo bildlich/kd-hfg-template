@@ -1,0 +1,13 @@
+{namespace vh=Tx_sdjhfgkd20_ViewHelpers}
+<f:layout name="Default" />
+<f:section name="main">
+	<ul class="teachers-list-big">
+		<f:for each="{links}" as="link">
+			<li class="col">
+				<a href="{vh:urlCheck(url:link.linkurl)}" target="_blank"><img src="{f:uri.image(src:"{link.image.originalResource.uid}",treatIdAsReference:1,maxWidth:218)}" alt="{link.linktitle}" class="teacher-portrait"></a>
+				<f:format.html>{link.bodytext}</f:format.html>
+				<p><a href="{vh:urlCheck(url:link.linkurl)}" target="_blank">{link.linktitle}</a></p>
+			</li>
+		</f:for>
+	</ul>
+</f:section>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2016-01-21T16:00:31Z" product-name="sdjhfgkd20links">
+		<header/>
+		<body>
+			<trans-unit id="tx_sdjhfgkd20links_domain_model_link">
+				<source>Link</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20links_domain_model_link.image">
+				<source>Bild</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20links_domain_model_link.bodytext">
+				<source>Text</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20links_domain_model_link.linktitle">
+				<source>Link: Titel</source>
+			</trans-unit>
+			<trans-unit id="tx_sdjhfgkd20links_domain_model_link.linkurl">
+				<source>Link: URL</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
